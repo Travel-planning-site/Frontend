@@ -2,6 +2,7 @@
     <div>
         <b-container fluid="fluid">
             <b-row>
+              <p>Travel-Plan</p>
                 <b-col class="search_body">
                     <b-container>
                         <div class="search_area">
@@ -35,9 +36,10 @@
                     <div class="savedplace_area">
                       <div id="savedplace_area_Header">저장된 장소</div>
                       <div id="savedplace_area_Body">Body</div>
-                      <div id="savedplace_area_Footer">
-                      <b-button block>Next</b-button>
-                      </div>
+                      <b-row cols="2" id="savedplace_area_Footer">
+                      <b-col><b-button block>Back</b-button></b-col>
+                      <b-col><b-button block>Next</b-button></b-col>
+                      </b-row>
                     </div>
                 </b-col>
             </b-row>
