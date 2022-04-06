@@ -31,7 +31,7 @@
             <b-row>
               <b-col id="buttons">
                 <b-button id="cancle" @click="$router.push('/')">Cancle</b-button>
-                <b-button id="next">Next</b-button>
+                <b-button id="next" @click="$router.push('ResearchPlace')">Next</b-button>
               </b-col>
             </b-row>
       </div>

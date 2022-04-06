@@ -10,11 +10,13 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import MainPage from './components/MainPage'
 import BasicInfo from './components/BasicInfo'
+import ResearchPlace from './components/ResearchPlace'
 
 Vue.config.productionTip = false
 
 Vue.component('main-page', MainPage)
 Vue.component('basic-info', BasicInfo)
+Vue.component('research-page', ResearchPlace)
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

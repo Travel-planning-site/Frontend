@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import MainPage from '@/components/MainPage'
 import BasicInfo from '@/components/BasicInfo'
+import ResearchPlace from '@/components/ResearchPlace'
 Vue.use(Router)
 
 export default new Router({
@@ -21,6 +22,11 @@ export default new Router({
       path: '/BasicInfo',
       name: 'BasicInfo',
       component: BasicInfo
+    },
+    {
+      path: '/ResearchPlace',
+      name: 'ResearchPlace',
+      component: ResearchPlace
     }
   ]
 })
