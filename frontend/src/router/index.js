@@ -4,6 +4,8 @@ import HelloWorld from '@/components/HelloWorld'
 import MainPage from '@/components/MainPage'
 import BasicInfo from '@/components/BasicInfo'
 import ResearchPlace from '@/components/ResearchPlace'
+import InputData from '@/components/InputData'
+
 Vue.use(Router)
 
 export default new Router({
@@ -27,6 +29,11 @@ export default new Router({
       path: '/ResearchPlace',
       name: 'ResearchPlace',
       component: ResearchPlace
+    },
+    {
+      path: '/InputData',
+      name: 'InputData',
+      component: InputData
     }
   ]
 })

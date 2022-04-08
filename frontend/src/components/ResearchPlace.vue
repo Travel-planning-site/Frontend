@@ -37,8 +37,8 @@
                       <div id="savedplace_area_Header">저장된 장소</div>
                       <div id="savedplace_area_Body">Body</div>
                       <b-row cols="2" id="savedplace_area_Footer">
-                      <b-col><b-button block>Back</b-button></b-col>
-                      <b-col><b-button block>Next</b-button></b-col>
+                      <b-col><b-button block @click="$router.go(-1)">Back</b-button></b-col>
+                      <b-col><b-button block @click="$router.push('InputData')">Next</b-button></b-col>
                       </b-row>
                     </div>
                 </b-col>
