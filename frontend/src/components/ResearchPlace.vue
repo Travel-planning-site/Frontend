@@ -1,32 +1,28 @@
 <template>
-    <div>
+    <div class="ResearchPlace_page">
         <b-container fluid="fluid">
             <b-row>
-              <p>Travel-Plan</p>
                 <b-col class="search_body">
+                  <div id="Page_name">
+                    Travel Plan
+                  </div>
                     <b-container>
                         <div class="search_area">
                             <b-row class="area_searching">
                                 <b-col>
+                                  <div style="padding: 2px;">
                                     <b-input-group>
                                         <b-input-group-prepend is-text="is-text">
                                             <b-icon icon="search"></b-icon>
                                         </b-input-group-prepend>
                                         <b-form-input type="search" v-bind="search_term" placeholder="장소검색"></b-form-input>
                                     </b-input-group>
+                                  </div>
                                 </b-col>
                             </b-row>
                             <b-row class="result_searched">
                               <b-col cols="3" id="result_box">
-                                <div>
-                                  <b-img src="https://cdn.smartlifetv.co.kr/news/photo/202107/12282_15191_4027.jpg" rounded center></b-img>
-                                </div>
-                                <div>
-                                  장소
-                                </div>
-                                <div>
-                                  주소
-                                </div>
+                                <result-box id="result_box"></result-box>
                               </b-col>
                             </b-row>
                         </div>
@@ -35,10 +31,10 @@
                 <b-col cols="3" class="container_savedplace">
                     <div class="savedplace_area">
                       <div id="savedplace_area_Header">저장된 장소</div>
-                      <div id="savedplace_area_Body">Body</div>
+                      <savedplace-list id="savedplace_area_Body"></savedplace-list>
                       <b-row cols="2" id="savedplace_area_Footer">
-                      <b-col><b-button block @click="$router.go(-1)">Back</b-button></b-col>
-                      <b-col><b-button block @click="$router.push('InputData')">Next</b-button></b-col>
+                        <b-col><b-button block @click="$router.go(-1)">Back</b-button></b-col>
+                        <b-col><b-button block @click="$router.push('InputData')">Next</b-button></b-col>
                       </b-row>
                     </div>
                 </b-col>
@@ -48,7 +44,9 @@
 </template>
 
 <script>
+import ResultBox from './ResultBox.vue'
 export default {
+  components: { ResultBox },
   name: 'ResearchPlace',
   data () {
     return {
@@ -59,19 +57,26 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+    font-family: 'yg-jalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
   .search_body {
     margin-top: 10%;
   }
   .area_searching {
     margin-bottom: 10%;
-    background-color: yellow;
+    background-color: gray;
   }
   .result_searched {
     background-color:  gray;
   }
   .container_savedplace {
     background-color: gray;
-    height: 100vh;
+    height: 100%;
     text-align: center;
   }
   #result_box {
@@ -98,7 +103,18 @@ export default {
     height: 5vh;
     background-color: white;
   }
-  img {
-    max-width: 200px;
+  .ResearchPlace_page {
+    min-width: 900px;
+    width: auto;
+    overflow: hidden;
+  }
+  .row {
+    display: flex;
+  }
+  #Page_name {
+    font-family: yg-jalnan;
+    margin: 10px;
+    font-size: 50px;
+    text-align: center;
   }
 </style>
