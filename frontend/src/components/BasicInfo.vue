@@ -1,6 +1,9 @@
 <template>
 <div>
     <b-container class="BasicInfo">
+      <div id="Page_name">
+        여행정보 입력
+      </div>
       <div class="body">
         <b-row><b-col>Title</b-col></b-row>
             <b-row>
@@ -18,7 +21,7 @@
             <b-row >
                 <b-col id="people_area"><b-form-input :id="people" size="lg" placeholder="여행 동반자" v-model="people"></b-form-input></b-col>
             </b-row>
-            <b-row><b-col class="text">How Long</b-col></b-row>
+            <b-row><b-col class="text">How long</b-col></b-row>
             <b-row>
                 <b-col id="period_area"><b-form-input :id="period" size="lg" placeholder="여행 기간" v-model="period"></b-form-input></b-col>
             </b-row>
@@ -42,22 +45,39 @@
 <script>
 
 export default{
-  name: 'BasicInfo'
-
+  name: 'BasicInfo',
+  data () {
+    return {
+      title: '',
+      place: '',
+      people: '',
+      period: '',
+      memo: ''
+    }
+  }
 }
 </script>
 
 <style scoped>
+@font-face {
+    font-family: 'yg-jalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 .body{
   background-color: rgba(135, 135, 135, 0.909);
   border-radius: 20px;
   padding: 30px;
-  height: auto;
+  margin: 30px;
   font-size: 40px;
+  font-family: yg-jalnan;
+
 }
 
 .BasicInfo{
-  padding-top: 100px;
+  padding: 50px;
 }
 
 .text {
@@ -73,6 +93,12 @@ export default{
 #cancle, #next {
   margin-top: 20px;
   font-size: 40px;
+}
+
+#Page_name {
+  font-family: yg-jalnan;
+  margin: 10px;
+  font-size: 50px;
 }
 
 </style>

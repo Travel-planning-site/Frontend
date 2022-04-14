@@ -30,6 +30,12 @@ export default{
 </script>
 
 <style scoped>
+@font-face {
+    font-family: 'yg-jalnan';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_four@1.2/JalnanOTF00.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
 
 .main {
     margin-left: 10px;
@@ -40,6 +46,8 @@ export default{
 .buttons {
     text-align: center;
     padding: 30px;
+    font-family: yg-jalnan;
+
 }
 #header-page {
     margin: 15px;
@@ -50,11 +58,13 @@ export default{
 }
 #login {
     font-size: 40px;
+    font-family: yg-jalnan;
+
 }
 
 #image {
     width: 1024px;
-    height: 800px;
+    height: 700px;
 }
 
 </style>
