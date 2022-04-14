@@ -2,7 +2,7 @@
     <div class="ResearchPlace_page">
         <b-container fluid="fluid">
             <b-row>
-                <b-col class="search_body">
+                <b-col cols="9" class="search_body">
                   <div id="Page_name">
                     Travel Plan
                   </div>
@@ -22,7 +22,9 @@
                             </b-row>
                             <b-row class="result_searched">
                               <b-col cols="3" id="result_box">
-                                <result-box id="result_box"></result-box>
+                                <b-row>
+                                  <result-list :results="results" @SelectFromResult_List="SelectFromResult_List"></result-list>
+                                </b-row>
                               </b-col>
                             </b-row>
                         </div>
@@ -31,7 +33,7 @@
                 <b-col cols="3" class="container_savedplace">
                     <div class="savedplace_area">
                       <div id="savedplace_area_Header">저장된 장소</div>
-                      <savedplace-list id="savedplace_area_Body"></savedplace-list>
+                      <savedplace-list :selected_count="selected_count" :selectedList="selectedList" id="savedplace_area_Body"></savedplace-list>
                       <b-row cols="2" id="savedplace_area_Footer">
                         <b-col><b-button block @click="$router.go(-1)">Back</b-button></b-col>
                         <b-col><b-button block @click="$router.push('InputData')">Next</b-button></b-col>
@@ -50,7 +52,24 @@ export default {
   name: 'ResearchPlace',
   data () {
     return {
-      search_term: ''
+      results: {
+        place_img: 'https://cdn.smartlifetv.co.kr/news/photo/202107/12282_15191_4027.jpg',
+        place_name: '장소이름',
+        place_addr: '장소주소'
+      },
+      selectedList: {
+        place_img: '',
+        place_name: '',
+        place_addr: ''
+      },
+      search_term: '',
+      selected_count: 0
+    }
+  },
+  methods: {
+    SelectFromResult_List (selected) {
+      this.selectedList = selected
+      this.selected_count += 1
     }
   }
 }

@@ -1,13 +1,13 @@
 <template>
     <div class="result_box">
         <b-card
-          v-bind:img-src="background_img" img-top
+          :img-src="place_img" img-top
           id="card_box"
         >
         <b-card-body class="card_box_body">
           <b-card-title class="card_box_body" style="margin-top: -10px; font-weight: bold">{{place_name}}</b-card-title>
           <b-card-sub-title class="card_box_body" style="font-weight: lighter;">{{place_addr}}</b-card-sub-title>
-          <b-button block class="card_box_body" style="padding: -5px;">담기</b-button>
+          <b-button block class="card_box_body" @click="SeletedonClick" style="padding: -5px;">담기</b-button>
         </b-card-body>
         </b-card>
     </div>
@@ -16,15 +16,33 @@
 <script>
 export default {
   name: 'ResultBox',
+  props: {
+    ResultList_results: {
+      type: Object,
+      default: () => {
+        return {
+          place_img: '',
+          place_name: '',
+          place_addr: ''
+        }
+      }
+    }
+  },
   data () {
     return {
-      background_img: 'https://cdn.smartlifetv.co.kr/news/photo/202107/12282_15191_4027.jpg',
-      place_name: '장소이름',
-      place_addr: '장소주소'
+      selectedList: this.ResultList_results,
+      place_name: this.ResultList_results.place_name,
+      place_addr: this.ResultList_results.place_addr,
+      place_img: this.ResultList_results.place_img
+    }
+  },
+  methods: {
+    SeletedonClick () {
+      console.log('담기발생')
+      this.$emit('SelectFromResult_box', this.selectedList)
     }
   }
 }
-
 </script>
 
 <style scoped>

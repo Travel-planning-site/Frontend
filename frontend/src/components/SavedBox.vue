@@ -4,15 +4,15 @@
       <b-row>
         <b-col>
           <div id="savedBox_Header">
-            {{place_name}}
+            {{place.place_name}}
           </div>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <b-card-body class="savedBox_Body">
-            <b-card-sub-title class="savedBox_Body" style="margin-bottom: 5px;">{{place_addr}}</b-card-sub-title>
-            <b-button block class="savedBox_Body">Delete</b-button>
+            <b-card-sub-title class="savedBox_Body" style="margin-bottom: 5px;">{{place.place_addr}}</b-card-sub-title>
+            <b-button block class="savedBox_Body" @click="DeleteOnClicked">Delete</b-button>
           </b-card-body>
         </b-col>
       </b-row>
@@ -22,10 +22,26 @@
 
 <script>
 export default {
+  name: 'SavedBox',
+  props: {
+    selectedList: {
+      type: Object,
+      default: () => {
+        return {
+          place_name: '',
+          place_addr: ''
+        }
+      }
+    }
+  },
   data () {
     return {
-      place_name: '장소이름',
-      place_addr: '장소주소'
+      place: this.selectedList
+    }
+  },
+  methods: {
+    DeleteOnClicked () {
+      this.$emit('DeleteEvent')
     }
   }
 }
