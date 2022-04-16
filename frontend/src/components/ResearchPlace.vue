@@ -33,7 +33,7 @@
                 <b-col cols="3" class="container_savedplace">
                     <div class="savedplace_area">
                       <div id="savedplace_area_Header">저장된 장소</div>
-                      <savedplace-list :selected_count="selected_count" :selectedList="selectedList" id="savedplace_area_Body"></savedplace-list>
+                      <savedplace-list :selectedList="resultList" @DeleteFromSavedBox="DeleteFromSavedBox" id="savedplace_area_Body"></savedplace-list>
                       <b-row cols="2" id="savedplace_area_Footer">
                         <b-col><b-button block @click="$router.go(-1)">Back</b-button></b-col>
                         <b-col><b-button block @click="$router.push('InputData')">Next</b-button></b-col>
@@ -63,13 +63,30 @@ export default {
         place_addr: ''
       },
       search_term: '',
-      selected_count: 0
+      resultList: []
     }
   },
   methods: {
-    SelectFromResult_List (selected) {
-      this.selectedList = selected
-      this.selected_count += 1
+    SelectFromResult_List: function (selected) {
+      this.CheckValidationOfSaved(selected)
+    },
+    CheckValidationOfSaved: function (selected) {
+      var i
+      if (Object.keys(selected).length > 0) {
+        if (this.resultList.length === 0) {
+          this.resultList.push(selected)
+        } else {
+          for (i = 0; i < this.resultList.length; i++) {
+            if (selected.place_addr !== this.resultList[i].place_addr) {
+              this.resultList.push(selected)
+            }
+          }
+        }
+      }
+    },
+    DeleteFromSavedBox: function (index) {
+      this.resultList.splice(index, 1)
+      console.log(this.resultList)
     }
   }
 }
