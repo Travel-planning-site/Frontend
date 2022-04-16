@@ -38,7 +38,6 @@ export default {
   },
   methods: {
     SeletedonClick () {
-      console.log('담기발생')
       this.$emit('SelectFromResult_box', this.selectedList)
     }
   }

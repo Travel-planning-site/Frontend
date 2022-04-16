@@ -1,5 +1,5 @@
 <template>
-  <div class="savedBox">
+  <div class="savedBox" v-if="selectedBox">
     <b-card no-body>
       <b-row>
         <b-col>

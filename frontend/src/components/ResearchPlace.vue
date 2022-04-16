@@ -15,7 +15,7 @@
                                         <b-input-group-prepend is-text="is-text">
                                             <b-icon icon="search"></b-icon>
                                         </b-input-group-prepend>
-                                        <b-form-input type="search" v-bind="search_term" placeholder="장소검색"></b-form-input>
+                                        <b-form-input type="search" v-bind="search_term" :search_term="search_term" placeholder="장소검색" @keyup.enter="searchOnEntered"></b-form-input>
                                     </b-input-group>
                                   </div>
                                 </b-col>
@@ -45,8 +45,10 @@
     </div>
 </template>
 
+<script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script>
 import ResultBox from './ResultBox.vue'
+import axios from 'axios'
 export default {
   components: { ResultBox },
   name: 'ResearchPlace',
@@ -62,8 +64,9 @@ export default {
         place_name: '',
         place_addr: ''
       },
-      search_term: '',
-      resultList: []
+      search_term: null,
+      resultList: [],
+      savedcheck: false
     }
   },
   methods: {
@@ -78,15 +81,28 @@ export default {
         } else {
           for (i = 0; i < this.resultList.length; i++) {
             if (selected.place_addr !== this.resultList[i].place_addr) {
-              this.resultList.push(selected)
             }
           }
         }
+        this.savedcheck = true
       }
     },
     DeleteFromSavedBox: function (index) {
       this.resultList.splice(index, 1)
-      console.log(this.resultList)
+    },
+    searchOnEntered: function () {
+      console.log('검색어: ' + this.search_term)
+      if (this.search_term !== null) {
+      axios
+        .get(
+          'http://localhost:9090/kakao/search' + query
+        )
+        .then((response) => {
+          console.log(response)
+        }).catch((error) => {
+          console.log(error)
+        })
+      }
     }
   }
 }
