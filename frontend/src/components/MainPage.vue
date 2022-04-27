@@ -1,6 +1,6 @@
 <template>
 <div class="main">
-    <b-container>
+    <b-container fluid="fluid">
         <b-row id="header-page" cols="6">
             <b-col cols="4" md style="text-align: right">
                 <b-button id= "login">Login</b-button>
