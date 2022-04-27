@@ -15,7 +15,7 @@
                                         <b-input-group-prepend is-text="is-text">
                                             <b-icon icon="search"></b-icon>
                                         </b-input-group-prepend>
-                                        <b-form-input type="search" v-bind="search_term" placeholder="장소검색"></b-form-input>
+                                        <b-form-input type="search" v-bind="search_term" :search_term="search_term" placeholder="장소검색" @keyup.enter="searchOnEntered"></b-form-input>
                                     </b-input-group>
                                   </div>
                                 </b-col>
@@ -33,7 +33,7 @@
                 <b-col cols="3" class="container_savedplace">
                     <div class="savedplace_area">
                       <div id="savedplace_area_Header">저장된 장소</div>
-                      <savedplace-list :selected_count="selected_count" :selectedList="selectedList" id="savedplace_area_Body"></savedplace-list>
+                      <savedplace-list :selectedList="resultList" @DeleteFromSavedBox="DeleteFromSavedBox" id="savedplace_area_Body"></savedplace-list>
                       <b-row cols="2" id="savedplace_area_Footer">
                         <b-col><b-button block @click="$router.go(-1)">Back</b-button></b-col>
                         <b-col><b-button block @click="$router.push('InputData')">Next</b-button></b-col>
@@ -45,8 +45,10 @@
     </div>
 </template>
 
+<script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script>
 import ResultBox from './ResultBox.vue'
+import axios from 'axios'
 export default {
   components: { ResultBox },
   name: 'ResearchPlace',
@@ -62,14 +64,45 @@ export default {
         place_name: '',
         place_addr: ''
       },
-      search_term: '',
-      selected_count: 0
+      search_term: null,
+      resultList: [],
+      savedcheck: false
     }
   },
   methods: {
-    SelectFromResult_List (selected) {
-      this.selectedList = selected
-      this.selected_count += 1
+    SelectFromResult_List: function (selected) {
+      this.CheckValidationOfSaved(selected)
+    },
+    CheckValidationOfSaved: function (selected) {
+      var i
+      if (Object.keys(selected).length > 0) {
+        if (this.resultList.length === 0) {
+          this.resultList.push(selected)
+        } else {
+          for (i = 0; i < this.resultList.length; i++) {
+            if (selected.place_addr !== this.resultList[i].place_addr) {
+            }
+          }
+        }
+        this.savedcheck = true
+      }
+    },
+    DeleteFromSavedBox: function (index) {
+      this.resultList.splice(index, 1)
+    },
+    searchOnEntered: function () {
+      console.log('검색어: ' + this.search_term)
+      if (this.search_term !== null) {
+      axios
+        .get(
+          'http://localhost:9090/kakao/search' + query
+        )
+        .then((response) => {
+          console.log(response)
+        }).catch((error) => {
+          console.log(error)
+        })
+      }
     }
   }
 }

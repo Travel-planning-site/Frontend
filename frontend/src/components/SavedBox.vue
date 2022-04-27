@@ -1,5 +1,5 @@
 <template>
-  <div class="savedBox">
+  <div class="savedBox" v-if="selectedBox">
     <b-card no-body>
       <b-row>
         <b-col>
@@ -22,26 +22,23 @@
 
 <script>
 export default {
-  name: 'SavedBox',
   props: {
-    selectedList: {
-      type: Object,
-      default: () => {
-        return {
-          place_name: '',
-          place_addr: ''
-        }
-      }
+    selectedBox: {
+      type: Object
+    },
+    index: {
+      type: Number
     }
   },
   data () {
     return {
-      place: this.selectedList
+      place: this.selectedBox,
+      id: this.index
     }
   },
   methods: {
     DeleteOnClicked () {
-      this.$emit('DeleteEvent')
+      this.$emit('DeleteFromSavedBox', this.id)
     }
   }
 }

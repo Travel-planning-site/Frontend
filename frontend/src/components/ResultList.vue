@@ -32,7 +32,6 @@ export default {
   },
   methods: {
     SelectFromResult_box: function (result) {
-      console.log('ResultList 담기 발생')
       this.selectedResult = result
       this.$emit('SelectFromResult_List', this.selectedResult)
     }

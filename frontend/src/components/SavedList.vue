@@ -3,7 +3,7 @@
     <b-container fluid>
       <b-row style="margin: 5px;">
         <b-col>
-          <savedplace-box v-if="selected_count" :selectedList="selectedList" @DeleteOnClicked="DeleteOnClicked"></savedplace-box>
+          <savedplace-box v-for="(result, index) in selectedList" :key="index" :index="index" :selectedBox="selectedList[index]" @DeleteFromSavedBox="DeleteFromSavedBox"></savedplace-box>
         </b-col>
       </b-row>
     </b-container>
@@ -15,26 +15,21 @@ export default {
   name: 'SavedList',
   props: {
     selectedList: {
-      type: Object,
+      type: Array,
       default: () => {
-        return {
-          place_name: '',
-          place_addr: '',
-          place_img: ''
-        }
+        return []
       }
-    },
-    selected_count: {
-      type: Number
     }
   },
   data () {
     return {
+      resultList: this.selectedList,
+      result: []
     }
   },
   methods: {
-    DeleteOnClicked () {
-      console.log('삭제이벤트')
+    DeleteFromSavedBox (index) {
+      this.$emit('DeleteFromSavedBox', index)
     }
   }
 }
