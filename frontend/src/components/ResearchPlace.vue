@@ -15,7 +15,7 @@
                                         <b-input-group-prepend is-text="is-text">
                                             <b-icon icon="search"></b-icon>
                                         </b-input-group-prepend>
-                                        <b-form-input type="search" v-bind="search_term" :search_term="search_term" placeholder="장소검색" @keyup.enter="searchOnEntered"></b-form-input>
+                                        <b-form-input type="search" v-model="search_term" placeholder="장소검색" @keyup.enter="searchOnEntered"></b-form-input>
                                     </b-input-group>
                                   </div>
                                 </b-col>
@@ -45,7 +45,6 @@
     </div>
 </template>
 
-<script type="text/javascript" src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
 <script>
 import ResultBox from './ResultBox.vue'
 import axios from 'axios'
@@ -64,9 +63,14 @@ export default {
         place_name: '',
         place_addr: ''
       },
-      search_term: null,
       resultList: [],
-      savedcheck: false
+      savedcheck: false,
+      search_term: '',
+      search_results: [],
+      center_postion: {
+        x: 33.450701,
+        y: 126.570667
+      }
     }
   },
   methods: {
@@ -91,18 +95,19 @@ export default {
       this.resultList.splice(index, 1)
     },
     searchOnEntered: function () {
-      console.log('검색어: ' + this.search_term)
-      if (this.search_term !== null) {
-      axios
-        .get(
-          'http://localhost:9090/kakao/search' + query
-        )
-        .then((response) => {
-          console.log(response)
-        }).catch((error) => {
-          console.log(error)
-        })
+      if (this.search_term.length > 0) {
+        this.kakaosearch(this.search_term)
       }
+    },
+    kakaosearch (keyword) {
+      console.log(keyword)
+      axios.get(
+        'https://dapi.kakao.com/v2/local/search/keyword.json?y=' + this.center_postion.y + '&x=' + this.center_postion.x + '&query=' + keyword, {
+          headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
+          }
+        }).then((res) => {
+        console.log(res.data)
+      })
     }
   }
 }
@@ -153,7 +158,6 @@ export default {
     margin: 10px;
     margin-top: 20px;
     height: 5vh;
-    background-color: white;
   }
   .ResearchPlace_page {
     min-width: 900px;
