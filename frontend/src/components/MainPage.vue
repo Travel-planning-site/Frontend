@@ -19,11 +19,10 @@
                 <b-col class="buttons">
                     <b-button
                         id="makeButton"
-                        style="font-size: 2.5rem"
-                        size="lg"
+                        style="font-size: 2rem"
                         variant="light"
                         @click="$router.push('BasicInfo')">Make a Travel Plan</b-button>
-                    <b-button style="font-size: 2.5rem" size="lg" variant="light">My Plans</b-button>
+                    <b-button style="font-size: 2rem" variant="light">My Plans</b-button>
                 </b-col>
             </b-row>
             <b-row></b-row>
@@ -69,7 +68,7 @@ export default {}
     }
 
     #image {
-        width: 700px;
-        height: 500px;
+        width: 600px;
+        height: 400px;
     }
 </style>

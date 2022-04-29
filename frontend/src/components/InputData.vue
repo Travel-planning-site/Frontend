@@ -1,11 +1,9 @@
 <template>
     <div class="body">
-      <b-container cols="6">
         <b-row>
             <b-col cols="6"><input-data-form></input-data-form></b-col>
             <b-col><kakao-map></kakao-map></b-col>
         </b-row>
-      </b-container>
     </div>
 </template>
 

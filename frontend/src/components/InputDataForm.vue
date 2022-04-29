@@ -10,8 +10,8 @@
                     <b-row>
                         <b-col>
                             <b-row style="margin-bottom: 20px;">
-                                <b-col><b-img src="https://picsum.photos/300/180/?image=54" rounded center></b-img></b-col>
-                                <b-col><b-img src="https://picsum.photos/300/180/?image=51" rounded center></b-img></b-col>
+                                <b-col><b-img src="https://picsum.photos/250/180/?image=54" rounded center></b-img></b-col>
+                                <b-col><b-img src="https://picsum.photos/250/180/?image=51" rounded center></b-img></b-col>
                             </b-row>
                             <b-row class="title">
                                 <b-col>출발지</b-col>
