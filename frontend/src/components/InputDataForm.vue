@@ -9,25 +9,25 @@
                     </b-row>
                     <b-row>
                         <b-col>
-                            <b-row style="margin-bottom: 30px;">
-                                <b-col><b-img src="https://picsum.photos/300/200/?image=54" rounded center></b-img></b-col>
-                                <b-col><b-img src="https://picsum.photos/300/200/?image=51" rounded center></b-img></b-col>
+                            <b-row style="margin-bottom: 20px;">
+                                <b-col><b-img src="https://picsum.photos/300/180/?image=54" rounded center></b-img></b-col>
+                                <b-col><b-img src="https://picsum.photos/300/180/?image=51" rounded center></b-img></b-col>
                             </b-row>
                             <b-row class="title">
                                 <b-col>출발지</b-col>
                                 <b-col>도착지</b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col><b-form-input :id="startPlace" size="lg" placeholder="출발장소" v-model="startPlace"></b-form-input></b-col>
-                                <b-col><b-form-input :id="arrivalPlace" size="lg" placeholder="도착장소" v-model="arrivalPlace"></b-form-input></b-col>
+                                <b-col><b-form-input :id="startPlace" placeholder="출발장소" v-model="startPlace"></b-form-input></b-col>
+                                <b-col><b-form-input :id="arrivalPlace" placeholder="도착장소" v-model="arrivalPlace"></b-form-input></b-col>
                             </b-row>
                             <b-row class="title">
                                 <b-col>출발시간</b-col>
                                 <b-col>도착시간</b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col><b-form-input :id="start_time" size="lg" placeholder="출발시간" v-model="start_time"></b-form-input></b-col>
-                                <b-col><b-form-input :id="arrive_time" size="lg" placeholder="도착시간" v-model="arrive_time"></b-form-input></b-col>
+                                <b-col><b-form-input :id="start_time"  placeholder="출발시간" v-model="start_time"></b-form-input></b-col>
+                                <b-col><b-form-input :id="arrive_time" placeholder="도착시간" v-model="arrive_time"></b-form-input></b-col>
                             </b-row>
                         </b-col>
                     </b-row>
@@ -39,11 +39,10 @@
                             </b-row>
                             <b-row class="margin">
                                 <b-col>
-                                    <b-form-input :id="cost" size="lg" placeholder="비용" v-model="cost"></b-form-input>
+                                    <b-form-input :id="cost"  placeholder="비용" v-model="cost"></b-form-input>
                                 </b-col>
                                 <b-col>
                                     <b-form-select
-                                    size="lg"
                                     :options="['기차', '렌트카', '비행기', '택시', '도보']"
                                     v-model="transportation"
                                 ></b-form-select>
@@ -54,15 +53,15 @@
                                 <b-col>소요 시간</b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col><b-form-input :id="content" size="lg" placeholder="내용" v-model="content"></b-form-input></b-col>
-                                <b-col><b-form-input :id="totalTime" size="lg" placeholder="총 소요시간" v-model="totalTime"></b-form-input></b-col>
+                                <b-col><b-form-input :id="content"  placeholder="내용" v-model="content"></b-form-input></b-col>
+                                <b-col><b-form-input :id="totalTime"  placeholder="총 소요시간" v-model="totalTime"></b-form-input></b-col>
                             </b-row>
-                            <b-row class="title" style="margin-top: 30px;">
+                            <b-row class="title" style="margin-top: 20px;">
                                 <b-col>메모</b-col>
                             </b-row>
                             <b-row>
                                 <b-col>
-                                    <b-form-textarea label class="p-2 bg-light border" id="memo" size="lg" v-model="memo" placeholder="주의사항이나 메모할 내용을 입력해주세요." rows="3" max-rows="6" no-resize></b-form-textarea>
+                                    <b-form-textarea  class="mt-2" id="memo"  v-model="memo" placeholder="주의사항이나 메모할 내용을 입력해주세요." ></b-form-textarea>
                                 </b-col>
                             </b-row>
                             <b-row class="button">
@@ -121,17 +120,19 @@ export default{
     font-weight: normal;
     font-style: normal;
 }
+
 .title {
     font-family: yg-jalnan;
 
 }
 .margin {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .left {
+    padding: 0 30px 30px 30px;
     height: auto;
-    margin-top: 30px;
+    /* margin-top: 30px; */
     padding-bottom: 30px;
     background-color: rgb(240, 228, 255);
 }
@@ -139,7 +140,6 @@ export default{
     text-align: right;
 }
 #button {
-    position: fixde;
     margin-top: 20px;
     bottom : 130px;
     width : 90px;
@@ -147,7 +147,7 @@ export default{
     border: 5px;
 }
 #sidebar {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     background-color: rgba(226, 213, 247, 0.943);
 }
 </style>
