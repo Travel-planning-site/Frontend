@@ -16,6 +16,12 @@ export default{
   name: 'InputData',
   data () {
     return {
+      savedList: ''
+    }
+  },
+  created () {
+    if (this.$route.params.savedList != null) {
+      this.savedList = this.$route.params.savedList
     }
   },
   methods: {

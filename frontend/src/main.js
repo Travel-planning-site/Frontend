@@ -15,6 +15,7 @@ import ResultList from './components/ResultList'
 import ResultBox from './components/ResultBox'
 import SavedList from './components/SavedList'
 import SavedBox from './components/SavedBox'
+import Pagination from './components/Pagination'
 import KakaoMap from './components/KakaoMap'
 import InputDataForm from './components/InputDataForm'
 
@@ -27,6 +28,7 @@ Vue.component('result-list', ResultList)
 Vue.component('result-box', ResultBox)
 Vue.component('savedplace-list', SavedList)
 Vue.component('savedplace-box', SavedBox)
+Vue.component('pagination', Pagination)
 Vue.component('kakao-map', KakaoMap)
 Vue.component('input-data-form', InputDataForm)
 

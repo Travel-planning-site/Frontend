@@ -1,7 +1,16 @@
 <template>
     <div class="ResultList">
-      <template>
-        <result-box :ResultList_results="results" @SelectFromResult_box="SelectFromResult_box"></result-box>
+      <template v-i="results.length > 0">
+        <b-row>
+          <b-col xxl="3" xl="4" lg="6" cols="12" v-for="(result, index) in listData" :key="index">
+            <result-box :ResultList_result="result" @SelectFromResult_box="SelectFromResult_box"></result-box>
+          </b-col>
+        </b-row>
+        <!-- <b-row>
+          <b-col cols="12" v-for="(result, index) in resultLists" :key="index">
+            <result-box :ResultList_result="result" @SelectFromResult_box="SelectFromResult_box"></result-box>
+          </b-col>
+        </b-row> -->
       </template>
     </div>
 </template>
@@ -10,30 +19,23 @@
 export default {
   name: 'ResultList',
   props: {
-    results: {
-      type: Object,
-      default: () => {
-        return {
-          place_img: '',
-          place_name: '',
-          place_addr: ''
-        }
-      }
+    listData: {
+      type: Array
+    }
+  },
+  watch: {
+    listData () {
+      this.results = this.listData
     }
   },
   data () {
     return {
-      selectedResult: {
-        place_img: '',
-        place_name: '',
-        place_addr: ''
-      }
+      results: ''
     }
   },
   methods: {
     SelectFromResult_box: function (result) {
-      this.selectedResult = result
-      this.$emit('SelectFromResult_List', this.selectedResult)
+      this.$emit('SelectFromResult_List', result)
     }
   }
 }

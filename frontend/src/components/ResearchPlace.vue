@@ -21,9 +21,12 @@
                                 </b-col>
                             </b-row>
                             <b-row class="result_searched">
-                              <b-col cols="3" id="result_box">
+                              <b-col id="result_box">
                                 <b-row>
-                                  <result-list :results="results" @SelectFromResult_List="SelectFromResult_List"></result-list>
+                                  <result-list :listData="listData" @SelectFromResult_List="SelectFromResult_List"></result-list>
+                                </b-row>
+                                <b-row>
+                                  <pagination @PageChanged="PageChanged"></pagination>
                                 </b-row>
                               </b-col>
                             </b-row>
@@ -36,7 +39,7 @@
                       <savedplace-list :selectedList="resultList" @DeleteFromSavedBox="DeleteFromSavedBox" id="savedplace_area_Body"></savedplace-list>
                       <b-row cols="2" id="savedplace_area_Footer">
                         <b-col><b-button block @click="$router.go(-1)">Back</b-button></b-col>
-                        <b-col><b-button block @click="$router.push('InputData')">Next</b-button></b-col>
+                        <b-col><b-button block @click="nextOnClicked">Next</b-button></b-col>
                       </b-row>
                     </div>
                 </b-col>
@@ -67,10 +70,16 @@ export default {
       savedcheck: false,
       search_term: '',
       search_results: [],
+      listData: [],
+      total: 0,
+      search: false,
       center_postion: {
         x: 33.450701,
         y: 126.570667
-      }
+      },
+      limit: 9,
+      block: 4,
+      currentPage: ''
     }
   },
   methods: {
@@ -78,14 +87,12 @@ export default {
       this.CheckValidationOfSaved(selected)
     },
     CheckValidationOfSaved: function (selected) {
-      var i
       if (Object.keys(selected).length > 0) {
         if (this.resultList.length === 0) {
           this.resultList.push(selected)
         } else {
-          for (i = 0; i < this.resultList.length; i++) {
-            if (selected.place_addr !== this.resultList[i].place_addr) {
-            }
+          if (this.resultList.every((item) => item.id !== selected.id)) {
+            this.resultList.push(selected)
           }
         }
         this.savedcheck = true
@@ -95,19 +102,38 @@ export default {
       this.resultList.splice(index, 1)
     },
     searchOnEntered: function () {
-      if (this.search_term.length > 0) {
-        this.kakaosearch(this.search_term)
+      if (!this.search) {
+        if (this.search_term.length > 0) {
+          for (var i = 1; i < 3; i++) {
+            this.kakaosearch(this.search_term, i)
+          }
+        }
       }
     },
-    kakaosearch (keyword) {
-      console.log(keyword)
+    kakaosearch (keyword, i) {
       axios.get(
-        'https://dapi.kakao.com/v2/local/search/keyword.json?y=' + this.center_postion.y + '&x=' + this.center_postion.x + '&query=' + keyword, {
+        'https://dapi.kakao.com/v2/local/search/keyword.json?page=' + i + '&query=' + keyword, {
           headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
           }
         }).then((res) => {
-        console.log(res.data)
+        this.search_results.push(...res.data.documents)
+        this.total += res.data.documents.length
+        this.search = true
+        this.PageChanged(1)
       })
+    },
+    PageChanged (page) {
+      console.log(page)
+      this.currentPage = page
+      this.listData = this.search_results.slice(
+        (page - 1) * this.limit,
+        page * this.limit
+      )
+      // page : 1, listData = search_result[0] ~ search_result[8]
+      this.$emit('listData', this.listData)
+    },
+    nextOnClicked () {
+      this.$router.push({name: 'InputData', params: { savedList: this.resultList }})
     }
   }
 }
