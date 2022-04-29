@@ -47,6 +47,7 @@ export default {}
         margin-left: 10px;
     }
     .logoImage {
+        padding-top: 45px;
         text-align: center;
     }
     .buttons {
@@ -64,7 +65,6 @@ export default {}
     #login {
         font-size: 20px;
         font-family: yg-jalnan;
-
     }
 
     #image {
