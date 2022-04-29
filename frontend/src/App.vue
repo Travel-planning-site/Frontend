@@ -20,4 +20,10 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 } */
+.dotOverlay {position:relative;bottom:30px;border-radius:6px;border: 1px solid #ccc;border-bottom:2px solid #ddd;float:left;font-size:12px;padding:5px;background:#fff; list-style:none;}
+.dotOverlay:nth-of-type(n) {border:0; box-shadow:0px 1px 2px #888;}
+.number {font-weight:bold;color:#ee6152;}
+.dotOverlay:after {content:'';position:absolute;margin-left:-6px;left:50%;bottom:-8px;width:11px;height:8px;background:url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white_small.png')}
+.distanceInfo {position:relative;top:5px;left:5px;list-style:none;margin:0;}
+.distanceInfo .label {display:inline-block;width:50px;}
 </style>
