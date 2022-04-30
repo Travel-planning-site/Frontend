@@ -68,7 +68,7 @@ export default {}
     }
 
     #image {
-        width: 600px;
-        height: 400px;
+        width: 700px;
+        height: 500px;
     }
 </style>

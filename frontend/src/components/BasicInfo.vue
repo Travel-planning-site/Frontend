@@ -126,7 +126,7 @@ export default {
     #Page_name {
         font-family: yg-jalnan;
         margin: 10px;
-        padding-top: 20px;
+        padding-top: 80px;
         font-size: 35px;
     }
 

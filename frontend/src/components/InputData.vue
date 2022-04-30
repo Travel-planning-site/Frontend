@@ -1,8 +1,8 @@
 <template>
     <div class="body">
         <b-row>
-            <b-col cols="6"><input-data-form></input-data-form></b-col>
-            <b-col><kakao-map></kakao-map></b-col>
+            <b-col cols="6"><input-data-form v-bind:savedListProps="savedList"></input-data-form></b-col>
+            <b-col><kakao-map v-bind:savedListProps="savedList"></kakao-map></b-col>
         </b-row>
     </div>
 </template>
@@ -16,7 +16,7 @@ export default{
   name: 'InputData',
   data () {
     return {
-      savedList: ''
+      savedList: []
     }
   },
   created () {

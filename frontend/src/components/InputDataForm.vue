@@ -9,9 +9,9 @@
                     </b-row>
                     <b-row>
                         <b-col>
-                            <b-row style="margin-bottom: 20px;">
-                                <b-col><b-img src="https://picsum.photos/250/180/?image=54" rounded center></b-img></b-col>
-                                <b-col><b-img src="https://picsum.photos/250/180/?image=51" rounded center></b-img></b-col>
+                            <b-row style="margin-bottom: 40px;">
+                                <b-col style="text-align: center;"><img :src="startPlaceImg" id="img"></b-col>
+                                <b-col style="text-align: center;"><img :src="arrivalPlaceImg" id="img"></b-col>
                             </b-row>
                             <b-row class="title">
                                 <b-col>출발지</b-col>
@@ -76,11 +76,13 @@
 </template>
 
 <script>
-import KakaoMap from './KakaoMap.vue'
 
+import axios from 'axios'
 export default{
-  components: { KakaoMap },
   name: 'InputData',
+  props: {
+    savedListProps: Array
+  },
   data () {
     return {
       startPlace: '',
@@ -91,7 +93,10 @@ export default{
       transportation: '기차',
       content: '',
       totalTime: '',
-      memo: ''
+      memo: '',
+      placeImg: '',
+      startPlaceImg: '',
+      arrivalPlaceImg: ''
     }
   },
   methods: {
@@ -108,7 +113,31 @@ export default{
       console.log(this.content)
       console.log(this.totalTime)
       console.log(this.memo)
+    },
+    setTitle: function (savedList) {
+      this.startPlace = savedList[0].place_name
+      this.arrivalPlace = savedList[1].place_name
+    },
+    getImage: function (placeName, num) {
+      axios.get(
+        'https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/image?query=' + placeName, {
+          headers: {
+            'X-Naver-Client-Id': 'o9H6ct1KNCA_QMfWXbtT',
+            'X-Naver-Client-Secret': 'kRkOfXCxP2'
+          }
+        }).then((res) => {
+        this.placeImg = res.data.items[0].thumbnail
+        console.log(this.placeImg)
+        if (num === 1) this.startPlaceImg = this.placeImg
+        if (num === 2) this.arrivalPlaceImg = this.placeImg
+      })
     }
+  },
+  created () {
+    console.log(this.savedListProps)
+    this.setTitle(this.savedListProps)
+    this.getImage(this.startPlace, 1)
+    this.getImage(this.arrivalPlace, 2)
   }
 }
 </script>
@@ -126,13 +155,13 @@ export default{
 
 }
 .margin {
-    margin-bottom: 10px;
+    margin-bottom: 30px;
 }
 
 .left {
     padding: 0 30px 30px 30px;
     height: auto;
-    /* margin-top: 30px; */
+    margin-top: 20px;
     padding-bottom: 30px;
     background-color: rgb(240, 228, 255);
 }
@@ -147,7 +176,11 @@ export default{
     border: 5px;
 }
 #sidebar {
-    margin-bottom: 20px;
+    margin-bottom: 40px;
     background-color: rgba(226, 213, 247, 0.943);
+}
+#img {
+    width: 400px;
+    height: 300px;
 }
 </style>

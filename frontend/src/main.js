@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+// import AxiosPlugin from 'vue-axios-cors'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -18,6 +19,8 @@ import SavedBox from './components/SavedBox'
 import Pagination from './components/Pagination'
 import KakaoMap from './components/KakaoMap'
 import InputDataForm from './components/InputDataForm'
+
+export const EventBus = new Vue()
 
 Vue.config.productionTip = false
 
@@ -34,6 +37,7 @@ Vue.component('input-data-form', InputDataForm)
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+// Vue.use(AxiosPlugin)
 
 /* eslint-disable no-new */
 new Vue({

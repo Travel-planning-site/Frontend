@@ -1,17 +1,21 @@
 <template>
-    <div id="map" style="width:100%; height:736px;"></div>
+    <div id="map" style="width:100%; height:966px;"></div>
 </template>
 
 <script>
 import InputDataForm from './InputDataForm.vue'
+// import {EventBus} from '../main'
 export default {
   components: { InputDataForm },
   name: 'KakaoMap',
+  props: {
+    savedListProps: Array
+  },
   data () {
     return {
       markerPositions1: [
-        [33.452278, 126.567803],
-        [33.452671, 126.574792],
+        [0, 0],
+        [0, 0]
         // [33.4524745, 126.5712975]
       ],
       markerPositions2: [
@@ -24,12 +28,18 @@ export default {
         [37.49646391248451, 127.02675574250912]
       ],
       markers: [],
-      infowindow: null
+      infowindow: null,
+      savedList: [],
+      midPoint: []
     }
   },
   created () {
+    console.log(this.savedListProps)
+    console.log(this.markerPositions1)
   },
   mounted () {
+    console.log(this.markerPositions1)
+
     if (window.kakao && window.kakao.maps) {
       this.initMap()
     } else {
@@ -42,12 +52,27 @@ export default {
     }
   },
   methods: {
+    getAddress (savedList) { // 좌표 구하기
+      for (var i = 0; i < savedList.length; i++) {
+        for (var j = 0; j < 2; j++) {
+          this.markerPositions1[i][0] = savedList[i].y
+          this.markerPositions1[i][1] = savedList[i].x
+        }
+      }
+      return this.markerPositions1
+    },
+    getMidPoint (markerPoint) { // overlay를 나타내기 위한 중간좌표 값 구하기
+      this.midPoint[0] = (parseFloat(markerPoint[0][0]) + parseFloat(markerPoint[1][0])) / 2
+      this.midPoint[1] = (parseFloat(markerPoint[0][1]) + parseFloat(markerPoint[1][1])) / 2
+      return this.midPoint
+    },
     initMap () {
+      this.markerPositions1 = this.getAddress(this.savedListProps)
       const container = document.getElementById('map') // 지도를 표시할 div
       console.log(container)
       const options = {
-        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-        level: 5 // 지도를 확대할 div
+        center: new kakao.maps.LatLng(this.markerPositions1[0][0], this.markerPositions1[0][1]), // 지도의 중심좌표
+        level: 2 // 지도를 확대할 div
       }
       // 지도 객체를 등록합니다.
       // 지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
@@ -68,7 +93,9 @@ export default {
 
       polyline.setMap(this.map)
       console.log(polyline.getLength())
-      console.log((this.markerPositions1[1][0] + this.markerPositions1[0][0]) / 2, (this.markerPositions1[1][1] + this.markerPositions1[0][1]) / 2)
+      console.log(this.getMidPoint(this.markerPositions1))
+      console.log(this.midPoint)
+      // console.log((this.markerPositions1[0][0] + this.markerPositions1[1][0]) / 2, (this.markerPositions1[1][1] + this.markerPositions1[0][1]) / 2)
 
       var distance = polyline.getLength().toFixed(0)
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
@@ -84,17 +111,17 @@ export default {
 
       var content = '<ul class="dotOverlay">'
       content += '    <li>'
-      content += '        <span class="label">총거리</span><span class="number">' + distance + '</span>m'
+      content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>m'
       content += '    </li>'
       content += '    <li>'
-      content += '        <span class="label">도보</span>' + walkHour + walkMin
+      content += '        <span class="label">도보 </span>' + walkHour + walkMin
       content += '    </li>'
       content += '</ul>'
 
       const distanceOverlay = new kakao.maps.CustomOverlay({
         map: this.map,
         content: content,
-        position: new kakao.maps.LatLng(33.4524745, 126.5712975),
+        position: new kakao.maps.LatLng(this.midPoint[0], this.midPoint[1]),
         yAnchor: 0.5,
         zIndex: 0
       })
@@ -132,6 +159,11 @@ export default {
         this.map.setBounds(bounds)
       }
     }
+  },
+  watch: {
+    // savedListProps: function () {
+    //   console.log(this.savedListProps)
+    // }
   }
 }
 </script>
@@ -140,6 +172,8 @@ export default {
 <style scoped>
 #map {
     margin-left: -20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .button-group {
