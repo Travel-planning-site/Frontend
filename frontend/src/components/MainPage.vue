@@ -2,7 +2,7 @@
     <div class="main">
         <b-container fluid="fluid">
             <b-row id="header-page" cols="6">
-                <b-col cols="4" md="md" style="text-align: right">
+                <b-col cols="6" md="md" style="text-align: right">
                     <b-button id="login">Login</b-button>
                 </b-col>
             </b-row>
@@ -10,7 +10,7 @@
                 <b-col class="logoImage">
                     <b-img
                         id="image"
-                        src="https://cdn.smartlifetv.co.kr/news/photo/202107/12282_15191_4027.jpg"
+                        src="/static/image/main.png"
                         fluid="fluid"
                         alt="Responsive image"></b-img>
                 </b-col>
@@ -19,10 +19,10 @@
                 <b-col class="buttons">
                     <b-button
                         id="makeButton"
-                        style="font-size: 2rem"
+                        style="font-size: 2.6rem"
                         variant="light"
                         @click="$router.push('BasicInfo')">Make a Travel Plan</b-button>
-                    <b-button style="font-size: 2rem" variant="light">My Plans</b-button>
+                    <b-button style="font-size: 2.6rem" variant="light">My Plans</b-button>
                 </b-col>
             </b-row>
             <b-row></b-row>

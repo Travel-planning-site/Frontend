@@ -127,14 +127,12 @@ export default{
           }
         }).then((res) => {
         this.placeImg = res.data.items[0].thumbnail
-        console.log(this.placeImg)
         if (num === 1) this.startPlaceImg = this.placeImg
         if (num === 2) this.arrivalPlaceImg = this.placeImg
       })
     }
   },
   created () {
-    console.log(this.savedListProps)
     this.setTitle(this.savedListProps)
     this.getImage(this.startPlace, 1)
     this.getImage(this.arrivalPlace, 2)

@@ -4,12 +4,14 @@
 
 <script>
 import InputDataForm from './InputDataForm.vue'
+import axios from 'axios'
 // import {EventBus} from '../main'
 export default {
   components: { InputDataForm },
   name: 'KakaoMap',
   props: {
-    savedListProps: Array
+    savedListProps: Array,
+    routesProps: Array
   },
   data () {
     return {
@@ -19,27 +21,22 @@ export default {
         // [33.4524745, 126.5712975]
       ],
       markerPositions2: [
-        [37.499590490909185, 127.0263723554437],
-        [37.499427948430814, 127.02794423197847],
-        [37.498553760499505, 127.02882598822454],
-        [37.497625593121384, 127.02935713582038],
-        [37.49629291770947, 127.02587362608637],
-        [37.49754540521486, 127.02546694890695],
-        [37.49646391248451, 127.02675574250912]
       ],
       markers: [],
       infowindow: null,
       savedList: [],
-      midPoint: []
+      midPoint: [],
+      guides: {},
+      linePath: ''
     }
   },
   created () {
-    console.log(this.savedListProps)
-    console.log(this.markerPositions1)
+    this.markerPositions1 = this.getAddress(this.savedListProps)
+    console.log(this.routesProps)
+    this.getKakaoNavi(this.markerPositions1)
+    // console.log(this.getKakaoNavi(this.markerPositions1)) // 결과값이 제대로 나오지 않음, 비동기 통신 관련 문제
   },
   mounted () {
-    console.log(this.markerPositions1)
-
     if (window.kakao && window.kakao.maps) {
       this.initMap()
     } else {
@@ -54,10 +51,8 @@ export default {
   methods: {
     getAddress (savedList) { // 좌표 구하기
       for (var i = 0; i < savedList.length; i++) {
-        for (var j = 0; j < 2; j++) {
-          this.markerPositions1[i][0] = savedList[i].y
-          this.markerPositions1[i][1] = savedList[i].x
-        }
+        this.markerPositions1[i][0] = savedList[i].y
+        this.markerPositions1[i][1] = savedList[i].x
       }
       return this.markerPositions1
     },
@@ -66,8 +61,24 @@ export default {
       this.midPoint[1] = (parseFloat(markerPoint[0][1]) + parseFloat(markerPoint[1][1])) / 2
       return this.midPoint
     },
+    getLinePath (address) {
+      if (address.length === 2) {
+        const latlngArray = new Array(2)
+        console.log(latlngArray)
+        for (var i = 0; i < 2; i++) {
+          latlngArray[i] = new kakao.maps.LatLng(address[i][0], address[i][1])
+        }
+        return latlngArray
+      } else {
+        const latlngArray = new Array(address.length)
+        for (var j = 0; j < address.length; j++) {
+          latlngArray[j] = new kakao.maps.LatLng(address[j][0], address[j][1])
+        }
+        console.log(latlngArray)
+        return latlngArray
+      }
+    },
     initMap () {
-      this.markerPositions1 = this.getAddress(this.savedListProps)
       const container = document.getElementById('map') // 지도를 표시할 div
       console.log(container)
       const options = {
@@ -78,24 +89,36 @@ export default {
       // 지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
       this.map = new kakao.maps.Map(container, options) // 지도 생성
       this.displayMarker(this.markerPositions1) // 마커 생성
-      const linePath = [
-        new kakao.maps.LatLng(this.markerPositions1[0][0], this.markerPositions1[0][1]),
-        new kakao.maps.LatLng(this.markerPositions1[1][0], this.markerPositions1[1][1])
-      ]
+      // console.log(this.getKakaoNavi(this.markerPositions1))
+      // this.setLine()
+    },
+    setLine (address) {
+      this.linePath = this.getLinePath(address)
+      // console.log(linePath)
 
-      var polyline = new kakao.maps.Polyline({
-        path: linePath, // 선을 구성하는 좌표배열 입니다
-        strokeWeight: 5, // 선의 두께 입니다
-        strokeColor: '#FFAE00', // 선의 색깔입니다
-        strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-        strokeStyle: 'solid' // 선의 스타일입니다
-      })
+      // const linePath = [
+      //   new kakao.maps.LatLng(35.157561850795894, 129.1726255253951),
+      //   new kakao.maps.LatLng(35.15920809173113, 129.170168603706),
+      //   new kakao.maps.LatLng(35.17216470466875, 129.1818477816053),
+      //   new kakao.maps.LatLng(35.175773796521696, 129.18332716704396),
+      //   new kakao.maps.LatLng(35.1833187391316, 129.20068467557806),
+      //   new kakao.maps.LatLng(35.18137432737682, 129.2058710134972),
+      //   new kakao.maps.LatLng(35.191346562036266, 129.21548323338433),
+      //   new kakao.maps.LatLng(35.19398128687029, 129.213414223396)
+      // ]
+      console.log(this.linePath)
 
-      polyline.setMap(this.map)
-      console.log(polyline.getLength())
-      console.log(this.getMidPoint(this.markerPositions1))
-      console.log(this.midPoint)
-      // console.log((this.markerPositions1[0][0] + this.markerPositions1[1][0]) / 2, (this.markerPositions1[1][1] + this.markerPositions1[0][1]) / 2)
+      if (this.length !== '') {
+        var polyline = new kakao.maps.Polyline({
+          path: this.linePath, // 선을 구성하는 좌표배열 입니다
+          strokeWeight: 5, // 선의 두께 입니다
+          strokeColor: '#FFAE00', // 선의 색깔입니다
+          strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+          strokeStyle: 'solid' // 선의 스타일입니다
+        })
+
+        polyline.setMap(this.map)
+      }
 
       var distance = polyline.getLength().toFixed(0)
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
@@ -158,12 +181,54 @@ export default {
 
         this.map.setBounds(bounds)
       }
+    },
+    async getKakaoNavi (address) {
+      // console.log(routes)
+      console.log(address)
+      // https://cors-anywhere.herokuapp.com 접속 후 request
+      // CORS 문제로 다른 사람이 만든 프록시 서버 이용, 추후 헤로쿠 사용하여 해결
+      await axios.get(
+        'https://cors-anywhere.herokuapp.com/https://apis-navi.kakaomobility.com/v1/directions', {
+          headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
+          },
+          params: {
+            origin: address[0][1] + ',' + address[0][0],
+            destination: address[1][1] + ',' + address[1][0]
+          }
+        }).then((res) => {
+        console.log(res)
+        const resultCode = res.data.routes[0].result_code
+        if (resultCode === 105) { // 교통 장애가 있다면
+          alert(res.data.routes[0].result_msg)
+          this.setLine(address)
+          // return address
+        } else if (resultCode === 0) { // 길찾기 성공
+          this.guides = res.data.routes[0].sections[0].guides
+          this.markerPositions2 = this.getAddressList(this.guides)
+          console.log(this.markerPositions2) // 카카오네비 결과값 x,y
+          this.setLine(this.markerPositions2)
+
+        // return this.markerPositions2
+        }
+      })
+    },
+    getAddressList (guides) {
+      // const arr = new Array(guides.length)
+      // for (var i = 0; i < guides.length; i++) {
+      //   arr[i] = new Array(2)
+      // }
+      const arr = new Array(guides.length).fill(0).map(() => new Array(2))
+      for (var j = 0; j < guides.length; j++) {
+        arr[j][0] = guides[j].x
+        arr[j][1] = guides[j].y
+      }
+      return arr
     }
   },
   watch: {
-    // savedListProps: function () {
-    //   console.log(this.savedListProps)
-    // }
+    markerPositions2: function () {
+      this.setLine(this.markerPositions2)
+    }
   }
 }
 </script>
