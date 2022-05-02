@@ -16,6 +16,7 @@
                                             <b-icon icon="search"></b-icon>
                                         </b-input-group-prepend>
                                         <b-form-input type="search" v-model="search_term" placeholder="장소검색" @keyup.enter="searchOnEntered"></b-form-input>
+                                        <daum-search :listData="listData" @getImageList="getImageList"></daum-search>
                                     </b-input-group>
                                   </div>
                                 </b-col>
@@ -56,30 +57,22 @@ export default {
   name: 'ResearchPlace',
   data () {
     return {
-      results: {
-        place_img: 'https://cdn.smartlifetv.co.kr/news/photo/202107/12282_15191_4027.jpg',
-        place_name: '장소이름',
-        place_addr: '장소주소'
-      },
-      selectedList: {
-        place_img: '',
-        place_name: '',
-        place_addr: ''
-      },
       resultList: [],
       savedcheck: false,
       search_term: '',
       search_results: [],
       listData: [],
+      ImageData: [],
       total: 0,
-      search: false,
       center_postion: {
         x: 33.450701,
         y: 126.570667
       },
       limit: 9,
       block: 4,
-      currentPage: ''
+      currentPage: '',
+      ImageList: [],
+      list: []
     }
   },
   methods: {
@@ -95,18 +88,18 @@ export default {
             this.resultList.push(selected)
           }
         }
-        this.savedcheck = true
       }
     },
     DeleteFromSavedBox: function (index) {
       this.resultList.splice(index, 1)
     },
     searchOnEntered: function () {
-      if (!this.search) {
-        if (this.search_term.length > 0) {
-          for (var i = 1; i < 3; i++) {
-            this.kakaosearch(this.search_term, i)
-          }
+      if (this.search_term.length > 0) {
+        if (this.search_results.length > 0) {
+          this.search_results.splice(0)
+        }
+        for (var i = 1; i < 3; i++) {
+          this.kakaosearch(this.search_term, i)
         }
       }
     },
@@ -118,25 +111,49 @@ export default {
         }).then((res) => {
         this.search_results.push(...res.data.documents)
         this.total += res.data.documents.length
-        this.search = true
         this.PageChanged(1)
       })
     },
+    getImageList: function (list) {
+      this.ImageList = list
+    },
     PageChanged (page) {
-      console.log(page)
       this.currentPage = page
       this.listData = this.search_results.slice(
         (page - 1) * this.limit,
         page * this.limit
       )
       // page : 1, listData = search_result[0] ~ search_result[8]
-      this.$emit('listData', this.listData)
+      this.ImageData = this.ImageList.splice(
+        (page - 1) * this.limit,
+        page * this.limit
+      )
+      this.unitList()
+      this.$emit('listData', this.list)
     },
     nextOnClicked () {
       if (this.resultList.length > 1) {
         this.$router.push({name: 'InputData', params: { savedList: this.resultList }})
       } else {
         alert('장소를 2개이상 선택해주세요.')
+        this.$router.push({name: 'InputData', params: { savedList: this.resultList }})
+      }
+    },
+    unitList () {
+      var obj = {
+        place_name: '',
+        road_address_name: '',
+        x: 0,
+        y: 0,
+        placeImage: ''
+      }
+      for (var i = 0; i < this.listData.length; i++) {
+        obj.place_name = this.listData[i].place_name
+        obj.road_address_name = this.listData[i].road_address_name
+        obj.x = this.listData[i].x
+        obj.y = this.listData[i].y
+        obj.placeImage = this.ImageData[i]
+        this.list.push(obj)
       }
     }
   }

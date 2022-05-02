@@ -12,6 +12,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import MainPage from './components/MainPage'
 import BasicInfo from './components/BasicInfo'
 import ResearchPlace from './components/ResearchPlace'
+import DaumSearch from './components/DaumSearch'
 import ResultList from './components/ResultList'
 import ResultBox from './components/ResultBox'
 import SavedList from './components/SavedList'
@@ -27,6 +28,7 @@ Vue.config.productionTip = false
 Vue.component('main-page', MainPage)
 Vue.component('basic-info', BasicInfo)
 Vue.component('research-page', ResearchPlace)
+Vue.component('daum-search', DaumSearch)
 Vue.component('result-list', ResultList)
 Vue.component('result-box', ResultBox)
 Vue.component('savedplace-list', SavedList)
