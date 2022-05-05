@@ -10,8 +10,7 @@ export default {
   components: { InputDataForm },
   name: 'KakaoMap',
   props: {
-    savedListProps: Array,
-    routesProps: Array
+    savedListProps: Array
   },
   data () {
     return {
@@ -31,12 +30,13 @@ export default {
     }
   },
   created () {
-    this.markerPositions1 = this.getAddress(this.savedListProps)
-    console.log(this.routesProps)
+    this.markerPositions1 = this.getAddress(this.savedListProps) // 넘겨받은 장소로부터 좌표값 추출
+    this.getMidPoint(this.markerPositions1)
     this.getKakaoNavi(this.markerPositions1)
     // console.log(this.getKakaoNavi(this.markerPositions1)) // 결과값이 제대로 나오지 않음, 비동기 통신 관련 문제
   },
   mounted () {
+    // https://codesandbox.io/s/nervous-keldysh-87yxg
     if (window.kakao && window.kakao.maps) {
       this.initMap()
     } else {
@@ -72,9 +72,9 @@ export default {
       } else {
         const latlngArray = new Array(address.length)
         for (var j = 0; j < address.length; j++) {
-          latlngArray[j] = new kakao.maps.LatLng(address[j][0], address[j][1])
+          latlngArray[j] = new kakao.maps.LatLng(address[j][1], address[j][0])
         }
-        console.log(latlngArray)
+        // console.log(latlngArray) // 2
         return latlngArray
       }
     },
@@ -85,46 +85,42 @@ export default {
         center: new kakao.maps.LatLng(this.markerPositions1[0][0], this.markerPositions1[0][1]), // 지도의 중심좌표
         level: 2 // 지도를 확대할 div
       }
-      // 지도 객체를 등록합니다.
-      // 지도 객체는 반응형 관리 대상이 아니므로 initMap에서 선언합니다.
+
       this.map = new kakao.maps.Map(container, options) // 지도 생성
       this.displayMarker(this.markerPositions1) // 마커 생성
-      // console.log(this.getKakaoNavi(this.markerPositions1))
-      // this.setLine()
     },
     setLine (address) {
-      this.linePath = this.getLinePath(address)
-      // console.log(linePath)
+      var linePath = this.getLinePath(address)
+      console.log(linePath) // 3
+      this.setLineAndOverLay(linePath)
+    },
+    setLineAndOverLay (linePath) {
+      var polyline = new kakao.maps.Polyline({
+        path: linePath, // 선을 구성하는 좌표배열
+        strokeWeight: 10, // 선의 두께
+        strokeColor: 'blue', // 선의 색깔
+        strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명
+        strokeStyle: 'solid' // 선의 스타일
+      })
 
-      // const linePath = [
-      //   new kakao.maps.LatLng(35.157561850795894, 129.1726255253951),
-      //   new kakao.maps.LatLng(35.15920809173113, 129.170168603706),
-      //   new kakao.maps.LatLng(35.17216470466875, 129.1818477816053),
-      //   new kakao.maps.LatLng(35.175773796521696, 129.18332716704396),
-      //   new kakao.maps.LatLng(35.1833187391316, 129.20068467557806),
-      //   new kakao.maps.LatLng(35.18137432737682, 129.2058710134972),
-      //   new kakao.maps.LatLng(35.191346562036266, 129.21548323338433),
-      //   new kakao.maps.LatLng(35.19398128687029, 129.213414223396)
-      // ]
-      console.log(this.linePath)
-
-      if (this.length !== '') {
-        var polyline = new kakao.maps.Polyline({
-          path: this.linePath, // 선을 구성하는 좌표배열 입니다
-          strokeWeight: 5, // 선의 두께 입니다
-          strokeColor: '#FFAE00', // 선의 색깔입니다
-          strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-          strokeStyle: 'solid' // 선의 스타일입니다
-        })
-
-        polyline.setMap(this.map)
-      }
-
+      console.log(polyline)
+      console.log(polyline.getPath())
+      polyline.setPath(linePath)
+      polyline.setMap(this.map)
       var distance = polyline.getLength().toFixed(0)
+      this.setOverLay(distance)
+    },
+    setOverLay (distance) { // 커스텀오버레이
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
       var walkkTime = distance / 67 | 0
       var walkHour = ''
       var walkMin = ''
+
+      if (distance >= 1000) {
+        var distanceCheck = true
+        distance /= 1000
+        distance = Math.floor(distance)
+      }
 
       // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
       if (walkkTime > 60) {
@@ -134,7 +130,8 @@ export default {
 
       var content = '<ul class="dotOverlay">'
       content += '    <li>'
-      content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>m'
+      if (distanceCheck) content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>Km'
+      else content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>m'
       content += '    </li>'
       content += '    <li>'
       content += '        <span class="label">도보 </span>' + walkHour + walkMin
@@ -150,13 +147,7 @@ export default {
       })
       distanceOverlay.setMap(this.map)
     },
-    changeSize (size) {
-      const container = document.getElementById('map')
-      container.style.width = `${size}px`
-      container.style.height = `${size}px`
-      this.map.relayout()
-    },
-    displayMarker (markerPositions) {
+    displayMarker (markerPositions) { // 마커 생성하는 메서드
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => marker.setMap(null))
       }
@@ -184,30 +175,31 @@ export default {
     },
     async getKakaoNavi (address) {
       // console.log(routes)
-      console.log(address)
+      console.log('출발지:' + address[0][1] + ',' + address[0][0])
+      console.log('도착지:' + address[1][1] + ',' + address[1][0])
       // https://cors-anywhere.herokuapp.com 접속 후 request
       // CORS 문제로 다른 사람이 만든 프록시 서버 이용, 추후 헤로쿠 사용하여 해결
-      await axios.get(
+      axios.get(
         'https://cors-anywhere.herokuapp.com/https://apis-navi.kakaomobility.com/v1/directions', {
           headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
           },
           params: {
-            origin: address[0][1] + ',' + address[0][0],
-            destination: address[1][1] + ',' + address[1][0]
+            origin: address[0][1] + ',' + address[0][0], // 출발지 x, y 좌표
+            destination: address[1][1] + ',' + address[1][0], // 도착지 x, y 좌표
+            priority: 'RECOMMEND' // 거리, 시간
           }
         }).then((res) => {
         console.log(res)
         const resultCode = res.data.routes[0].result_code
-        if (resultCode === 105) { // 교통 장애가 있다면
+        if (resultCode === 105) { // 교통 장애가 있다면 출발지와 도착지간의 선 하나만 출력
           alert(res.data.routes[0].result_msg)
           this.setLine(address)
           // return address
-        } else if (resultCode === 0) { // 길찾기 성공
+        } else if (resultCode === 0) { // 길찾기 성공이면 이동경로 선으로 출력
           this.guides = res.data.routes[0].sections[0].guides
           this.markerPositions2 = this.getAddressList(this.guides)
           console.log(this.markerPositions2) // 카카오네비 결과값 x,y
-          this.setLine(this.markerPositions2)
-
+          this.setLineAndOverLay(this.getLinePath(this.markerPositions2))
         // return this.markerPositions2
         }
       })
@@ -227,7 +219,7 @@ export default {
   },
   watch: {
     markerPositions2: function () {
-      this.setLine(this.markerPositions2)
+      // this.setLineAndOverLay(this.getLinePath(this.markerPositions2))
     }
   }
 }
