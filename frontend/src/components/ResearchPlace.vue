@@ -24,7 +24,7 @@
                             <b-row class="result_searched">
                               <b-col id="result_box">
                                 <b-row>
-                                  <result-list :listData="listData" @SelectFromResult_List="SelectFromResult_List"></result-list>
+                                  <result-list :listData="listData" :ImageList="ImageList" @SelectFromResult_List="SelectFromResult_List"></result-list>
                                 </b-row>
                                 <b-row>
                                   <pagination @PageChanged="PageChanged"></pagination>
@@ -62,7 +62,6 @@ export default {
       search_term: '',
       search_results: [],
       listData: [],
-      ImageData: [],
       total: 0,
       center_postion: {
         x: 33.450701,
@@ -83,9 +82,11 @@ export default {
       if (Object.keys(selected).length > 0) {
         if (this.resultList.length === 0) {
           this.resultList.push(selected)
+          this.unitList(selected, this.search_results.findIndex(i => i.id === selected.id))
         } else {
           if (this.resultList.every((item) => item.id !== selected.id)) {
             this.resultList.push(selected)
+            this.unitList(selected, this.search_results.findIndex(i => i.id === selected.id))
           }
         }
       }
@@ -115,6 +116,7 @@ export default {
       })
     },
     getImageList: function (list) {
+      this.ImageList.splice(0)
       this.ImageList = list
     },
     PageChanged (page) {
@@ -124,11 +126,6 @@ export default {
         page * this.limit
       )
       // page : 1, listData = search_result[0] ~ search_result[8]
-      this.ImageData = this.ImageList.splice(
-        (page - 1) * this.limit,
-        page * this.limit
-      )
-      this.unitList()
       this.$emit('listData', this.list)
     },
     nextOnClicked () {
@@ -139,22 +136,21 @@ export default {
         this.$router.push({name: 'InputData', params: { savedList: this.resultList }})
       }
     },
-    unitList () {
+    unitList (selected, index) {
+      console.log(index + 1)
       var obj = {
         place_name: '',
-        road_address_name: '',
+        address_name: '',
         x: 0,
         y: 0,
         placeImage: ''
       }
-      for (var i = 0; i < this.listData.length; i++) {
-        obj.place_name = this.listData[i].place_name
-        obj.road_address_name = this.listData[i].road_address_name
-        obj.x = this.listData[i].x
-        obj.y = this.listData[i].y
-        obj.placeImage = this.ImageData[i]
-        this.list.push(obj)
-      }
+      obj.place_name = selected.place_name
+      obj.address_name = selected.address_name
+      obj.x = selected.x
+      obj.y = selected.y
+      obj.placeImage = this.ImageList[index]
+      this.list.push(obj)
     }
   }
 }
@@ -199,7 +195,7 @@ export default {
   #savedplace_area_Body {
     background: white;
     margin: 10px;
-    height: 80vh;
+    height: 100vh;
   }
   #savedplace_area_Footer {
     margin: 10px;
