@@ -17,8 +17,7 @@ export default{
   name: 'InputData',
   data () {
     return {
-      savedList: [],
-      routes: [] // 자식으로 routes 보내려고 시도
+      savedList: []
     }
   },
   created () {
@@ -26,12 +25,12 @@ export default{
       this.savedList = this.$route.params.savedList
       console.log(this.savedList)
       this.getKakaoNavi(this.savedList)
-      // https://cors-anywhere.herokuapp.com 접속 후 request
-      // CORS 문제로 다른 사람이 만든 프록시 서버 이용, 추후 헤로쿠 사용하여 해결
     }
   },
   methods: {
     async getKakaoNavi () {
+      // https://cors-anywhere.herokuapp.com 접속 후 request
+      // CORS 문제로 다른 사람이 만든 프록시 서버 이용, 추후 헤로쿠 사용하여 해결
       await axios.get(
         'https://cors-anywhere.herokuapp.com/https://apis-navi.kakaomobility.com/v1/directions', {
           headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'

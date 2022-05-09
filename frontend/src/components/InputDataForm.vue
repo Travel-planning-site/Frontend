@@ -78,6 +78,8 @@
 <script>
 
 import axios from 'axios'
+// import {EventBus} from '../main'
+
 export default{
   name: 'InputData',
   props: {
