@@ -17,7 +17,6 @@ export default {
       markerPositions1: [
         [0, 0],
         [0, 0]
-        // [33.4524745, 126.5712975]
       ],
       markerPositions2: [
       ],
@@ -33,7 +32,7 @@ export default {
     this.markerPositions1 = this.getAddress(this.savedListProps) // 넘겨받은 장소로부터 좌표값 추출
     this.getMidPoint(this.markerPositions1)
     this.getKakaoNavi(this.markerPositions1)
-    // console.log(this.getKakaoNavi(this.markerPositions1)) // 결과값이 제대로 나오지 않음, 비동기 통신 관련 문제
+    console.log(this.savedListProps)
   },
   mounted () {
     // https://codesandbox.io/s/nervous-keldysh-87yxg
@@ -62,7 +61,7 @@ export default {
       return this.midPoint
     },
     getLinePath (address) {
-      if (address.length === 2) {
+      if (address.length === 2) { // 출발지, 도착지만 있을 경우
         const latlngArray = new Array(2)
         console.log(latlngArray)
         for (var i = 0; i < 2; i++) {
@@ -74,7 +73,6 @@ export default {
         for (var j = 0; j < address.length; j++) {
           latlngArray[j] = new kakao.maps.LatLng(address[j][1], address[j][0])
         }
-        // console.log(latlngArray) // 2
         return latlngArray
       }
     },
@@ -83,7 +81,7 @@ export default {
       console.log(container)
       const options = {
         center: new kakao.maps.LatLng(this.markerPositions1[0][0], this.markerPositions1[0][1]), // 지도의 중심좌표
-        level: 2 // 지도를 확대할 div
+        level: 5 // 지도를 확대할 div
       }
 
       this.map = new kakao.maps.Map(container, options) // 지도 생성
@@ -91,7 +89,6 @@ export default {
     },
     setLine (address) {
       var linePath = this.getLinePath(address)
-      console.log(linePath) // 3
       this.setLineAndOverLay(linePath)
     },
     setLineAndOverLay (linePath) {
@@ -99,19 +96,18 @@ export default {
         path: linePath, // 선을 구성하는 좌표배열
         strokeWeight: 10, // 선의 두께
         strokeColor: 'blue', // 선의 색깔
-        strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명
+        strokeOpacity: 0.7, // 선의 불투명도, 1에서 0 사이의 값이며 0에 가까울수록 투명
         strokeStyle: 'solid' // 선의 스타일
       })
 
       console.log(polyline)
-      console.log(polyline.getPath())
       polyline.setPath(linePath)
       polyline.setMap(this.map)
       var distance = polyline.getLength().toFixed(0)
       this.setOverLay(distance)
     },
     setOverLay (distance) { // 커스텀오버레이
-      // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min입니다
+      // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
       var walkkTime = distance / 67 | 0
       var walkHour = ''
       var walkMin = ''
@@ -122,7 +118,7 @@ export default {
         distance = Math.floor(distance)
       }
 
-      // 계산한 도보 시간이 60분 보다 크면 시간으로 표시합니다
+      // 계산한 도보 시간이 60분 보다 크면 시간으로 표시
       if (walkkTime > 60) {
         walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + '</span>시간 '
       }
@@ -157,13 +153,26 @@ export default {
       )
 
       if (positions.length > 0) {
-        this.markers = positions.map(
-          (position) =>
-            new kakao.maps.Marker({
-              map: this.map,
-              position
-            })
-        )
+        for (var i = 0; i < positions.length; i++) {
+
+          const content = this.savedListProps[i].place_name
+          var iwContent = '<div style="padding:5px; font-size:20px;">' + content + '</div>'
+          const marker = new kakao.maps.Marker({
+            map: this.map,
+            position: positions[i]
+          })
+          const infowindow = new kakao.maps.InfoWindow({
+            content: iwContent
+          })
+          kakao.maps.event.addListener(marker, 'mouseover', function () {
+            var map = marker.getMap()
+            infowindow.open(map, marker)
+          })
+
+          kakao.maps.event.addListener(marker, 'mouseout', function () {
+            infowindow.close();
+          })
+        }
 
         const bounds = positions.reduce(
           (bounds, latlng) => bounds.extend(latlng),
@@ -205,22 +214,15 @@ export default {
       })
     },
     getAddressList (guides) {
-      // const arr = new Array(guides.length)
-      // for (var i = 0; i < guides.length; i++) {
-      //   arr[i] = new Array(2)
-      // }
       const arr = new Array(guides.length).fill(0).map(() => new Array(2))
-      for (var j = 0; j < guides.length; j++) {
-        arr[j][0] = guides[j].x
-        arr[j][1] = guides[j].y
+      for (var i = 0; i < guides.length; i++) {
+        arr[i][0] = guides[i].x
+        arr[i][1] = guides[i].y
       }
       return arr
     }
   },
   watch: {
-    markerPositions2: function () {
-      // this.setLineAndOverLay(this.getLinePath(this.markerPositions2))
-    }
   }
 }
 </script>

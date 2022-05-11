@@ -85,6 +85,7 @@
 
 import axios from 'axios'
 import ResultBox from './ResultBox.vue'
+// import {EventBus} from '../main'
 export default{
   components: { ResultBox },
   name: 'InputData',
