@@ -4,7 +4,13 @@
             <b-row>
                 <b-col class="left">
                     <b-row id="sidebar">
-                        <b-col><b-button @click="sidebar()"><b-icon icon="forward-fill"></b-icon></b-button></b-col>
+                        <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1></b-button>
+                            <b-sidebar id="sidebar-1" title="저장된 장소들" shadow>
+                                <div>
+                                    <savedplace-box v-for="(saved, index) in savedListProps" :key="index" :selectedBox="saved" style="text-align: center;"></savedplace-box>
+                                </div>
+                            </b-sidebar>
+                        </b-col>
                         <b-col>Where - date</b-col>
                     </b-row>
                     <b-row>
@@ -78,7 +84,9 @@
 <script>
 
 import axios from 'axios'
+import ResultBox from './ResultBox.vue'
 export default{
+  components: { ResultBox },
   name: 'InputData',
   props: {
     savedListProps: Array
