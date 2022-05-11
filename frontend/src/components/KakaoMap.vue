@@ -154,7 +154,6 @@ export default {
 
       if (positions.length > 0) {
         for (var i = 0; i < positions.length; i++) {
-
           const content = this.savedListProps[i].place_name
           var iwContent = '<div style="padding:5px; font-size:20px;">' + content + '</div>'
           const marker = new kakao.maps.Marker({
@@ -170,7 +169,7 @@ export default {
           })
 
           kakao.maps.event.addListener(marker, 'mouseout', function () {
-            infowindow.close();
+            infowindow.close()
           })
         }
 
