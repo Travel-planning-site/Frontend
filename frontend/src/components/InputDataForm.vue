@@ -28,6 +28,23 @@
                                 <b-col><b-form-input :id="arrivalPlace" placeholder="도착장소" v-model="arrivalPlace"></b-form-input></b-col>
                             </b-row>
                             <b-row class="title">
+                                <b-col>이동수단</b-col>
+                                <b-col>소요시간</b-col>
+                            </b-row>
+                            <b-row class="margin">
+                                <b-col>
+                                    <b-form-select @change="changeOption()"
+                                    :options="[ '도보', '자동차']"
+                                    v-model="transportation"
+                                ></b-form-select>
+                                </b-col>
+                                <b-col><b-form-input :id="totalTime"  placeholder="총 소요시간" v-model="totalTime"></b-form-input></b-col>
+                            </b-row>
+                        </b-col>
+                    </b-row>
+                    <b-row>
+                        <b-col>
+                            <b-row class="title">
                                 <b-col>출발시간</b-col>
                                 <b-col>도착시간</b-col>
                             </b-row>
@@ -35,32 +52,13 @@
                                 <b-col><b-form-input :id="start_time"  placeholder="출발시간" v-model="start_time"></b-form-input></b-col>
                                 <b-col><b-form-input :id="arrive_time" placeholder="도착시간" v-model="arrive_time"></b-form-input></b-col>
                             </b-row>
-                        </b-col>
-                    </b-row>
-                    <b-row>
-                        <b-col>
                             <b-row class="title">
                                 <b-col>비용</b-col>
-                                <b-col>이동수단</b-col>
-                            </b-row>
-                            <b-row class="margin">
-                                <b-col>
-                                    <b-form-input :id="cost"  placeholder="비용" v-model="cost"></b-form-input>
-                                </b-col>
-                                <b-col>
-                                    <b-form-select
-                                    :options="['기차', '렌트카', '비행기', '택시', '도보']"
-                                    v-model="transportation"
-                                ></b-form-select>
-                                </b-col>
-                            </b-row>
-                            <b-row class="title">
                                 <b-col>내용</b-col>
-                                <b-col>소요 시간</b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col><b-form-input :id="content"  placeholder="내용" v-model="content"></b-form-input></b-col>
-                                <b-col><b-form-input :id="totalTime"  placeholder="총 소요시간" v-model="totalTime"></b-form-input></b-col>
+                                <b-col><b-form-input :id="cost"  placeholder="비용" v-model="cost"></b-form-input></b-col>
+                                <b-col><b-form-input :id="arrive_time" placeholder="도착시간" v-model="arrive_time"></b-form-input></b-col>
                             </b-row>
                             <b-row class="title" style="margin-top: 20px;">
                                 <b-col>메모</b-col>
@@ -87,10 +85,12 @@ import axios from 'axios'
 import ResultBox from './ResultBox.vue'
 // import {EventBus} from '../main'
 export default{
+  emits: ['msg'],
   components: { ResultBox },
   name: 'InputData',
   props: {
-    savedListProps: Array
+    savedListProps: Array,
+    durationProps: String
   },
   data () {
     return {
@@ -99,7 +99,7 @@ export default{
       start_time: '',
       arrive_time: '',
       cost: '',
-      transportation: '기차',
+      transportation: '도보',
       content: '',
       totalTime: '',
       memo: '',
@@ -109,6 +109,9 @@ export default{
     }
   },
   methods: {
+    changeOption: function () {
+    //   EventBus.$emit('message', 'hello world')
+    },
     sidebar: function () {
       alert('sidebar')
     },
@@ -145,6 +148,14 @@ export default{
     this.setTitle(this.savedListProps)
     this.getImage(this.startPlace, 1)
     this.getImage(this.arrivalPlace, 2)
+  },
+  watch: {
+    transportation () {
+      this.$emit('msg', this.transportation)
+    },
+    durationProps () {
+      this.totalTime = this.durationProps
+    }
   }
 }
 </script>

@@ -10,7 +10,8 @@ export default {
   components: { InputDataForm },
   name: 'KakaoMap',
   props: {
-    savedListProps: Array
+    savedListProps: Array,
+    transportation: String
   },
   data () {
     return {
@@ -25,7 +26,8 @@ export default {
       savedList: [],
       midPoint: [],
       guides: {},
-      linePath: ''
+      linePath: '',
+      time: ''
     }
   },
   created () {
@@ -33,6 +35,8 @@ export default {
     this.getMidPoint(this.markerPositions1)
     this.getKakaoNavi(this.markerPositions1)
     console.log(this.savedListProps)
+    this.duration = this.getDuration(this.markerPositions1)
+    console.log(this.duration)
   },
   mounted () {
     // https://codesandbox.io/s/nervous-keldysh-87yxg
@@ -106,17 +110,17 @@ export default {
       var distance = polyline.getLength().toFixed(0)
       this.setOverLay(distance)
     },
-    setOverLay (distance) { // 커스텀오버레이
+    async setOverLay (distance) { // 커스텀오버레이
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
       var walkkTime = distance / 67 | 0
       var walkHour = ''
       var walkMin = ''
-
       if (distance >= 1000) {
         var distanceCheck = true
         distance /= 1000
         distance = Math.floor(distance)
       }
+      this.time = Math.floor(walkkTime / 60) + '시간 ' + walkkTime % 60 + '분'
 
       // 계산한 도보 시간이 60분 보다 크면 시간으로 표시
       if (walkkTime > 60) {
@@ -129,8 +133,17 @@ export default {
       if (distanceCheck) content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>Km'
       else content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>m'
       content += '    </li>'
+      if (Math.floor(walkkTime / 60) < 1) {
+        content += '    <li>'
+        content += '        <span class="label">도보 </span>' + walkHour + walkMin
+        content += '    </li>'
+      } else {
+        content += '    <li>'
+        content += '        <span class="label">도보</span>' + '<span class="number"> 1</span>' + '시간이상'
+        content += '    </li>'
+      }
       content += '    <li>'
-      content += '        <span class="label">도보 </span>' + walkHour + walkMin
+      content += '        <span class="label">자동차 </span>' + '<span style="color: blue; font-weight:bold;">' + this.duration + '</span>'
       content += '    </li>'
       content += '</ul>'
 
@@ -155,7 +168,7 @@ export default {
       if (positions.length > 0) {
         for (var i = 0; i < positions.length; i++) {
           const content = this.savedListProps[i].place_name
-          var iwContent = '<div style="padding:5px; font-size:20px;">' + content + '</div>'
+          var iwContent = '<div style="padding:5px; font-size:18px;">' + content + '</div>'
           const marker = new kakao.maps.Marker({
             map: this.map,
             position: positions[i]
@@ -192,7 +205,7 @@ export default {
           headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
           },
           params: {
-            origin: address[0][1] + ',' + address[0][0], // 출발지 x, y 좌표
+            origin: address[0][1] + ',' + address[0][0], // 출발지 x(경도), y(위도) 좌표
             destination: address[1][1] + ',' + address[1][0], // 도착지 x, y 좌표
             priority: 'RECOMMEND' // 거리, 시간
           }
@@ -219,9 +232,30 @@ export default {
         arr[i][1] = guides[i].y
       }
       return arr
+    },
+    async getDuration (address) {
+      console.log('출발지:' + address[0][1] + ',' + address[0][0])
+      console.log('도착지:' + address[1][1] + ',' + address[1][0])
+      await axios.get(
+        'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&mode=transit&' +
+        'origins=' + address[0][0] + ',' + address[0][1] +
+        '&destinations=' + address[1][0] + ',' + address[1][1] +
+        '&region=KR&key=AIzaSyDq6BYogP8DXJXho6EXr4A87IeyEqc5lo0'
+      ).then((res) => {
+        this.duration = res.data.rows[0].elements[0].duration.text
+      })
+      console.log(this.duration)
+      return this.duration
     }
   },
   watch: {
+    transportation () {
+      if (this.transportation === '도보') {
+        this.$emit('msg', this.time)
+      } else if (this.transportation === '자동차') {
+        this.$emit('msg', this.duration)
+      }
+    }
   }
 }
 </script>
