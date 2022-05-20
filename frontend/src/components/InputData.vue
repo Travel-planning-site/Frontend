@@ -1,8 +1,8 @@
 <template>
     <div class="body">
         <b-row>
-            <b-col cols="6"><input-data-form @msg = "getTransport" v-bind:savedListProps="savedList" v-bind:durationProps="duration"></input-data-form></b-col>
-            <b-col><kakao-map  @msg = "getDuration" v-bind:savedListProps="savedList" v-bind:transportation="transportation"></kakao-map></b-col>
+            <b-col cols="6"><input-data-form @msg = "getTransport" @height = "getHeight" v-bind:savedListProps="savedList" v-bind:durationProps="duration"></input-data-form></b-col>
+            <b-col><kakao-map  @msg = "getDuration" v-bind:savedListProps="savedList" v-bind:transportation="transportation" v-bind:heightProp="height"></kakao-map></b-col>
         </b-row>
     </div>
 </template>
@@ -18,7 +18,8 @@ export default{
     return {
       savedList: [],
       transportation: '',
-      duration: ''
+      duration: '',
+      height: ''
     }
   },
   created () {
@@ -33,6 +34,9 @@ export default{
     },
     getDuration (msg) {
       this.duration = msg
+    },
+    getHeight (height) {
+      this.height = height
     }
   },
   watch: {
