@@ -1,5 +1,5 @@
 <template>
-    <div id="map" style="width:100%; height:966px;"></div>
+    <div id="map" ref="kakaoMap" style="width:100%; height:996px;"></div>
 </template>
 
 <script>
@@ -11,7 +11,8 @@ export default {
   name: 'KakaoMap',
   props: {
     savedListProps: Array,
-    transportation: String
+    transportation: String,
+    heightProp: String
   },
   data () {
     return {
@@ -27,7 +28,8 @@ export default {
       midPoint: [],
       guides: {},
       linePath: '',
-      time: ''
+      time: '',
+      duration: 0
     }
   },
   created () {
@@ -35,8 +37,7 @@ export default {
     this.getMidPoint(this.markerPositions1)
     this.getKakaoNavi(this.markerPositions1)
     console.log(this.savedListProps)
-    this.duration = this.getDuration(this.markerPositions1)
-    console.log(this.duration)
+    this.transit = this.getDuration(this.markerPositions1)
   },
   mounted () {
     // https://codesandbox.io/s/nervous-keldysh-87yxg
@@ -95,7 +96,7 @@ export default {
       var linePath = this.getLinePath(address)
       this.setLineAndOverLay(linePath)
     },
-    setLineAndOverLay (linePath) {
+    setLineAndOverLay (linePath, duration) {
       var polyline = new kakao.maps.Polyline({
         path: linePath, // 선을 구성하는 좌표배열
         strokeWeight: 10, // 선의 두께
@@ -108,9 +109,9 @@ export default {
       polyline.setPath(linePath)
       polyline.setMap(this.map)
       var distance = polyline.getLength().toFixed(0)
-      this.setOverLay(distance)
+      this.setOverLay(distance, duration)
     },
-    async setOverLay (distance) { // 커스텀오버레이
+    async setOverLay (distance, duration) { // 커스텀오버레이
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
       var walkkTime = distance / 67 | 0
       var walkHour = ''
@@ -120,7 +121,12 @@ export default {
         distance /= 1000
         distance = Math.floor(distance)
       }
-      this.time = Math.floor(walkkTime / 60) + '시간 ' + walkkTime % 60 + '분'
+      this.time = Math.floor(walkkTime / 60) + '시간 ' + walkkTime % 60 + '분' // 도보시간
+
+      var hour = parseInt(duration / 3600)
+      var min = parseInt((duration % 3600) / 60)
+
+      if (hour < 1) { this.carTime = min + '분' } else { this.carTime = hour + '시간' + min + '분' } // 자동차 소요시간
 
       // 계산한 도보 시간이 60분 보다 크면 시간으로 표시
       if (walkkTime > 60) {
@@ -143,7 +149,12 @@ export default {
         content += '    </li>'
       }
       content += '    <li>'
-      content += '        <span class="label">자동차 </span>' + '<span style="color: blue; font-weight:bold;">' + this.duration + '</span>'
+      content += '        <span class="label">자동차 </span>' + '<span style="color: blue; font-weight:bold;">'
+      if (hour > 0) { content += hour + '시간' }
+      content += min + '분' + '</span>'
+      content += '    </li>'
+      content += '    <li>'
+      content += '        <span class="label">대중교통 </span>' + '<span style="color: blue; font-weight:bold;">' + this.transit + '</span>'
       content += '    </li>'
       content += '</ul>'
 
@@ -200,7 +211,7 @@ export default {
       console.log('도착지:' + address[1][1] + ',' + address[1][0])
       // https://cors-anywhere.herokuapp.com 접속 후 request
       // CORS 문제로 다른 사람이 만든 프록시 서버 이용, 추후 헤로쿠 사용하여 해결
-      axios.get(
+      await axios.get(
         'https://cors-anywhere.herokuapp.com/https://apis-navi.kakaomobility.com/v1/directions', {
           headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
           },
@@ -220,7 +231,8 @@ export default {
           this.guides = res.data.routes[0].sections[0].guides
           this.markerPositions2 = this.getAddressList(this.guides)
           console.log(this.markerPositions2) // 카카오네비 결과값 x,y
-          this.setLineAndOverLay(this.getLinePath(this.markerPositions2))
+          this.duration = res.data.routes[0].sections[0].duration
+          this.setLineAndOverLay(this.getLinePath(this.markerPositions2), this.duration)
         // return this.markerPositions2
         }
       })
@@ -242,10 +254,11 @@ export default {
         '&destinations=' + address[1][0] + ',' + address[1][1] +
         '&region=KR&key=AIzaSyDq6BYogP8DXJXho6EXr4A87IeyEqc5lo0'
       ).then((res) => {
-        this.duration = res.data.rows[0].elements[0].duration.text
+        console.log(res)
+        this.transit = res.data.rows[0].elements[0].duration.text
       })
-      console.log(this.duration)
-      return this.duration
+      console.log(this.transit)
+      return this.transit
     }
   },
   watch: {
@@ -253,7 +266,19 @@ export default {
       if (this.transportation === '도보') {
         this.$emit('msg', this.time)
       } else if (this.transportation === '자동차') {
-        this.$emit('msg', this.duration)
+        this.$emit('msg', this.carTime)
+      } else if (this.transportation === '대중교통') {
+        this.$emit('msg', this.transit)
+      }
+    },
+    heightProp () {
+      var height = document.getElementById('map').style.height
+      console.log(this.heightProp)
+      console.log(parseInt(height))
+      if (parseInt(this.heightProp) === parseInt(height)) {
+        document.getElementById('map').style.height = String(this.heightProp + 68) + 'px'
+      } else {
+        document.getElementById('map').style.height = String(this.heightProp - 68) + 'px'
       }
     }
   }
