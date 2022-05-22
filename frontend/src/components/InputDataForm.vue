@@ -5,9 +5,9 @@
                 <b-col class="left">
                     <b-row id="sidebar">
                         <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1></b-button>
-                            <b-sidebar id="sidebar-1" title="저장된 장소들" width="830px" shadow>
-                                <div>
-                                    <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" style="text-align: center;"></sidebar-box>
+                            <b-sidebar id="sidebar-1" width="25%" title="저장된 장소들" title-color="primary" shadow>
+                                <div class="sidebarbox">
+                                    <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" :index="index" style="text-align: center;" @startingonClicked="startingonClicked" @destinationClicked="destinationClicked"></sidebar-box>
                                 </div>
                             </b-sidebar>
                         </b-col>
@@ -125,7 +125,9 @@ export default{
         cost: ''
       },
       costArray: [],
-      totalCost: 0
+      totalCost: 0,
+      startingObject: '',
+      destinationObject: ''
     }
   },
   methods: {
@@ -179,6 +181,20 @@ export default{
       console.log(this.costArray)
       this.totalCost -= cost
       console.log(document.getElementsByClassName('left'))
+    },
+    startingonClicked (index) {
+      if (this.destinationObject !== this.savedListProps[index]) {
+        this.startingObject = this.savedListProps[index]
+      } else {
+        alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
+      }
+    },
+    destinationClicked (index) {
+      if (this.startingObject !== this.savedListProps[index]) {
+        this.destinationObject = this.savedListProps[index]
+      } else {
+        alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
+      }
     }
   },
   created () {
@@ -228,15 +244,23 @@ export default{
 }
 .sidebarbox{
   margin: 5px;
-  border: solid 1px black;
   padding: 2px;
+  display: block;
+  flex-wrap: wrap;
 }
+
 #button {
     margin-top: 20px;
     bottom : 130px;
     width : 90px;
     right : 30px;
     border: 5px;
+}
+#sidebar-1 {
+  position: fixed;
+  overflow: auto;
+  margin: 0;
+  padding: 0;
 }
 #sidebar {
     margin-bottom: 40px;
