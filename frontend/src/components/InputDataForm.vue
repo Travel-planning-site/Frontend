@@ -5,9 +5,9 @@
                 <b-col class="left">
                     <b-row id="sidebar">
                         <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1></b-button>
-                            <b-sidebar id="sidebar-1" title="저장된 장소들" shadow>
+                            <b-sidebar id="sidebar-1" title="저장된 장소들" width="830px" shadow>
                                 <div>
-                                    <savedplace-box v-for="(saved, index) in savedListProps" :key="index" :selectedBox="saved" style="text-align: center;"></savedplace-box>
+                                    <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" style="text-align: center;"></sidebar-box>
                                 </div>
                             </b-sidebar>
                         </b-col>
@@ -225,6 +225,11 @@ export default{
 }
 .button{
     text-align: right;
+}
+.sidebarbox{
+  margin: 5px;
+  border: solid 1px black;
+  padding: 2px;
 }
 #button {
     margin-top: 20px;

@@ -2,7 +2,7 @@
     <div class="body">
         <b-row>
             <b-col cols="6"><input-data-form @msg = "getTransport" @height = "getHeight" v-bind:savedListProps="savedList" v-bind:durationProps="duration"></input-data-form></b-col>
-            <b-col><kakao-map  @msg = "getDuration" v-bind:savedListProps="savedList" v-bind:transportation="transportation" v-bind:heightProp="height"></kakao-map></b-col>
+            <b-col><kakao-map @msg = "getDuration" v-bind:savedListProps="savedList" v-bind:transportation="transportation" v-bind:heightProp="height"></kakao-map></b-col>
         </b-row>
     </div>
 </template>
