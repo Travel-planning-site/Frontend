@@ -21,6 +21,7 @@ import Pagination from './components/Pagination'
 import KakaoMap from './components/KakaoMap'
 import InputDataForm from './components/InputDataForm'
 import MyPlan from './components/MyPlan'
+import SidebarBox from './components/SidebarBox'
 
 export const EventBus = new Vue()
 
@@ -38,6 +39,7 @@ Vue.component('pagination', Pagination)
 Vue.component('kakao-map', KakaoMap)
 Vue.component('input-data-form', InputDataForm)
 Vue.component('my-plan', MyPlan)
+Vue.component('sidebar-box', SidebarBox)
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

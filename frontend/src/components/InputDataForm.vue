@@ -5,9 +5,9 @@
                 <b-col class="left">
                     <b-row id="sidebar">
                         <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1></b-button>
-                            <b-sidebar id="sidebar-1" title="저장된 장소들" shadow>
+                            <b-sidebar id="sidebar-1" title="저장된 장소들" width="830px" shadow>
                                 <div>
-                                    <savedplace-box v-for="(saved, index) in savedListProps" :key="index" :selectedBox="saved" style="text-align: center;"></savedplace-box>
+                                    <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" style="text-align: center;"></sidebar-box>
                                 </div>
                             </b-sidebar>
                         </b-col>
@@ -28,40 +28,51 @@
                                 <b-col><b-form-input :id="arrivalPlace" placeholder="도착장소" v-model="arrivalPlace"></b-form-input></b-col>
                             </b-row>
                             <b-row class="title">
-                                <b-col>출발시간</b-col>
-                                <b-col>도착시간</b-col>
+                                <b-col>이동수단</b-col>
+                                <b-col>소요시간</b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col><b-form-input :id="start_time"  placeholder="출발시간" v-model="start_time"></b-form-input></b-col>
-                                <b-col><b-form-input :id="arrive_time" placeholder="도착시간" v-model="arrive_time"></b-form-input></b-col>
+                                <b-col>
+                                    <b-form-select @change="changeOption()"
+                                    :options="[ '도보', '자동차', '대중교통']"
+                                    v-model="transportation"
+                                ></b-form-select>
+                                </b-col>
+                                <b-col><b-form-input :id="totalTime"  placeholder="총 소요시간" v-model="totalTime"></b-form-input></b-col>
                             </b-row>
                         </b-col>
                     </b-row>
                     <b-row>
                         <b-col>
                             <b-row class="title">
-                                <b-col>비용</b-col>
-                                <b-col>이동수단</b-col>
+                                <b-col>출발시간</b-col>
+                                <b-col>도착시간</b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col>
-                                    <b-form-input :id="cost"  placeholder="비용" v-model="cost"></b-form-input>
-                                </b-col>
-                                <b-col>
-                                    <b-form-select
-                                    :options="['기차', '렌트카', '비행기', '택시', '도보']"
-                                    v-model="transportation"
-                                ></b-form-select>
-                                </b-col>
+                                <b-col><b-form-input id="start_time" :type="'time'"></b-form-input></b-col>
+                                <b-col><b-form-input id="arrive_time" :type="'time'"></b-form-input></b-col>
                             </b-row>
                             <b-row class="title">
-                                <b-col>내용</b-col>
-                                <b-col>소요 시간</b-col>
+                                <b-col>비용</b-col>
+                                <b-col></b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col><b-form-input :id="content"  placeholder="내용" v-model="content"></b-form-input></b-col>
-                                <b-col><b-form-input :id="totalTime"  placeholder="총 소요시간" v-model="totalTime"></b-form-input></b-col>
+                                <b-col><b-form-input id = "costTitle" placeholder="항목" list="my-list-id"></b-form-input>
+                                    <datalist id="my-list-id">
+                                    <option v-for= "size in sizes" :key="size.id">{{ size }}</option>
+                                    </datalist></b-col>
+                                <b-col><b-form-input :id="content"  placeholder="가격" v-model="cost"></b-form-input></b-col>
+                                <b-col><b-button @click="addBtnOnClick()">+</b-button></b-col>
                             </b-row>
+                            <b-row class="margin" v-for= "costObject in costArray" :key="costObject.id">
+                                <b-col>
+                                    <div>{{costObject.costTitle}}</div></b-col>
+                                <b-col><div>{{costObject.cost}}</div></b-col>
+                                <b-col><b-button @click="removeBtnOnClick($event, costObject.costTitle, costObject.cost)">-</b-button></b-col>
+                                </b-row>
+                            <b-row>
+                                <b-col></b-col>
+                                <b-col><div>총 비용: {{totalCost}}</div></b-col></b-row>
                             <b-row class="title" style="margin-top: 20px;">
                                 <b-col>메모</b-col>
                             </b-row>
@@ -87,10 +98,12 @@ import axios from 'axios'
 import ResultBox from './ResultBox.vue'
 // import {EventBus} from '../main'
 export default{
+  emits: ['msg'],
   components: { ResultBox },
   name: 'InputData',
   props: {
-    savedListProps: Array
+    savedListProps: Array,
+    durationProps: String
   },
   data () {
     return {
@@ -99,27 +112,37 @@ export default{
       start_time: '',
       arrive_time: '',
       cost: '',
-      transportation: '기차',
+      transportation: '',
       content: '',
       totalTime: '',
       memo: '',
       placeImg: '',
       startPlaceImg: '',
-      arrivalPlaceImg: ''
+      arrivalPlaceImg: '',
+      sizes: ['렌트카', '택시', '버스비', '입장료'],
+      costObject: {
+        costTitle: '',
+        cost: ''
+      },
+      costArray: [],
+      totalCost: 0
     }
   },
   methods: {
+    changeOption: function () {
+    //   EventBus.$emit('message', 'hello world')
+    },
     sidebar: function () {
       alert('sidebar')
     },
     onClick: function () {
       console.log(this.startPlace)
       console.log(this.arrivalPlace)
-      console.log(this.start_time)
-      console.log(this.arrive_time)
+      console.log(document.getElementById('costTitle').value)
       console.log(this.cost)
+      console.log(document.getElementById('start_time').value)
+      console.log(document.getElementById('arrive_time').value)
       console.log(this.transportation)
-      console.log(this.content)
       console.log(this.totalTime)
       console.log(this.memo)
     },
@@ -139,12 +162,40 @@ export default{
         if (num === 1) this.startPlaceImg = this.placeImg
         if (num === 2) this.arrivalPlaceImg = this.placeImg
       })
+    },
+    addBtnOnClick: function () {
+      var costObject = {costTitle: document.getElementById('costTitle').value, cost: this.cost}
+      console.log(costObject)
+      this.costArray.push(costObject)
+      console.log(this.costArray)
+      this.totalCost += Number(this.cost)
+      document.getElementById('costTitle').value = ''
+      this.cost = ''
+    },
+    removeBtnOnClick: function (event, costTitle, cost) {
+      console.log(event.path[2])
+      //   event.path[3].removeChild(event.path[2])
+      this.costArray = this.costArray.filter((item) => item.costTitle !== costTitle)
+      console.log(this.costArray)
+      this.totalCost -= cost
+      console.log(document.getElementsByClassName('left'))
     }
   },
   created () {
     this.setTitle(this.savedListProps)
     this.getImage(this.startPlace, 1)
     this.getImage(this.arrivalPlace, 2)
+  },
+  watch: {
+    transportation () {
+      this.$emit('msg', this.transportation)
+    },
+    durationProps () {
+      this.totalTime = this.durationProps
+    },
+    costArray () {
+      this.$emit('height', document.getElementsByClassName('left')[0].offsetHeight)
+    }
   }
 }
 </script>
@@ -174,6 +225,11 @@ export default{
 }
 .button{
     text-align: right;
+}
+.sidebarbox{
+  margin: 5px;
+  border: solid 1px black;
+  padding: 2px;
 }
 #button {
     margin-top: 20px;

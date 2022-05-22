@@ -131,7 +131,6 @@ export default {
         this.$router.push({name: 'InputData', params: { savedList: this.resultList }})
       } else {
         alert('장소를 2개이상 선택해주세요.')
-        this.$router.push({name: 'InputData', params: { savedList: this.resultList }})
       }
     },
     unitList (selected, index) {
