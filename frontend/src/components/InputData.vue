@@ -17,7 +17,8 @@ export default{
   name: 'InputData',
   data () {
     return {
-      savedList: []
+      savedList: [],
+      routes: []
     }
   },
   created () {

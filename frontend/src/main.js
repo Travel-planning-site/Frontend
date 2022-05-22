@@ -20,6 +20,7 @@ import SavedBox from './components/SavedBox'
 import Pagination from './components/Pagination'
 import KakaoMap from './components/KakaoMap'
 import InputDataForm from './components/InputDataForm'
+import MyPlan from './components/MyPlan'
 
 export const EventBus = new Vue()
 
@@ -36,6 +37,7 @@ Vue.component('savedplace-box', SavedBox)
 Vue.component('pagination', Pagination)
 Vue.component('kakao-map', KakaoMap)
 Vue.component('input-data-form', InputDataForm)
+Vue.component('my-plan', MyPlan)
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)

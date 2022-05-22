@@ -22,7 +22,7 @@
                         style="font-size: 2.6rem"
                         variant="light"
                         @click="$router.push('BasicInfo')">Make a Travel Plan</b-button>
-                    <b-button style="font-size: 2.6rem" variant="light">My Plans</b-button>
+                    <b-button style="font-size: 2.6rem" variant="light" @click="$router.push('MyPlan')">My Plans</b-button>
                 </b-col>
             </b-row>
             <b-row></b-row>

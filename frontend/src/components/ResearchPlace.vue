@@ -50,10 +50,8 @@
 </template>
 
 <script>
-import ResultBox from './ResultBox.vue'
 import axios from 'axios'
 export default {
-  components: { ResultBox },
   name: 'ResearchPlace',
   data () {
     return {
