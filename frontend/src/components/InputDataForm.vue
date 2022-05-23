@@ -4,8 +4,8 @@
             <b-row>
                 <b-col class="left">
                     <b-row id="sidebar">
-                        <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1></b-button>
-                            <b-sidebar id="sidebar-1" width="25%" title="저장된 장소들" title-color="primary" shadow>
+                        <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1><b-icon font-scale="2" icon="arrow-right-square"></b-icon></b-button>
+                            <b-sidebar visible="true" id="sidebar-1" width="25%" title="저장된 장소들" title-color="primary" shadow>
                                 <div class="sidebarbox">
                                     <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" :index="index" style="text-align: center;" @startingonClicked="startingonClicked" @destinationClicked="destinationClicked"></sidebar-box>
                                 </div>
@@ -185,22 +185,33 @@ export default{
     startingonClicked (index) {
       if (this.destinationObject !== this.savedListProps[index]) {
         this.startingObject = this.savedListProps[index]
+        this.getImage(this.startingObject.place_name, 1)
+        this.startPlace = this.startingObject.place_name
       } else {
         alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
       }
     },
     destinationClicked (index) {
-      if (this.startingObject !== this.savedListProps[index]) {
-        this.destinationObject = this.savedListProps[index]
+      if (this.startingObject === '') {
+        alert('출발지를 먼저 선택해주세요.')
       } else {
-        alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
+        if (this.startingObject !== this.savedListProps[index]) {
+          this.destinationObject = this.savedListProps[index]
+          this.getImage(this.destinationObject.place_name, 2)
+          this.arrivalPlace = this.destinationObject.place_name
+          this.$emit('coordinate', this.startingObject, this.destinationObject)
+        } else {
+          alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
+        }
       }
     }
   },
   created () {
-    this.setTitle(this.savedListProps)
-    this.getImage(this.startPlace, 1)
-    this.getImage(this.arrivalPlace, 2)
+    // this.setTitle(this.savedListProps)
+    // this.getImage(this.startPlace, 1)
+    // this.getImage(this.arrivalPlace, 2)
+  },
+  mounted () {
   },
   watch: {
     transportation () {
