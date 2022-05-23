@@ -5,7 +5,7 @@
 <script>
 import InputDataForm from './InputDataForm.vue'
 import axios from 'axios'
-// import {EventBus} from '../main'
+import {EventBus} from '../main'
 export default {
   components: { InputDataForm },
   name: 'KakaoMap',
@@ -33,10 +33,15 @@ export default {
     }
   },
   created () {
-    this.markerPositions1 = this.getAddress(this.savedListProps) // 넘겨받은 장소로부터 좌표값 추출
+    EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
+      this.markerPositions1 = positions
+      this.getMidPoint(this.markerPositions1)
+      this.getKakaoNavi(this.markerPositions1)
+      this.transit = this.getDuration(this.markerPositions1)
+      this.initMap()
+    })
     this.getMidPoint(this.markerPositions1)
     this.getKakaoNavi(this.markerPositions1)
-    console.log(this.savedListProps)
     this.transit = this.getDuration(this.markerPositions1)
   },
   mounted () {
@@ -54,9 +59,9 @@ export default {
   },
   methods: {
     getAddress (savedList) { // 좌표 구하기
-      for (var i = 0; i < savedList.length; i++) {
+      for (var i = 0; i < 2; i++) {
         this.markerPositions1[i][0] = savedList[i].y
-        this.markerPositions1[i][1] = savedList[i].x
+        this.markerPositions1[i][1] = savedList[i].x // 129
       }
       return this.markerPositions1
     },
@@ -90,13 +95,14 @@ export default {
       }
 
       this.map = new kakao.maps.Map(container, options) // 지도 생성
-      this.displayMarker(this.markerPositions1) // 마커 생성
     },
     setLine (address) {
       var linePath = this.getLinePath(address)
       this.setLineAndOverLay(linePath)
     },
     setLineAndOverLay (linePath, duration) {
+      this.displayMarker(this.markerPositions1) // 마커 생성
+
       var polyline = new kakao.maps.Polyline({
         path: linePath, // 선을 구성하는 좌표배열
         strokeWeight: 10, // 선의 두께
@@ -107,6 +113,7 @@ export default {
 
       console.log(polyline)
       polyline.setPath(linePath)
+      polyline.setMap(null)
       polyline.setMap(this.map)
       var distance = polyline.getLength().toFixed(0)
       this.setOverLay(distance, duration)
@@ -165,11 +172,14 @@ export default {
         yAnchor: 0.5,
         zIndex: 0
       })
+      // this.distanceOverlay.setMap(null)
       distanceOverlay.setMap(this.map)
     },
     displayMarker (markerPositions) { // 마커 생성하는 메서드
       if (this.markers.length > 0) {
-        this.markers.forEach((marker) => marker.setMap(null))
+        this.markers.forEach((marker) => {
+          marker.setMap(null)
+        })
       }
 
       const positions = markerPositions.map(
@@ -202,7 +212,7 @@ export default {
           new kakao.maps.LatLngBounds()
         )
 
-        this.map.setBounds(bounds)
+        this.map.setBounds(bounds) // 지도의 중심 좌표와 확대 수준을 설정
       }
     },
     async getKakaoNavi (address) {
@@ -280,6 +290,11 @@ export default {
       } else {
         document.getElementById('map').style.height = String(this.heightProp - 68) + 'px'
       }
+    },
+    markerPositions1 () {
+      this.getMidPoint(this.markerPositions1)
+      this.getKakaoNavi(this.markerPositions1)
+      this.transit = this.getDuration(this.markerPositions1)
     }
   }
 }
