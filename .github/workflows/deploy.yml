@@ -25,4 +25,4 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Deploy site
-        run: curl -X POST -d {} ${{ secrets.NETLRIFY_BUILD_HOOK }}
+        run: curl -X POST -d {} ${{ secrets.NETLIFY_BUILD_HOOK }}
