@@ -35,9 +35,6 @@ export default {
       type: Number
     }
   },
-  data () {
-
-  },
   methods: {
     startingClicked () {
       this.$emit('startingonClicked', this.index)
