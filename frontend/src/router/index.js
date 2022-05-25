@@ -7,6 +7,7 @@ import ResearchPlace from '@/components/ResearchPlace'
 import InputData from '@/components/InputData'
 import KakaoMap from '@/components/KakaoMap'
 import MyPlan from '@/components/MyPlan'
+import PlanData from '@/components/PlanData'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/MyPlan',
       name: 'MyPlan',
       component: MyPlan
+    },
+    {
+      path: '/PlanData',
+      name: 'PlanData',
+      component: PlanData
     }
   ]
 })

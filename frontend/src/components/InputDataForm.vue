@@ -5,7 +5,7 @@
                 <b-col class="left">
                     <b-row id="sidebar">
                         <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1><b-icon font-scale="2" icon="arrow-right-square"></b-icon></b-button>
-                            <b-sidebar visible="true" id="sidebar-1" width="25%" title="저장된 장소들" title-color="primary" shadow>
+                            <b-sidebar :visible="true" id="sidebar-1" width="25%" title="저장된 장소들" title-color="primary" shadow>
                                 <div class="sidebarbox">
                                     <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" :index="index" style="text-align: center;" @startingonClicked="startingonClicked" @destinationClicked="destinationClicked"></sidebar-box>
                                 </div>
@@ -16,8 +16,8 @@
                     <b-row>
                         <b-col>
                             <b-row style="margin-bottom: 40px;">
-                                <b-col style="text-align: center;"><img :src="startPlaceImg" id="img"></b-col>
-                                <b-col style="text-align: center;"><img :src="arrivalPlaceImg" id="img"></b-col>
+                                <b-col style="text-align: center;"><img :src="startPlaceImg" id="img" art="https://picsum.photos/125/125/?image=58"></b-col>
+                                <b-col style="text-align: center;"><img :src="arrivalPlaceImg" id="img" art="https://picsum.photos/125/125/?image=58"></b-col>
                             </b-row>
                             <b-row class="title">
                                 <b-col>출발지</b-col>
@@ -49,8 +49,8 @@
                                 <b-col>도착시간</b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col><b-form-input id="start_time" :type="'time'"></b-form-input></b-col>
-                                <b-col><b-form-input id="arrive_time" :type="'time'"></b-form-input></b-col>
+                                <b-col><b-form-input id="startTime" :type="'time'"></b-form-input></b-col>
+                                <b-col><b-form-input id="arriveTime" :type="'time'"></b-form-input></b-col>
                             </b-row>
                             <b-row class="title">
                                 <b-col>비용</b-col>
@@ -82,7 +82,10 @@
                                 </b-col>
                             </b-row>
                             <b-row class="button">
-                                <b-col><b-button id="button" @click="onClick">입력완료</b-button></b-col>
+                                <b-col>
+                                  <b-button id="button" @click="inputOnClick">입력완료</b-button>
+                                  <b-button id="button" @click="savePlans">저장하기</b-button>
+                                </b-col>
                             </b-row>
                         </b-col>
                     </b-row>
@@ -111,7 +114,7 @@ export default{
       arrivalPlace: '',
       start_time: '',
       arrive_time: '',
-      cost: '',
+      cost: 0,
       transportation: '',
       content: '',
       totalTime: '',
@@ -127,7 +130,21 @@ export default{
       costArray: [],
       totalCost: 0,
       startingObject: '',
-      destinationObject: ''
+      destinationObject: '',
+      plans: [],
+      plan: {
+        startPlaceImg: '',
+        arrivalPlaceImg: '',
+        startPlace: '',
+        arrivalPlace: '',
+        costArray: '',
+        totalCost: Number,
+        startTime: '',
+        arriveTime: '',
+        transportation: '',
+        totalTime: '',
+        memo: ''
+      }
     }
   },
   methods: {
@@ -137,21 +154,45 @@ export default{
     sidebar: function () {
       alert('sidebar')
     },
-    onClick: function () {
-      console.log(this.startPlace)
-      console.log(this.arrivalPlace)
-      console.log(document.getElementById('costTitle').value)
-      console.log(this.cost)
-      console.log(document.getElementById('start_time').value)
-      console.log(document.getElementById('arrive_time').value)
-      console.log(this.transportation)
-      console.log(this.totalTime)
-      console.log(this.memo)
+    inputOnClick: function () {
+      this.plan = {
+        startPlaceImg: this.startPlaceImg,
+        arrivalPlaceImg: this.arrivalPlaceImg,
+        startPlace: this.startPlace,
+        arrivalPlace: this.arrivalPlace,
+        costArray: this.costArray,
+        totalCost: this.totalCost,
+        startTime: document.getElementById('startTime').value,
+        arriveTime: document.getElementById('arriveTime').value,
+        transportation: this.transportation,
+        totalTime: this.totalTime,
+        memo: this.memo
+      }
+      this.plans.push(this.plan)
+      console.log(this.plan)
+      console.log(this.plans)
+      this.inputDataReset()
     },
-    setTitle: function (savedList) {
-      this.startPlace = savedList[0].place_name
-      this.arrivalPlace = savedList[1].place_name
+    inputDataReset: function () {
+      this.startPlaceImg = ''
+      this.arrivalPlaceImg = ''
+      this.startPlace = ''
+      this.arrivalPlace = ''
+      this.arrivalPlace = ''
+      document.getElementById('costTitle').value = ''
+      this.cost = ''
+      this.totalCost = 0
+      this.costArray = []
+      document.getElementById('startTime').value = ''
+      document.getElementById('arriveTime').value = ''
+      this.transportation = ''
+      this.totalTime = ''
+      this.memo = ''
     },
+    // setTitle: function (savedList) {
+    //   this.startPlace = savedList[0].place_name
+    //   this.arrivalPlace = savedList[1].place_name
+    // },
     getImage: function (placeName, num) {
       axios.get(
         'https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/image?query=' + placeName, {
@@ -166,13 +207,15 @@ export default{
       })
     },
     addBtnOnClick: function () {
-      var costObject = {costTitle: document.getElementById('costTitle').value, cost: this.cost}
-      console.log(costObject)
-      this.costArray.push(costObject)
-      console.log(this.costArray)
-      this.totalCost += Number(this.cost)
-      document.getElementById('costTitle').value = ''
-      this.cost = ''
+      if (this.cost !== '') {
+        var costObject = {costTitle: document.getElementById('costTitle').value, cost: this.cost}
+        console.log(costObject)
+        this.costArray.push(costObject)
+        console.log(this.costArray)
+        this.totalCost += Number(this.cost)
+        document.getElementById('costTitle').value = ''
+        this.cost = ''
+      }
     },
     removeBtnOnClick: function (event, costTitle, cost) {
       console.log(event.path[2])
@@ -204,6 +247,9 @@ export default{
           alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
         }
       }
+    },
+    savePlans () {
+      this.$router.push({name: 'PlanData', query: { data: this.plans }})
     }
   },
   created () {
