@@ -7,7 +7,7 @@ import ResearchPlace from '@/components/ResearchPlace'
 import InputData from '@/components/InputData'
 import KakaoMap from '@/components/KakaoMap'
 import MyPlan from '@/components/MyPlan'
-import PlanData from '@/components/PlanData'
+import PlanData from '@/components/Plandata'
 
 Vue.use(Router)
 
