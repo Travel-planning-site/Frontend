@@ -7,8 +7,8 @@
         </b-col>
       </b-row>
       <b-row cols="4">
-        <b-col>
-          <my-plan-box></my-plan-box>
+        <b-col v-for="(box, index) in boxlist" :key="index">
+          <my-plan-box style="margin-bottom: 20px;"></my-plan-box>
         </b-col>
       </b-row>
     </b-container>
@@ -22,7 +22,8 @@ export default {
   name: 'MyPlan',
   data () {
     return {
-      userName: '사용자'
+      userName: '사용자',
+      boxlist: 5
     }
   }
 }
