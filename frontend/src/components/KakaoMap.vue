@@ -29,7 +29,8 @@ export default {
       guides: {},
       linePath: '',
       time: '',
-      duration: 0
+      duration: 0,
+      positionArray: []
     }
   },
   created () {
@@ -39,6 +40,8 @@ export default {
       this.getKakaoNavi(this.markerPositions1)
       this.transit = this.getDuration(this.markerPositions1)
       this.initMap()
+      // this.positionArray.push(positions)
+      // console.log(this.positionArray)
     })
     this.getMidPoint(this.markerPositions1)
     this.getKakaoNavi(this.markerPositions1)
@@ -74,13 +77,13 @@ export default {
       if (address.length === 2) { // 출발지, 도착지만 있을 경우
         const latlngArray = new Array(2)
         console.log(latlngArray)
-        for (var i = 0; i < 2; i++) {
+        for (let i = 0; i < 2; i++) {
           latlngArray[i] = new kakao.maps.LatLng(address[i][0], address[i][1])
         }
         return latlngArray
       } else {
         const latlngArray = new Array(address.length)
-        for (var j = 0; j < address.length; j++) {
+        for (let j = 0; j < address.length; j++) {
           latlngArray[j] = new kakao.maps.LatLng(address[j][1], address[j][0])
         }
         return latlngArray
@@ -176,6 +179,7 @@ export default {
       distanceOverlay.setMap(this.map)
     },
     displayMarker (markerPositions) { // 마커 생성하는 메서드
+      console.log(markerPositions)
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => {
           marker.setMap(null)
@@ -264,8 +268,8 @@ export default {
         '&destinations=' + address[1][0] + ',' + address[1][1] +
         '&region=KR&key=AIzaSyDq6BYogP8DXJXho6EXr4A87IeyEqc5lo0'
       ).then((res) => {
-        console.log(res)
-        this.transit = res.data.rows[0].elements[0].duration.text
+        if (res.data.rows[0].elements[0].status === 'ZERO_RESULTS') this.transit = '정보없음'
+        else this.transit = res.data.rows[0].elements[0].duration.text
       })
       console.log(this.transit)
       return this.transit
