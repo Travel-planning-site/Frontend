@@ -144,7 +144,8 @@ export default{
         transportation: '',
         totalTime: '',
         memo: ''
-      }
+      },
+      positions: []
     }
   },
   methods: {
@@ -153,41 +154,6 @@ export default{
     },
     sidebar: function () {
       alert('sidebar')
-    },
-    inputOnClick: function () {
-      this.plan = {
-        startPlaceImg: this.startPlaceImg,
-        arrivalPlaceImg: this.arrivalPlaceImg,
-        startPlace: this.startPlace,
-        arrivalPlace: this.arrivalPlace,
-        costArray: this.costArray,
-        totalCost: this.totalCost,
-        startTime: document.getElementById('startTime').value,
-        arriveTime: document.getElementById('arriveTime').value,
-        transportation: this.transportation,
-        totalTime: this.totalTime,
-        memo: this.memo
-      }
-      this.plans.push(this.plan)
-      console.log(this.plan)
-      console.log(this.plans)
-      this.inputDataReset()
-    },
-    inputDataReset: function () {
-      this.startPlaceImg = ''
-      this.arrivalPlaceImg = ''
-      this.startPlace = ''
-      this.arrivalPlace = ''
-      this.arrivalPlace = ''
-      document.getElementById('costTitle').value = ''
-      this.cost = ''
-      this.totalCost = 0
-      this.costArray = []
-      document.getElementById('startTime').value = ''
-      document.getElementById('arriveTime').value = ''
-      this.transportation = ''
-      this.totalTime = ''
-      this.memo = ''
     },
     // setTitle: function (savedList) {
     //   this.startPlace = savedList[0].place_name
@@ -208,7 +174,7 @@ export default{
     },
     addBtnOnClick: function () {
       if (this.cost !== '') {
-        var costObject = {costTitle: document.getElementById('costTitle').value, cost: this.cost}
+        let costObject = {costTitle: document.getElementById('costTitle').value, cost: this.cost}
         console.log(costObject)
         this.costArray.push(costObject)
         console.log(this.costArray)
@@ -226,12 +192,13 @@ export default{
       console.log(document.getElementsByClassName('left'))
     },
     startingonClicked (index) {
-      if (this.destinationObject !== this.savedListProps[index]) {
+      if (this.destinationObject === this.savedListProps[index]) {
+        alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
+      } else {
         this.startingObject = this.savedListProps[index]
         this.getImage(this.startingObject.place_name, 1)
         this.startPlace = this.startingObject.place_name
-      } else {
-        alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
+        if (this.destinationObject !== '') this.$emit('coordinate', this.startingObject, this.destinationObject)
       }
     },
     destinationClicked (index) {
@@ -243,13 +210,57 @@ export default{
           this.getImage(this.destinationObject.place_name, 2)
           this.arrivalPlace = this.destinationObject.place_name
           this.$emit('coordinate', this.startingObject, this.destinationObject)
-        } else {
-          alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
+        } else if (this.startingObject === this.savedListProps[index]) {
+          alert('출발지와 다른 도착지를 선택해주세요.')
         }
       }
     },
+    inputOnClick: function () {
+      this.plan = {
+        startPlaceImg: this.startPlaceImg,
+        arrivalPlaceImg: this.arrivalPlaceImg,
+        startPlace: this.startPlace,
+        arrivalPlace: this.arrivalPlace,
+        costArray: this.costArray,
+        totalCost: this.totalCost,
+        startTime: document.getElementById('startTime').value,
+        arriveTime: document.getElementById('arriveTime').value,
+        transportation: this.transportation,
+        totalTime: this.totalTime,
+        memo: this.memo
+      }
+      this.plans.push(this.plan)
+      console.log(this.plan)
+      console.log(this.plans)
+      this.inputDataReset()
+      const position = Array.from(Array(2), () => new Array(2))
+      position[0][0] = this.startingObject.y
+      position[0][1] = this.startingObject.x
+      position[1][0] = this.destinationObject.y
+      position[1][1] = this.destinationObject.x
+      console.log(position)
+      this.positions.push(position)
+      this.startingObject = this.destinationObject
+      this.destinationObject = ''
+    },
+    inputDataReset: function () {
+      this.startPlaceImg = this.arrivalPlaceImg
+      this.arrivalPlaceImg = ''
+      this.startPlace = this.arrivalPlace
+      this.arrivalPlace = ''
+      document.getElementById('costTitle').value = ''
+      this.cost = ''
+      this.totalCost = 0
+      this.costArray = []
+      document.getElementById('startTime').value = ''
+      document.getElementById('arriveTime').value = ''
+      this.transportation = ''
+      this.totalTime = ''
+      this.memo = ''
+    },
     savePlans () {
-      this.$router.push({name: 'PlanData', query: { data: this.plans }})
+      console.log(this.positions)
+      // this.$router.push({name: 'PlanData', query: { data: this.plans }})
     }
   },
   created () {
