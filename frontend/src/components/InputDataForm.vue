@@ -4,7 +4,7 @@
             <b-row>
                 <b-col class="left">
                     <b-row id="sidebar">
-                        <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1><b-icon font-scale="2" icon="arrow-right-square"></b-icon></b-button>
+                        <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1 id="sideOpenBtn"><b-icon font-scale="2" icon="arrow-right-square"></b-icon></b-button>
                             <b-sidebar :visible="true" id="sidebar-1" width="25%" title="저장된 장소들" title-color="primary" shadow>
                                 <div class="sidebarbox">
                                     <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" :index="index" style="text-align: center;" @startingonClicked="startingonClicked" @destinationClicked="destinationClicked"></sidebar-box>
@@ -145,7 +145,8 @@ export default{
         totalTime: '',
         memo: ''
       },
-      positions: []
+      positions: [],
+      img: 'https://picsum.photos/125/125/?image=58'
     }
   },
   methods: {
@@ -167,9 +168,15 @@ export default{
             'X-Naver-Client-Secret': 'kRkOfXCxP2'
           }
         }).then((res) => {
-        this.placeImg = res.data.items[0].thumbnail
-        if (num === 1) this.startPlaceImg = this.placeImg
-        if (num === 2) this.arrivalPlaceImg = this.placeImg
+        if (res.status === 200) {
+          this.placeImg = res.data.items[1].thumbnail
+          if (num === 1) this.startPlaceImg = this.placeImg
+          if (num === 2) this.arrivalPlaceImg = this.placeImg
+        }
+        console.log(res)
+      }).catch(() => {
+        if (num === 1) this.startPlaceImg = this.img
+        if (num === 2) this.arrivalPlaceImg = this.img
       })
     },
     addBtnOnClick: function () {
@@ -192,20 +199,18 @@ export default{
       console.log(document.getElementsByClassName('left'))
     },
     startingonClicked (index) {
-      if (this.destinationObject === this.savedListProps[index]) {
-        alert('이미 도착지로 지정한 장소를 출발지로 지정할 수 없습니다.')
-      } else {
-        this.startingObject = this.savedListProps[index]
-        this.getImage(this.startingObject.place_name, 1)
-        this.startPlace = this.startingObject.place_name
-        if (this.destinationObject !== '') this.$emit('coordinate', this.startingObject, this.destinationObject)
-      }
+      this.destinationObject = ''
+      this.resetDestnation()
+      this.startingObject = this.savedListProps[index]
+      this.getImage(this.startingObject.place_name, 1)
+      this.startPlace = this.startingObject.place_name
     },
     destinationClicked (index) {
       if (this.startingObject === '') {
         alert('출발지를 먼저 선택해주세요.')
       } else {
         if (this.startingObject !== this.savedListProps[index]) {
+          document.getElementsByClassName('close text-dark')[0].click()
           this.destinationObject = this.savedListProps[index]
           this.getImage(this.destinationObject.place_name, 2)
           this.arrivalPlace = this.destinationObject.place_name
@@ -214,6 +219,10 @@ export default{
           alert('출발지와 다른 도착지를 선택해주세요.')
         }
       }
+    },
+    resetDestnation: function () {
+      this.arrivalPlaceImg = ''
+      this.arrivalPlace = ''
     },
     inputOnClick: function () {
       this.plan = {
@@ -242,6 +251,7 @@ export default{
       this.positions.push(position)
       this.startingObject = this.destinationObject
       this.destinationObject = ''
+      document.getElementById('sideOpenBtn').click()
     },
     inputDataReset: function () {
       this.startPlaceImg = this.arrivalPlaceImg
@@ -260,6 +270,7 @@ export default{
     },
     savePlans () {
       console.log(this.positions)
+      this.$router.push({name: 'ResultOfPlan', params: { positions: this.positions, plans: this.plans }})
       // this.$router.push({name: 'PlanData', query: { data: this.plans }})
     }
   },
@@ -338,4 +349,5 @@ export default{
     width: 400px;
     height: 300px;
 }
+
 </style>
