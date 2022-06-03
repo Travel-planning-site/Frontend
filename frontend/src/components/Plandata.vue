@@ -52,7 +52,7 @@ export default{
     }
   },
   created () {
-    this.plans = this.$route.query.data
+    this.plans = this.$route.params.plans
     console.log(this.plans)
   },
   mounted () {
