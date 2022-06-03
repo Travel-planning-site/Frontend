@@ -7,7 +7,8 @@ import ResearchPlace from '@/components/ResearchPlace'
 import InputData from '@/components/InputData'
 import KakaoMap from '@/components/KakaoMap'
 import MyPlan from '@/components/MyPlan'
-import PlanData from '@/components/Plandata'
+import PlanData from '@/components/PlanData'
+import ResultOfPlan from '@/components/ResultOfPlan'
 
 Vue.use(Router)
 
@@ -51,7 +52,14 @@ export default new Router({
     {
       path: '/PlanData',
       name: 'PlanData',
-      component: PlanData
+      component: PlanData,
+      props: true
+    },
+    {
+      path: '/ResultOfPlan',
+      name: 'ResultOfPlan',
+      component: ResultOfPlan,
+      props: true
     }
   ]
 })
