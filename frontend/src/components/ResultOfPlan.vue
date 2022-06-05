@@ -7,9 +7,9 @@
 </template>
 
 <script>
-import ResultButton from './ResultButton.vue'
+// import ResultButton from './ResultButton.vue'
 export default {
-  components: { ResultButton },
+  // components: { ResultButton },
   data () {
     return {
       positions: [],
