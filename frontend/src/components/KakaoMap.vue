@@ -1,5 +1,5 @@
 <template>
-    <div id="map" ref="kakaoMap" style="width:100%; height:996px;"></div>
+    <div id="map" ref="kakaoMap"></div>
 </template>
 
 <script>
@@ -285,16 +285,16 @@ export default {
         this.$emit('msg', this.transit)
       }
     },
-    heightProp () {
-      var height = document.getElementById('map').style.height
-      console.log(this.heightProp)
-      console.log(parseInt(height))
-      if (parseInt(this.heightProp) === parseInt(height)) {
-        document.getElementById('map').style.height = String(this.heightProp + 68) + 'px'
-      } else {
-        document.getElementById('map').style.height = String(this.heightProp - 68) + 'px'
-      }
-    },
+    // heightProp () {
+    //   var height = document.getElementById('map').style.height
+    //   console.log(this.heightProp)
+    //   console.log(parseInt(height))
+    //   if (parseInt(this.heightProp) === parseInt(height)) {
+    //     document.getElementById('map').style.height = String(this.heightProp + 68) + 'px'
+    //   } else {
+    //     document.getElementById('map').style.height = String(this.heightProp - 68) + 'px'
+    //   }
+    // },
     markerPositions1 () {
       this.getMidPoint(this.markerPositions1)
       this.getKakaoNavi(this.markerPositions1)
@@ -308,8 +308,10 @@ export default {
 <style scoped>
 #map {
     margin-left: -20px;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     margin-bottom: 20px;
+    width:100%;
+    height:100%;
 }
 
 .button-group {

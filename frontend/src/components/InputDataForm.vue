@@ -316,7 +316,6 @@ export default{
     height: auto;
     margin-top: 20px;
     padding-bottom: 30px;
-    background-color: rgb(240, 228, 255);
 }
 .button{
     text-align: right;
@@ -326,6 +325,12 @@ export default{
   padding: 2px;
   display: block;
   flex-wrap: wrap;
+}
+
+.body {
+  height: auto;
+  /* background-color: rgb(240, 228, 255); */
+
 }
 
 #button {

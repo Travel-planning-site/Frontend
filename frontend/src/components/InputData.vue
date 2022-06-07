@@ -1,8 +1,8 @@
 <template>
     <div class="body">
         <b-row>
-            <b-col cols="6"><input-data-form @msg = "getTransport" @height = "getHeight" @coordinate = "getPlace"  v-bind:savedListProps="savedList" v-bind:durationProps="duration"></input-data-form></b-col>
-            <b-col><kakao-map @msg = "getDuration" v-bind:savedListProps="savedList" v-bind:transportation="transportation" v-bind:heightProp="height"></kakao-map></b-col>
+            <b-col cols="6"><input-data-form id="inputForm" @msg = "getTransport" @height = "getHeight" @coordinate = "getPlace"  v-bind:savedListProps="savedList" v-bind:durationProps="duration"></input-data-form></b-col>
+            <b-col><kakao-map  @msg = "getDuration" v-bind:savedListProps="savedList" v-bind:transportation="transportation"></kakao-map></b-col>
         </b-row>
     </div>
 </template>
@@ -19,7 +19,6 @@ export default{
       savedList: [],
       transportation: '',
       duration: '',
-      height: '',
       positions: [
         [0, 0],
         [0, 0]
@@ -40,9 +39,6 @@ export default{
     },
     getDuration (msg) {
       this.duration = msg
-    },
-    getHeight (height) {
-      this.height = height
     },
     getPlace (msg1, msg2) {
       // for (var i = 0; i < 2; i++) {
@@ -67,5 +63,9 @@ export default{
 </script>
 
 <style scoped>
+#inputForm {
+    background-color: rgb(240, 228, 255);
+    height: auto;
 
+}
 </style>
