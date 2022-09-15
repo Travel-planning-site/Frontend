@@ -1,4 +1,4 @@
-# travle-plan
+# travel-plan
 
 > A Vue.js project
 
