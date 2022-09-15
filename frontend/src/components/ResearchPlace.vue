@@ -4,10 +4,9 @@
       <b-row>
         <b-col>
           <div style="margin-top: 10px;">
-            <b-button style="border-color: gray">
-              <b-icon icon="list"></b-icon>
-            </b-button>
-            <b-sidebar>
+            <b-button v-b-toggle.sidebar-1><b-icon icon="list"></b-icon></b-button>
+            <b-sidebar id="sidebar-1" title="SavedList" text-align="center" shadow>
+              <savedplace-list :selectedList="resultList" @DeleteFromSavedBox="DeleteFromSavedBox" id="savedplace_area_Body"></savedplace-list>
             </b-sidebar>
           </div>
         </b-col>
