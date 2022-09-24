@@ -1,14 +1,22 @@
 <template>
   <div class="ResearchPlace_page">
     <b-container fluid>
-      <b-row>
-        <b-col>
+      <b-row align-h="between">
+        <b-col cols="11">
           <div style="margin-top: 10px;">
             <b-button v-b-toggle.sidebar-1><b-icon icon="list"></b-icon></b-button>
             <b-sidebar id="sidebar-1" title="SavedList" text-align="center" shadow>
               <savedplace-list :selectedList="resultList" @DeleteFromSavedBox="DeleteFromSavedBox" id="savedplace_area_Body"></savedplace-list>
             </b-sidebar>
           </div>
+        </b-col>
+        <b-col cols="1" style="margin-top: 10px;">
+          <b-button @click="$router.go(-1)">
+            이전
+          </b-button>
+          <b-button @click="nextOnClicked">
+            다음
+          </b-button>
         </b-col>
         <b-col cols="12" class="search_body">
           <div id="Page_name">
@@ -163,7 +171,7 @@ export default {
     nextOnClicked () {
       if (this.resultList.length > 1) {
         this.$router.push({
-          params: { savedList: this.resultList }
+          name: 'InputData', params: { savedList: this.resultList }
         })
       } else {
         alert('장소를 2개이상 선택해주세요.')
