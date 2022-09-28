@@ -7,9 +7,7 @@
 </template>
 
 <script>
-// import ResultButton from './ResultButton.vue'
 export default {
-  // components: { ResultButton },
   data () {
     return {
       positions: [],
@@ -46,8 +44,6 @@ export default {
 
       this.positions.map((number, i, position) => {
         var array = number[0]
-        console.log(array[0])
-        console.log(array[1])
         var marker = new kakao.maps.Marker({
           map: this.map,
           position: new kakao.maps.LatLng(array[0], array[1])

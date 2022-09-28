@@ -99,7 +99,6 @@
 
 import axios from 'axios'
 import ResultBox from './ResultBox.vue'
-// import {EventBus} from '../main'
 export default{
   emits: ['msg'],
   components: { ResultBox },
@@ -151,15 +150,10 @@ export default{
   },
   methods: {
     changeOption: function () {
-    //   EventBus.$emit('message', 'hello world')
     },
     sidebar: function () {
       alert('sidebar')
     },
-    // setTitle: function (savedList) {
-    //   this.startPlace = savedList[0].place_name
-    //   this.arrivalPlace = savedList[1].place_name
-    // },
     getImage: function (placeName, num) {
       axios.get(
         'https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/image?query=' + placeName, {
@@ -275,9 +269,6 @@ export default{
     }
   },
   created () {
-    // this.setTitle(this.savedListProps)
-    // this.getImage(this.startPlace, 1)
-    // this.getImage(this.arrivalPlace, 2)
   },
   mounted () {
   },
@@ -329,7 +320,6 @@ export default{
 
 .body {
   height: auto;
-  /* background-color: rgb(240, 228, 255); */
 
 }
 
