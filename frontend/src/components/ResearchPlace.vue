@@ -79,6 +79,8 @@
 
 <script>
 import axios from 'axios'
+import { LOCAL_URL } from '../url/BackendUrl'
+
 export default {
   name: 'ResearchPlace',
   data () {
@@ -131,27 +133,33 @@ export default {
         if (this.search_results.length > 0) {
           this.search_results.splice(0)
         }
-        for (var i = 1; i < 3; i++) {
-          this.kakaosearch(this.search_term, i)
-        }
+        this.PlaceSearch(this.search_term)
       }
     },
-    kakaosearch (keyword, i) {
-      axios
-        .get(
-          'https://dapi.kakao.com/v2/local/search/keyword.json?page=' +
-            i +
-            '&query=' +
-            keyword,
-          {
-            headers: {
-              Authorization: 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
-            }
-          }
-        )
+    // kakaosearch (keyword, i) {
+    //   axios
+    //     .get(
+    //       'https://dapi.kakao.com/v2/local/search/keyword.json?page=' +
+    //         i +
+    //         '&query=' +
+    //         keyword,
+    //       {
+    //         headers: {
+    //           Authorization: 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
+    //         }
+    //       }
+    //     )
+    //     .then(res => {
+    //       this.search_results.push(...res.data.documents)
+    //       this.total += res.data.documents.length
+    //       this.PageChanged(1)
+    //     })
+    // },
+    PlaceSearch (keyword) {
+      axios.get(LOCAL_URL + '/ResearchPlace/search' + '?input=' + keyword)
         .then(res => {
-          this.search_results.push(...res.data.documents)
           this.total += res.data.documents.length
+          this.search_results.push(...res.data.documents)
           this.PageChanged(1)
         })
     },
