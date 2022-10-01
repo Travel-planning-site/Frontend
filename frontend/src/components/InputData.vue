@@ -40,14 +40,14 @@ export default{
     getDuration (msg) {
       this.duration = msg
     },
-    getPlace (msg1, msg2) {
-       for (var i = 0; i < 2; i++) {
-         for (var j = 0; j < 2 ; j++) {
-           this.positions[i][j] = msg1.x
-           this.positions[i][j] = msg1.y
-         }
-         // console.log(`msg${i + 1}`.x)
-       }
+    getPlace (msg1) {
+      for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 2; j++) {
+          this.positions[i][j] = msg1.x
+          this.positions[i][j] = msg1.y
+        }
+        // console.log(`msg${i + 1}`.x)
+      }
       EventBus.$emit('push-positions', this.positions)
     }
   },
