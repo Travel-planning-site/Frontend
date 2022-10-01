@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     initMap () {
-      var centerPosition = this.positions[0]
+      let centerPosition = this.positions[0]
       console.log(centerPosition)
       const container = document.getElementById('map')
       const options = {
@@ -43,8 +43,8 @@ export default {
       this.map = new kakao.maps.Map(container, options)
 
       this.positions.map((number, i, position) => {
-        var array = number[0]
-        var marker = new kakao.maps.Marker({
+        let array = number[0]
+        let marker = new kakao.maps.Marker({
           map: this.map,
           position: new kakao.maps.LatLng(array[0], array[1])
         })
@@ -52,7 +52,7 @@ export default {
       })
       const linePath = this.getLinePath()
 
-      var polyline = new kakao.maps.Polyline({
+      let polyline = new kakao.maps.Polyline({
         map: this.map,
         path: linePath,
         strokeWeight: 8,
