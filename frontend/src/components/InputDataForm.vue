@@ -164,10 +164,11 @@ export default{
         }).then((res) => {
         if (res.status === 200) {
           this.placeImg = res.data.items[1].thumbnail
+          console.log(this.placeImg)
           if (num === 1) this.startPlaceImg = this.placeImg
           if (num === 2) this.arrivalPlaceImg = this.placeImg
         }
-        console.log(res)
+        console.log(num + ' ' + res)
       }).catch(() => {
         if (num === 1) this.startPlaceImg = this.img
         if (num === 2) this.arrivalPlaceImg = this.img

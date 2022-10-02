@@ -4,7 +4,6 @@
             <b-col cols="6">
               <input-data-form id="inputForm"
                 @msg = "getTransport"
-                @height = "getHeight"
                 @coordinate = "getPlace"
                 v-bind:savedListProps="savedList"
                 v-bind:durationProps="duration">

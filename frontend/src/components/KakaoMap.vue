@@ -36,21 +36,19 @@ export default {
   created () {
     EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
       this.markerPositions1 = positions
-      this.getMidPoint(this.markerPositions1)
-      this.getKakaoNavi(this.markerPositions1)
-      this.transit = this.getDuration(this.markerPositions1)
-      this.initMap()
+      // this.getMidPoint(this.markerPositions1)
+      // this.getKakaoNavi(this.markerPositions1)
+      // this.transit = this.getDuration(this.markerPositions1)
+      // this.initMap()
+
       // this.positionArray.push(positions)
       // console.log(this.positionArray)
     })
-    this.getMidPoint(this.markerPositions1)
-    this.getKakaoNavi(this.markerPositions1)
-    this.transit = this.getDuration(this.markerPositions1)
   },
   mounted () {
     // https://codesandbox.io/s/nervous-keldysh-87yxg
     if (window.kakao && window.kakao.maps) {
-      this.initMap()
+      // this.initMap()
     } else {
       const script = document.createElement('script')
       /* global kakao */
@@ -220,6 +218,7 @@ export default {
       }
     },
     async getKakaoNavi (address) {
+      console.log('address:' + address)
       // console.log(routes)
       console.log('출발지:' + address[0][1] + ',' + address[0][0])
       console.log('도착지:' + address[1][1] + ',' + address[1][0])
@@ -235,7 +234,7 @@ export default {
             priority: 'RECOMMEND' // 거리, 시간
           }
         }).then((res) => {
-        console.log(res)
+        console.log('kakaonavi: ' + res)
         const resultCode = res.data.routes[0].result_code
         if (resultCode === 105) { // 교통 장애가 있다면 출발지와 도착지간의 선 하나만 출력
           alert(res.data.routes[0].result_msg)
@@ -271,7 +270,7 @@ export default {
         if (res.data.rows[0].elements[0].status === 'ZERO_RESULTS') this.transit = '정보없음'
         else this.transit = res.data.rows[0].elements[0].duration.text
       })
-      console.log(this.transit)
+      console.log('이동시간 ' + this.transit)
       return this.transit
     }
   },
@@ -285,16 +284,6 @@ export default {
         this.$emit('msg', this.transit)
       }
     },
-    // heightProp () {
-    //   let height = document.getElementById('map').style.height
-    //   console.log(this.heightProp)
-    //   console.log(parseInt(height))
-    //   if (parseInt(this.heightProp) === parseInt(height)) {
-    //     document.getElementById('map').style.height = String(this.heightProp + 68) + 'px'
-    //   } else {
-    //     document.getElementById('map').style.height = String(this.heightProp - 68) + 'px'
-    //   }
-    // },
     markerPositions1 () {
       this.getMidPoint(this.markerPositions1)
       this.getKakaoNavi(this.markerPositions1)
