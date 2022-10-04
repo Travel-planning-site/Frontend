@@ -155,13 +155,16 @@ export default {
     //       this.PageChanged(1)
     //     })
     // },
-    PlaceSearch (keyword) {
-      axios.get(LOCAL_URL + '/ResearchPlace/search' + '?input=' + keyword)
-        .then(res => {
-          this.total += res.data.documents.length
-          this.search_results.push(...res.data.documents)
-          this.PageChanged(1)
-        })
+    async PlaceSearch (keyword) {
+      // axios.get(LOCAL_URL + '/ResearchPlace/searchplace' + '?input=' + keyword)
+      //   .then(axios.get(LOCAL_URL + '/ResearchPlace/getsearch')
+      //     .then(res => {
+      //       console.log(res)
+      //     }))
+      const response = await axios.get(LOCAL_URL + '/ResearchPlace/searchplace' + '?input=' + keyword)
+      console.log(response)
+      const response2 = await axios.get(LOCAL_URL + '/ResearchPlace/getsearch')
+      console.log(response2)
     },
     getImageList: function (list) {
       this.ImageList.splice(0)
