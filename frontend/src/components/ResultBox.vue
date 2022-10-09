@@ -18,26 +18,23 @@ export default {
   props: {
     ResultList_result: {
       type: Object
-    },
-    Image: {
-      type: String
     }
   },
   data () {
     return {
       searchList: this.ResultList_result,
-      place_name: this.ResultList_result.place_name,
-      place_addr: this.ResultList_result.road_address_name,
-      place_img: this.Image
+      place_name: this.ResultList_result.placeName,
+      place_addr: this.ResultList_result.Addr,
+      place_img: this.ResultList_result.placeImage
     }
   },
   watch: {
     ResultList_result () {
-      this.place_name = this.ResultList_result.place_name
-      this.place_addr = this.ResultList_result.road_address_name
+      this.place_name = this.ResultList_result.placeName
+      this.place_addr = this.ResultList_result.Addr
     },
     Image () {
-      this.place_img = this.Image
+      this.place_img = this.ResultList_result.placeImage
     }
   },
   methods: {

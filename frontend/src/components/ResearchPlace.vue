@@ -37,10 +37,10 @@
                         placeholder="장소검색"
                         @keyup.enter="searchOnEntered"
                       ></b-form-input>
-                      <daum-search
+                      <!-- <daum-search
                         :listData="listData"
                         @getImageList="getImageList"
-                      ></daum-search>
+                      ></daum-search> -->
                     </b-input-group>
                   </div>
                 </b-col>
@@ -110,17 +110,9 @@ export default {
       if (Object.keys(selected).length > 0) {
         if (this.resultList.length === 0) {
           this.resultList.push(selected)
-          this.unitList(
-            selected,
-            this.search_results.findIndex(i => i.id === selected.id)
-          )
         } else {
-          if (this.resultList.every(item => item.id !== selected.id)) {
+          if (this.resultList.every(item => item.placeId !== selected.placeId)) {
             this.resultList.push(selected)
-            this.unitList(
-              selected,
-              this.search_results.findIndex(i => i.id === selected.id)
-            )
           }
         }
       }
@@ -165,11 +157,21 @@ export default {
       console.log(response)
       const response2 = await axios.get(LOCAL_URL + '/ResearchPlace/getsearch')
       console.log(response2)
+      this.progressPlace(response2)
     },
-    getImageList: function (list) {
-      this.ImageList.splice(0)
-      this.ImageList = list
+    progressPlace (res) {
+      for (var i = 0; i < res.data.length; i++) {
+        for (var j = 0; j < res.data[i].length; j++) {
+          this.search_results.push(res.data[i][j])
+          this.total += res.data[i].length
+          this.PageChanged(1)
+        }
+      }
     },
+    // getImageList: function (list) {
+    //   this.ImageList.splice(0)
+    //   this.ImageList = list
+    // },
     PageChanged (page) {
       this.currentPage = page
       this.listData = this.search_results.slice(
@@ -187,23 +189,23 @@ export default {
       } else {
         alert('장소를 2개이상 선택해주세요.')
       }
-    },
-    unitList (selected, index) {
-      console.log(index + 1)
-      var obj = {
-        place_name: '',
-        address_name: '',
-        x: 0,
-        y: 0,
-        placeImage: ''
-      }
-      obj.place_name = selected.place_name
-      obj.address_name = selected.address_name
-      obj.x = selected.x
-      obj.y = selected.y
-      obj.placeImage = this.ImageList[index]
-      this.list.push(obj)
     }
+    // unitList (selected, index) {
+    //   console.log(index + 1)
+    //   var obj = {
+    //     place_name: '',
+    //     address_name: '',
+    //     x: 0,
+    //     y: 0,
+    //     placeImage: ''
+    //   }
+    //   obj.place_name = selected.place_name
+    //   obj.address_name = selected.address_name
+    //   obj.x = selected.x
+    //   obj.y = selected.y
+    //   obj.placeImage = this.ImageList[index]
+    //   this.list.push(obj)
+    // }
   }
 }
 </script>

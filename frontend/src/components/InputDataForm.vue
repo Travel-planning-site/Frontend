@@ -196,8 +196,8 @@ export default{
       this.destinationObject = ''
       this.resetDestnation()
       this.startingObject = this.savedListProps[index]
-      this.getImage(this.startingObject.place_name, 1)
-      this.startPlace = this.startingObject.place_name
+      this.getImage(this.startingObject.placeName, 1)
+      this.startPlace = this.startingObject.placeName
     },
     destinationClicked (index) {
       if (this.startingObject === '') {
@@ -206,8 +206,8 @@ export default{
         if (this.startingObject !== this.savedListProps[index]) {
           document.getElementsByClassName('close text-dark')[0].click()
           this.destinationObject = this.savedListProps[index]
-          this.getImage(this.destinationObject.place_name, 2)
-          this.arrivalPlace = this.destinationObject.place_name
+          this.getImage(this.destinationObject.placeName, 2)
+          this.arrivalPlace = this.destinationObject.placeName
           this.$emit('coordinate', this.startingObject, this.destinationObject)
         } else if (this.startingObject === this.savedListProps[index]) {
           alert('출발지와 다른 도착지를 선택해주세요.')
@@ -237,10 +237,10 @@ export default{
       console.log(this.plans)
       this.inputDataReset()
       const position = Array.from(Array(2), () => new Array(2))
-      position[0][0] = this.startingObject.y
-      position[0][1] = this.startingObject.x
-      position[1][0] = this.destinationObject.y
-      position[1][1] = this.destinationObject.x
+      console.log(this.startingObject.placeY)
+      position[0][1] = this.startingObject.placeX
+      position[1][0] = this.destinationObject.placeY
+      position[1][1] = this.destinationObject.placeX
       console.log(position)
       this.positions.push(position)
       this.startingObject = this.destinationObject
