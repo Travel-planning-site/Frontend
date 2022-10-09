@@ -190,7 +190,7 @@ export default {
 
       if (positions.length > 0) {
         for (let i = 0; i < positions.length; i++) {
-          const content = this.savedListProps[i].place_name
+          const content = this.savedListProps[i].placeName
           let iwContent = '<div style="padding:5px; font-size:18px;">' + content + '</div>'
           const marker = new kakao.maps.Marker({
             map: this.map,

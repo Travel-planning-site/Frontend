@@ -4,14 +4,14 @@
       <b-row>
         <b-col>
           <div id="savedBox_Header">
-            {{place.place_name}}
+            {{place.placeName}}
           </div>
         </b-col>
       </b-row>
       <b-row>
         <b-col>
           <b-card-body class="savedBox_Body">
-            <b-card-sub-title class="savedBox_Body" style="margin-bottom: 5px;">{{place.place_addr}}</b-card-sub-title>
+            <b-card-sub-title class="savedBox_Body" style="margin-bottom: 5px;">{{place.placeAddr}}</b-card-sub-title>
             <b-button block class="savedBox_Body" @click="DeleteOnClicked">Delete</b-button>
           </b-card-body>
         </b-col>

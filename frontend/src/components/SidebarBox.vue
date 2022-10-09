@@ -8,8 +8,8 @@
         <b-col class="info_container">
           <b-row class="info_items">
             <b-col class="info" center cols="12" md="auto">
-              <div id="info_place">{{savedProps.place_name}}</div>
-              <div id="info_address" style="color: gray">{{savedProps.address_name}}</div>
+              <div id="info_place">{{savedProps.placeName}}</div>
+              <div id="info_address" style="color: gray">{{savedProps.addressName}}</div>
             </b-col>
             <b-col class="buttons" cols="12" md="auto">
               <b-row class="buttons">

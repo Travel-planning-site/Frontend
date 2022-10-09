@@ -56,8 +56,8 @@ export default{
     getPlace (msg1) {
       for (var i = 0; i < 2; i++) {
         for (var j = 0; j < 2; j++) {
-          this.positions[i][j] = msg1.x
-          this.positions[i][j] = msg1.y
+          this.positions[i][j] = msg1.placeX
+          this.positions[i][j] = msg1.placeY
         }
         // console.log(`msg${i + 1}`.x)
       }
