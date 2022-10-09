@@ -36,21 +36,19 @@ export default {
   created () {
     EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
       this.markerPositions1 = positions
-      this.getMidPoint(this.markerPositions1)
-      this.getKakaoNavi(this.markerPositions1)
-      this.transit = this.getDuration(this.markerPositions1)
-      this.initMap()
+      // this.getMidPoint(this.markerPositions1)
+      // this.getKakaoNavi(this.markerPositions1)
+      // this.transit = this.getDuration(this.markerPositions1)
+      // this.initMap()
+
       // this.positionArray.push(positions)
       // console.log(this.positionArray)
     })
-    this.getMidPoint(this.markerPositions1)
-    this.getKakaoNavi(this.markerPositions1)
-    this.transit = this.getDuration(this.markerPositions1)
   },
   mounted () {
     // https://codesandbox.io/s/nervous-keldysh-87yxg
     if (window.kakao && window.kakao.maps) {
-      this.initMap()
+      // this.initMap()
     } else {
       const script = document.createElement('script')
       /* global kakao */
@@ -62,7 +60,7 @@ export default {
   },
   methods: {
     getAddress (savedList) { // 좌표 구하기
-      for (var i = 0; i < 2; i++) {
+      for (let i = 0; i < 2; i++) {
         this.markerPositions1[i][0] = savedList[i].y
         this.markerPositions1[i][1] = savedList[i].x // 129
       }
@@ -100,13 +98,13 @@ export default {
       this.map = new kakao.maps.Map(container, options) // 지도 생성
     },
     setLine (address) {
-      var linePath = this.getLinePath(address)
+      let linePath = this.getLinePath(address)
       this.setLineAndOverLay(linePath)
     },
     setLineAndOverLay (linePath, duration) {
       this.displayMarker(this.markerPositions1) // 마커 생성
 
-      var polyline = new kakao.maps.Polyline({
+      let polyline = new kakao.maps.Polyline({
         path: linePath, // 선을 구성하는 좌표배열
         strokeWeight: 10, // 선의 두께
         strokeColor: 'blue', // 선의 색깔
@@ -118,14 +116,14 @@ export default {
       polyline.setPath(linePath)
       polyline.setMap(null)
       polyline.setMap(this.map)
-      var distance = polyline.getLength().toFixed(0)
+      let distance = polyline.getLength().toFixed(0)
       this.setOverLay(distance, duration)
     },
     async setOverLay (distance, duration) { // 커스텀오버레이
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
-      var walkkTime = distance / 67 | 0
-      var walkHour = ''
-      var walkMin = ''
+      let walkkTime = distance / 67 | 0
+      let walkHour = ''
+      let walkMin = ''
       if (distance >= 1000) {
         var distanceCheck = true
         distance /= 1000
@@ -133,8 +131,8 @@ export default {
       }
       this.time = Math.floor(walkkTime / 60) + '시간 ' + walkkTime % 60 + '분' // 도보시간
 
-      var hour = parseInt(duration / 3600)
-      var min = parseInt((duration % 3600) / 60)
+      let hour = parseInt(duration / 3600)
+      let min = parseInt((duration % 3600) / 60)
 
       if (hour < 1) { this.carTime = min + '분' } else { this.carTime = hour + '시간' + min + '분' } // 자동차 소요시간
 
@@ -144,7 +142,7 @@ export default {
       }
       walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
 
-      var content = '<ul class="dotOverlay">'
+      let content = '<ul class="dotOverlay">'
       content += '    <li>'
       if (distanceCheck) content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>Km'
       else content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>m'
@@ -178,7 +176,7 @@ export default {
       // this.distanceOverlay.setMap(null)
       distanceOverlay.setMap(this.map)
     },
-    displayMarker (markerPositions) { // 마커 생성하는 메서드
+    displayMarker (markerPositions) { // 마커 생성
       console.log(markerPositions)
       if (this.markers.length > 0) {
         this.markers.forEach((marker) => {
@@ -191,9 +189,9 @@ export default {
       )
 
       if (positions.length > 0) {
-        for (var i = 0; i < positions.length; i++) {
+        for (let i = 0; i < positions.length; i++) {
           const content = this.savedListProps[i].placeName
-          var iwContent = '<div style="padding:5px; font-size:18px;">' + content + '</div>'
+          let iwContent = '<div style="padding:5px; font-size:18px;">' + content + '</div>'
           const marker = new kakao.maps.Marker({
             map: this.map,
             position: positions[i]
@@ -202,7 +200,7 @@ export default {
             content: iwContent
           })
           kakao.maps.event.addListener(marker, 'mouseover', function () {
-            var map = marker.getMap()
+            let map = marker.getMap()
             infowindow.open(map, marker)
           })
 
@@ -220,6 +218,7 @@ export default {
       }
     },
     async getKakaoNavi (address) {
+      console.log('address:' + address)
       // console.log(routes)
       console.log('출발지:' + address[0][1] + ',' + address[0][0])
       console.log('도착지:' + address[1][1] + ',' + address[1][0])
@@ -235,7 +234,7 @@ export default {
             priority: 'RECOMMEND' // 거리, 시간
           }
         }).then((res) => {
-        console.log(res)
+        console.log('kakaonavi: ' + res)
         const resultCode = res.data.routes[0].result_code
         if (resultCode === 105) { // 교통 장애가 있다면 출발지와 도착지간의 선 하나만 출력
           alert(res.data.routes[0].result_msg)
@@ -253,7 +252,7 @@ export default {
     },
     getAddressList (guides) {
       const arr = new Array(guides.length).fill(0).map(() => new Array(2))
-      for (var i = 0; i < guides.length; i++) {
+      for (let i = 0; i < guides.length; i++) {
         arr[i][0] = guides[i].x
         arr[i][1] = guides[i].y
       }
@@ -271,7 +270,7 @@ export default {
         if (res.data.rows[0].elements[0].status === 'ZERO_RESULTS') this.transit = '정보없음'
         else this.transit = res.data.rows[0].elements[0].duration.text
       })
-      console.log(this.transit)
+      console.log('이동시간 ' + this.transit)
       return this.transit
     }
   },
@@ -285,16 +284,6 @@ export default {
         this.$emit('msg', this.transit)
       }
     },
-    // heightProp () {
-    //   var height = document.getElementById('map').style.height
-    //   console.log(this.heightProp)
-    //   console.log(parseInt(height))
-    //   if (parseInt(this.heightProp) === parseInt(height)) {
-    //     document.getElementById('map').style.height = String(this.heightProp + 68) + 'px'
-    //   } else {
-    //     document.getElementById('map').style.height = String(this.heightProp - 68) + 'px'
-    //   }
-    // },
     markerPositions1 () {
       this.getMidPoint(this.markerPositions1)
       this.getKakaoNavi(this.markerPositions1)

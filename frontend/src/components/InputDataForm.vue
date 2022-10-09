@@ -16,8 +16,8 @@
                     <b-row>
                         <b-col>
                             <b-row style="margin-bottom: 40px;">
-                                <b-col style="text-align: center;"><img :src="startPlaceImg" id="img" art="https://picsum.photos/125/125/?image=58"></b-col>
-                                <b-col style="text-align: center;"><img :src="arrivalPlaceImg" id="img" art="https://picsum.photos/125/125/?image=58"></b-col>
+                                <b-col style="text-align: center;"><img :src="startPlaceImg" id="startImg" art="https://picsum.photos/125/125/?image=58"></b-col>
+                                <b-col style="text-align: center;"><img :src="arrivalPlaceImg" id="arriveImg" art="https://picsum.photos/125/125/?image=58"></b-col>
                             </b-row>
                             <b-row class="title">
                                 <b-col>출발지</b-col>
@@ -96,7 +96,7 @@
 </template>
 
 <script>
-
+import { LOCAL_URL } from '../url/BackendUrl'
 import axios from 'axios'
 import ResultBox from './ResultBox.vue'
 export default{
@@ -118,7 +118,6 @@ export default{
       content: '',
       totalTime: '',
       memo: '',
-      placeImg: '',
       startPlaceImg: '',
       arrivalPlaceImg: '',
       sizes: ['렌트카', '택시', '버스비', '입장료'],
@@ -154,23 +153,14 @@ export default{
     sidebar: function () {
       alert('sidebar')
     },
-    getImage: function (placeName, num) {
+    getImage: function (placeName, placeImg) {
       axios.get(
-        'https://cors-anywhere.herokuapp.com/https://openapi.naver.com/v1/search/image?query=' + placeName, {
-          headers: {
-            'X-Naver-Client-Id': 'o9H6ct1KNCA_QMfWXbtT',
-            'X-Naver-Client-Secret': 'kRkOfXCxP2'
-          }
+        LOCAL_URL + '/api/searchImg?query=' + placeName, {
         }).then((res) => {
-        if (res.status === 200) {
-          this.placeImg = res.data.items[1].thumbnail
-          if (num === 1) this.startPlaceImg = this.placeImg
-          if (num === 2) this.arrivalPlaceImg = this.placeImg
-        }
         console.log(res)
+        placeImg.setAttribute('src', res.data)
       }).catch(() => {
-        if (num === 1) this.startPlaceImg = this.img
-        if (num === 2) this.arrivalPlaceImg = this.img
+        console.log('이미지 가져오기 실패')
       })
     },
     addBtnOnClick: function () {
@@ -196,7 +186,7 @@ export default{
       this.destinationObject = ''
       this.resetDestnation()
       this.startingObject = this.savedListProps[index]
-      this.getImage(this.startingObject.placeName, 1)
+      this.getImage(this.startingObject.placeName, document.querySelector('#startImg'))
       this.startPlace = this.startingObject.placeName
     },
     destinationClicked (index) {
@@ -207,6 +197,8 @@ export default{
           document.getElementsByClassName('close text-dark')[0].click()
           this.destinationObject = this.savedListProps[index]
           this.getImage(this.destinationObject.placeName, 2)
+          this.arrivalPlace = this.destinationObject.placeName
+          this.getImage(this.destinationObject.placeName, document.querySelector('#arriveImg'))
           this.arrivalPlace = this.destinationObject.placeName
           this.$emit('coordinate', this.startingObject, this.destinationObject)
         } else if (this.startingObject === this.savedListProps[index]) {
@@ -262,7 +254,7 @@ export default{
       this.totalTime = ''
       this.memo = ''
     },
-    savePlans () {
+    savePlans () { // 저장
       console.log(this.positions)
       this.$router.push({name: 'ResultOfPlan', params: { positions: this.positions, plans: this.plans }})
       // this.$router.push({name: 'PlanData', query: { data: this.plans }})
@@ -340,7 +332,7 @@ export default{
     margin-bottom: 40px;
     background-color: rgba(226, 213, 247, 0.943);
 }
-#img {
+#startImg, #arriveImg {
     width: 400px;
     height: 300px;
 }
