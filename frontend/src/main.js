@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import MainPage from './components/MainPage'
+import LoginBoard from './components/LoginBoard'
 import BasicInfo from './components/BasicInfo'
 import ResearchPlace from './components/ResearchPlace'
 import DaumSearch from './components/DaumSearch'
@@ -29,6 +30,7 @@ export const EventBus = new Vue()
 Vue.config.productionTip = false
 
 Vue.component('main-page', MainPage)
+Vue.component('login-board', LoginBoard)
 Vue.component('basic-info', BasicInfo)
 Vue.component('research-page', ResearchPlace)
 Vue.component('daum-search', DaumSearch)
