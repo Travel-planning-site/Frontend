@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import MainPage from '@/components/MainPage'
+import LoginBoard from '@/components/LoginBoard'
 import BasicInfo from '@/components/BasicInfo'
 import ResearchPlace from '@/components/ResearchPlace'
 import InputData from '@/components/InputData'
@@ -18,6 +19,11 @@ export default new Router({
       path: '/',
       name: 'Main',
       component: MainPage
+    },
+    {
+      path: '/LoginBoard',
+      name: 'LoginBoard',
+      component: LoginBoard
     },
     {
       path: '/HelloWorld',

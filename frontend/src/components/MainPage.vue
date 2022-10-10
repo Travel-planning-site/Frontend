@@ -3,7 +3,7 @@
         <b-container fluid="fluid">
             <b-row id="header-page" cols="6">
                 <b-col cols="6" md="md" style="text-align: right">
-                    <b-button id="login">Login</b-button>
+                    <b-button id="login" @click="$router.push('LoginBoard')">Login</b-button>
                 </b-col>
             </b-row>
             <b-row>
