@@ -61,8 +61,8 @@ export default {
   methods: {
     getAddress (savedList) { // 좌표 구하기
       for (let i = 0; i < 2; i++) {
-        this.markerPositions1[i][0] = savedList[i].y
-        this.markerPositions1[i][1] = savedList[i].x // 129
+        this.markerPositions1[i][0] = savedList[i].placeY
+        this.markerPositions1[i][1] = savedList[i].placeX // 129
       }
       return this.markerPositions1
     },
@@ -253,8 +253,8 @@ export default {
     getAddressList (guides) {
       const arr = new Array(guides.length).fill(0).map(() => new Array(2))
       for (let i = 0; i < guides.length; i++) {
-        arr[i][0] = guides[i].x
-        arr[i][1] = guides[i].y
+        arr[i][0] = guides[i].placeX
+        arr[i][1] = guides[i].placeY
       }
       return arr
     },
