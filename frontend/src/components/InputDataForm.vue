@@ -49,7 +49,8 @@
                                 <b-col>도착시간</b-col>
                             </b-row>
                             <b-row class="margin">
-                                <b-col><b-form-input id="startTime" :type="'time'"></b-form-input></b-col>
+                                <b-col><b-form-input id="startTime" :type="'time'"></b-form-input></b-col> 
+                                <!-- bootstrap vue -->
                                 <b-col><b-form-input id="arriveTime" :type="'time'"></b-form-input></b-col>
                             </b-row>
                             <b-row class="title">
@@ -230,6 +231,7 @@ export default{
       this.inputDataReset()
       const position = Array.from(Array(2), () => new Array(2))
       console.log(this.startingObject.placeY)
+      // 00 startY 없음
       position[0][1] = this.startingObject.placeX
       position[1][0] = this.destinationObject.placeY
       position[1][1] = this.destinationObject.placeX

@@ -3,15 +3,15 @@
         <b-row>
             <b-col cols="6">
               <input-data-form id="inputForm"
-                @msg = "getTransport"
-                @coordinate = "getPlace"
+                @msg="getTransport"
+                @coordinate="getPlace"
                 v-bind:savedListProps="savedList"
                 v-bind:durationProps="duration">
               </input-data-form>
             </b-col>
             <b-col>
               <kakao-map
-                @msg = "getDuration"
+                @msg="getDuration"
                 v-bind:savedListProps="savedList"
                 v-bind:transportation="transportation">
               </kakao-map>

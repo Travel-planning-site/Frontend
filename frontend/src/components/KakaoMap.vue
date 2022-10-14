@@ -1,5 +1,6 @@
 <template>
     <div id="map" ref="kakaoMap"></div>
+    <div v-if="overl;ay"></div>
 </template>
 
 <script>
@@ -36,9 +37,9 @@ export default {
   created () {
     EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
       this.markerPositions1 = positions
-      // this.getMidPoint(this.markerPositions1)
-      // this.getKakaoNavi(this.markerPositions1)
-      // this.transit = this.getDuration(this.markerPositions1)
+      this.getMidPoint(this.markerPositions1)
+      this.getKakaoNavi(this.markerPositions1)
+      this.transit = this.getDuration(this.markerPositions1)
       // this.initMap()
 
       // this.positionArray.push(positions)
@@ -48,7 +49,7 @@ export default {
   mounted () {
     // https://codesandbox.io/s/nervous-keldysh-87yxg
     if (window.kakao && window.kakao.maps) {
-      // this.initMap()
+      this.initMap()
     } else {
       const script = document.createElement('script')
       /* global kakao */
@@ -87,11 +88,13 @@ export default {
         return latlngArray
       }
     },
-    initMap () {
+    initMap () { // 현재위치
       const container = document.getElementById('map') // 지도를 표시할 div
       console.log(container)
       const options = {
         center: new kakao.maps.LatLng(this.markerPositions1[0][0], this.markerPositions1[0][1]), // 지도의 중심좌표
+        // center: new kakao.maps.LatLng(33.450701, 126.570667),
+
         level: 5 // 지도를 확대할 div
       }
 
