@@ -3,7 +3,12 @@
     <b-container fluid>
       <b-row align-v="start">
         <b-col cols="12" md="auto" style="margin-bottom: 30px;">
-          <div class="nameBox"><span id="userName">{{userName}}</span> 님의 여행 계획</div>
+          <div class="nameBox">
+            <span id="userName">
+              {{userName}}
+            </span>
+            님의 여행 계획
+          </div>
         </b-col>
       </b-row>
       <b-row cols="4">

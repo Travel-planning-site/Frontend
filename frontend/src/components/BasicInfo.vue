@@ -11,7 +11,11 @@
                 </b-row>
                 <b-row>
                     <b-col id="title">
-                        <b-form-input :id="title" placeholder="여행 제목" v-model="title"></b-form-input>
+                        <b-form-input
+                            :id="title"
+                            placeholder="여행 제목"
+                            v-model="title">
+                        </b-form-input>
                     </b-col>
                 </b-row>
                 <b-row>
@@ -19,7 +23,11 @@
                 </b-row>
                 <b-row>
                     <b-col id="place">
-                        <b-form-input :id="place" placeholder="여행 장소" v-model="place"></b-form-input>
+                        <b-form-input
+                            :id="place"
+                            placeholder="여행 장소"
+                            v-model="place">
+                        </b-form-input>
                     </b-col>
                 </b-row>
                 <b-row>
@@ -27,7 +35,11 @@
                 </b-row>
                 <b-row >
                     <b-col id="people">
-                        <b-form-input :id="people" placeholder="여행 동반자" v-model="people"></b-form-input>
+                        <b-form-input
+                            :id="people"
+                            placeholder="여행 동반자"
+                            v-model="people">
+                    </b-form-input>
                     </b-col>
                 </b-row>
                 <b-row>
@@ -35,7 +47,11 @@
                 </b-row>
                 <b-row>
                     <b-col id="period">
-                        <b-form-input :id="period" placeholder="여행 기간" v-model="period"></b-form-input>
+                        <b-form-input
+                            :id="period"
+                            placeholder="여행 기간"
+                            v-model="period">
+                        </b-form-input>
                     </b-col>
                 </b-row>
                 <b-row>
@@ -49,13 +65,20 @@
                             id="memo"
                             v-model="memo"
                             placeholder="주의사항"
-                            no-resize="no-resize"></b-form-textarea>
+                            no-resize="no-resize">
+                        </b-form-textarea>
                     </b-col>
                 </b-row>
                 <b-row>
                     <b-col id="buttons">
-                        <b-button id="cancle" @click="$router.push('/')">Cancle</b-button>
-                        <b-button id="next" @click="[onClickInfo(),$router.push('ResearchPlace')]">Next</b-button>
+                        <b-button id="cancle"
+                            @click="$router.push('/')">
+                            Cancle
+                        </b-button>
+                        <b-button id="next"
+                            @click="[onClickInfo(),$router.push('ResearchPlace')]">
+                            Next
+                        </b-button>
                     </b-col>
                 </b-row>
                 </b-col>
