@@ -1,8 +1,14 @@
 <template>
 <div>
     <div id="map"></div>
-    <b-button id="distanceBtn" @click = "showDistance">총 거리는?</b-button>
-    <b-button id="resultBtn" @click = "resultBtnOnClick">결과보기</b-button>
+    <b-button id="distanceBtn"
+      @click = "showDistance">
+      총 거리는?
+    </b-button>
+    <b-button id="resultBtn"
+      @click = "resultBtnOnClick">
+      결과보기
+    </b-button>
 </div>
 </template>
 
