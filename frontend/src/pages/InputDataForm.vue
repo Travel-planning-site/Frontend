@@ -4,20 +4,38 @@
             <b-row>
                 <b-col class="left">
                     <b-row id="sidebar">
-                        <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1 id="sideOpenBtn"><b-icon font-scale="2" icon="arrow-right-square"></b-icon></b-button>
-                            <b-sidebar :visible="true" id="sidebar-1" width="25%" title="저장된 장소들" title-color="primary" shadow>
-                                <div class="sidebarbox">
-                                    <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" :index="index" style="text-align: center;" @startingonClicked="startingonClicked" @destinationClicked="destinationClicked"></sidebar-box>
-                                </div>
-                            </b-sidebar>
+                        <b-col cols="12" md="auto">
+                          <b-button v-b-toggle.sidebar-1 id="sideOpenBtn">
+                            <b-icon font-scale="2" icon="arrow-right-square"></b-icon>
+                          </b-button>
+                          <b-sidebar
+                            :visible="true"
+                            id="sidebar-1"
+                            width="25%"
+                            title="저장된 장소들"
+                            title-color="primary" shadow>
+                            <div class="sidebarbox">
+                                  <sidebar-box class="sidebarbox"
+                                    v-for="(saved, index) in savedListProps"
+                                    :key="index"
+                                    :savedProps="saved"
+                                    :index="index"
+                                    style="text-align: center;"
+                                    @startingonClicked="startingonClicked"
+                                    @destinationClicked="destinationClicked"></sidebar-box>
+                            </div>
+                          </b-sidebar>
                         </b-col>
                         <b-col>Where - date</b-col>
                     </b-row>
                     <b-row>
                         <b-col>
                             <b-row style="margin-bottom: 40px;">
-                                <b-col style="text-align: center;"><img :src="startPlaceImg" id="startImg" art="https://picsum.photos/125/125/?image=58"></b-col>
-                                <b-col style="text-align: center;"><img :src="arrivalPlaceImg" id="arriveImg" art="https://picsum.photos/125/125/?image=58"></b-col>
+                                <b-col style="text-align: center;">
+                                  <img :src="startPlaceImg" id="startImg" art="https://picsum.photos/125/125/?image=58">
+                                </b-col>
+                                <b-col style="text-align: center;">
+                                  <img :src="arrivalPlaceImg" id="arriveImg" art="https://picsum.photos/125/125/?image=58"></b-col>
                             </b-row>
                             <b-row class="title">
                                 <b-col>출발지</b-col>
@@ -33,10 +51,11 @@
                             </b-row>
                             <b-row class="margin">
                                 <b-col>
-                                    <b-form-select @change="changeOption()"
-                                    :options="[ '도보', '자동차', '대중교통']"
-                                    v-model="transportation"
-                                ></b-form-select>
+                                    <b-form-select
+                                      @change="changeOption()"
+                                      :options="[ '도보', '자동차', '대중교통']"
+                                      v-model="transportation"
+                                    ></b-form-select>
                                 </b-col>
                                 <b-col><b-form-input :id="totalTime"  placeholder="총 소요시간" v-model="totalTime"></b-form-input></b-col>
                             </b-row>

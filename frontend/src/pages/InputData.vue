@@ -54,17 +54,13 @@ export default{
       this.duration = msg
     },
     getPlace (startObj, arriveObj) {
-      // for (var i = 0; i < 2; i++) {
-      //   for (var j = 0; j < 2; j++) {
-      //     this.positions[i][j] = msg1.placeX
-      //     this.positions[i][j] = msg1.placeY
-      //   }
-      //   // console.log(`msg${i + 1}`.x)
-      // }
-      this.positions[0][0] = startObj.placeX
-      this.positions[0][1] = startObj.placeY
-      this.positions[1][0] = arriveObj.placeX
-      this.positions[1][1] = arriveObj.placeY
+      for (var i = 0; i < 2; i++) {
+        for (var j = 0; j < 2; j++) {
+          this.positions[i][j] = startObj.placeX
+          this.positions[i][j] = arriveObj.placeY
+        }
+        // console.log(`msg${i + 1}`.x)
+      }
       EventBus.$emit('push-positions', this.positions)
     }
   },
