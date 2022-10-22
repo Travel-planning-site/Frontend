@@ -40,8 +40,32 @@
 </template>
 
 <script>
+import { LOCAL_URL } from '../url/BackendUrl'
+import axios from 'axios'
 
-export default {}
+export default {
+  name: 'MainPage',
+  created () {
+    if (new URL(window.location.href).searchParams.get('code')) {
+      var googleCode = new URL(window.location.href).searchParams.get('code')
+      console.log(googleCode)
+      this.requestUserInfo(new URL(window.location.href).searchParams.get('code'))
+    }
+  },
+  data () {
+    return {
+      // eslint-disable-next-line indent
+        isLogin: false
+    }
+  },
+  methods: {
+    async requestUserInfo (googleCode) {
+      console.log(googleCode)
+      axios.get(LOCAL_URL + '/login/auth?code=' + googleCode)
+      window.location.assign('http://localhost:8080/#/')
+    }
+  }
+}
 </script>
 
 <style scoped="scoped">
