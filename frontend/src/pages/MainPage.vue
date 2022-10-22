@@ -3,8 +3,10 @@
         <b-container fluid="fluid">
             <b-row id="header-page" cols="6">
                 <b-col cols="6" md="md" style="text-align: right">
-                    <b-button id="login" v-if="!isLogin" @click="$router.push('LoginBoard')">Login</b-button>
-                    <p v-if="isLogin">Logout</p>
+                    <b-button id="login"
+                        @click="$router.push('LoginBoard')">
+                        Login
+                    </b-button>
                 </b-col>
             </b-row>
             <b-row>
@@ -22,8 +24,14 @@
                         id="makeButton"
                         style="font-size: 2.6rem"
                         variant="light"
-                        @click="$router.push('BasicInfo')">Make a Travel Plan</b-button>
-                    <b-button style="font-size: 2.6rem" variant="light" @click="$router.push('MyPlan')">My Plans</b-button>
+                        @click="$router.push('BasicInfo')">
+                        Make a Travel Plan
+                    </b-button>
+                    <b-button style="font-size: 2.6rem"
+                        variant="light"
+                        @click="$router.push('MyPlan')">
+                        My Plans
+                    </b-button>
                 </b-col>
             </b-row>
             <b-row></b-row>

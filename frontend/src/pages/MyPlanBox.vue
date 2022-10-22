@@ -1,7 +1,13 @@
 <template>
   <div class="MyPlanBox">
-    <b-card style="width: 400px; height: 100%" align="center" border-variant="dark">
-      <b-card-img src="https://picsum.photos/125/125/?image=58" style="width: 300px; height: 200px"></b-card-img>
+    <b-card
+      style="width: 400px;
+      height: 100%"
+      align="center"
+      border-variant="dark">
+      <b-card-img src="https://picsum.photos/125/125/?image=58"
+        style="width: 300px; height: 200px">
+      </b-card-img>
       <b-list-group class="listgroup" flush>
         <b-list-group-item>
           <h4>Title</h4>
