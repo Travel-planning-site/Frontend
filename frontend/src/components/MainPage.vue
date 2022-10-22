@@ -3,7 +3,8 @@
         <b-container fluid="fluid">
             <b-row id="header-page" cols="6">
                 <b-col cols="6" md="md" style="text-align: right">
-                    <b-button id="login" @click="$router.push('LoginBoard')">Login</b-button>
+                    <b-button id="login" v-if="!isLogin" @click="$router.push('LoginBoard')">Login</b-button>
+                    <p v-if="isLogin">Logout</p>
                 </b-col>
             </b-row>
             <b-row>
@@ -31,8 +32,32 @@
 </template>
 
 <script>
+import { LOCAL_URL } from '../url/BackendUrl'
+import axios from 'axios'
 
-export default {}
+export default {
+  name: 'MainPage',
+  created () {
+    if (new URL(window.location.href).searchParams.get('code')) {
+      var googleCode = new URL(window.location.href).searchParams.get('code')
+      console.log(googleCode)
+      this.requestUserInfo(new URL(window.location.href).searchParams.get('code'))
+    }
+  },
+  data () {
+    return {
+      // eslint-disable-next-line indent
+        isLogin: false
+    }
+  },
+  methods: {
+    async requestUserInfo (googleCode) {
+      console.log(googleCode)
+      axios.get(LOCAL_URL + '/login/auth?code=' + googleCode)
+      window.location.assign('http://localhost:8080/#/')
+    }
+  }
+}
 </script>
 
 <style scoped="scoped">

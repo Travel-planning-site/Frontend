@@ -26,6 +26,9 @@ export default new Router({
       component: LoginBoard
     },
     {
+      path: '/login'
+    },
+    {
       path: '/HelloWorld',
       name: 'HelloWorld',
       component: HelloWorld

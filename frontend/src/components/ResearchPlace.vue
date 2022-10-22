@@ -128,25 +128,6 @@ export default {
         this.PlaceSearch(this.search_term)
       }
     },
-    // kakaosearch (keyword, i) {
-    //   axios
-    //     .get(
-    //       'https://dapi.kakao.com/v2/local/search/keyword.json?page=' +
-    //         i +
-    //         '&query=' +
-    //         keyword,
-    //       {
-    //         headers: {
-    //           Authorization: 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
-    //         }
-    //       }
-    //     )
-    //     .then(res => {
-    //       this.search_results.push(...res.data.documents)
-    //       this.total += res.data.documents.length
-    //       this.PageChanged(1)
-    //     })
-    // },
     async PlaceSearch (keyword) {
       // axios.get(LOCAL_URL + '/ResearchPlace/searchplace' + '?input=' + keyword)
       //   .then(axios.get(LOCAL_URL + '/ResearchPlace/getsearch')
