@@ -61,10 +61,11 @@ export default{
       //   }
       //   // console.log(`msg${i + 1}`.x)
       // }
-      this.positions[0][0] = startObj.placeX
-      this.positions[0][1] = startObj.placeY
-      this.positions[1][0] = arriveObj.placeX
-      this.positions[1][1] = arriveObj.placeY
+      this.positions[0][1] = startObj.placeX
+      this.positions[0][0] = startObj.placeY
+      this.positions[1][1] = arriveObj.placeX
+      this.positions[1][0] = arriveObj.placeY
+      console.log('posi: ' + this.positions)
       EventBus.$emit('push-positions', this.positions)
     }
   },
