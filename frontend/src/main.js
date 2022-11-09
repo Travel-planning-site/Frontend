@@ -4,6 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import VueCookies from 'vue-cookies'
 // import AxiosPlugin from 'vue-axios-cors'
 
 import 'bootstrap/dist/css/bootstrap.css'
@@ -47,7 +48,10 @@ Vue.component('sidebar-box', SidebarBox)
 
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.use(VueCookies)
 // Vue.use(AxiosPlugin)
+
+Vue.$cookies.config('7d')
 
 /* eslint-disable no-new */
 new Vue({

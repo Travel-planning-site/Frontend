@@ -22,23 +22,33 @@
 </template>
 
 <script>
-// import { LOCAL_URL } from '../url/BackendUrl'
-// import axios from 'axios'
+import { LOCAL_URL } from '../url/BackendUrl'
+import axios from 'axios'
 
 export default {
   name: 'LoginBoard',
-  created () {
+  data () {
+    return {
+      userEmail: null
+    }
   },
   methods: {
     LoginonClicked () {
-      const OAuthURL = 'https://accounts.google.com/o/oauth2/v2/auth?client_id=169713788333-838a0rcafee5k2o0en414val4vgqh3ke.apps.googleusercontent.com&' +
-        'response_type=code&' +
-        'redirect_uri=http://localhost:8080/login/&' +
-        'scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile'
-      window.location.assign(OAuthURL)
+      this.requestServercode()
+    },
+    requestServercode () {
+      window.location.assign('http://localhost:9090/user/login')
+    },
+    requestAccessToken (refreshtoken) {
+      const requestURL = LOCAL_URL + '/refresh?index=' + refreshtoken
+      axios.post(requestURL)
+        .then(res => {
+          console.log(res)
+        })
+    },
+    findUserInfo () {
+      axios.get(LOCAL_URL + '/info')
     }
-    // requestAccessToken () {
-    // }
   }
 }
 </script>
