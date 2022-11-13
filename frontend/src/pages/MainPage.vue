@@ -47,8 +47,15 @@ export default {
   name: 'MainPage',
   data () {
     return {
-      // eslint-disable-next-line indent
-        isLogin: false
+      userInfo: null,
+      isLogin: false
+    }
+  },
+  mounted () {
+    const info = this.$cookies.get('info') || false
+    if (info) {
+      this.isLogin = true
+      this.userInfo = info
     }
   }
 }

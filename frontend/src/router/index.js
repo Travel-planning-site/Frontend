@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import HelloWorld from '@/pages/HelloWorld'
 import MainPage from '@/pages/MainPage'
 import LoginBoard from '@/pages/LoginBoard'
+import Login from '@/pages/Login'
 import BasicInfo from '@/pages/BasicInfo'
 import ResearchPlace from '@/pages/ResearchPlace'
 import InputData from '@/pages/InputData'
@@ -26,7 +27,9 @@ export default new Router({
       component: LoginBoard
     },
     {
-      path: '/login'
+      path: '/login',
+      name: 'Login',
+      component: Login
     },
     {
       path: '/HelloWorld',
