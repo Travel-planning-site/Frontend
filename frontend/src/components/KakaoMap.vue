@@ -18,7 +18,7 @@ export default {
   data () {
     return {
       markerPositions1: [
-        [0, 0],
+        [126.570667, 33.450701],
         [0, 0]
       ],
       markerPositions2: [
@@ -36,11 +36,13 @@ export default {
   },
   created () { // template 만들어지기 전
     EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
-      console.log('position: ' + positions)
+      // console.log('position: ' + positions) 나옴
+      this.map.setCenter(new kakao.maps.LatLng(positions[0][0], positions[0][1]))
+      this.displayMarker(positions) // 마커 생성
       this.markerPositions1 = positions
       this.getMidPoint(this.markerPositions1)
       this.getKakaoNavi(this.markerPositions1)
-      // this.transit = this.getDuration(this.markerPositions1)
+      this.transit = this.getDuration(this.markerPositions1)
       // this.initMap()
 
       // this.positionArray.push(positions)
@@ -108,8 +110,6 @@ export default {
       this.setLineAndOverLay(linePath)
     },
     setLineAndOverLay (linePath, duration) {
-      this.displayMarker(this.markerPositions1) // 마커 생성
-
       let polyline = new kakao.maps.Polyline({
         path: linePath, // 선을 구성하는 좌표배열
         strokeWeight: 10, // 선의 두께
@@ -224,10 +224,10 @@ export default {
       }
     },
     async getKakaoNavi (address) { // 잘못됨
-      console.log('address:' + address)
+      // console.log('address:' + address) 나옴
       // console.log(routes)
-      console.log('출발지:' + address[0][1] + ',' + address[0][0])
-      console.log('도착지:' + address[1][1] + ',' + address[1][0])
+      // console.log('출발지:' + address[0][1] + ',' + address[0][0]) 129, 35
+      // console.log('도착지:' + address[1][1] + ',' + address[1][0])
       // https://cors-anywhere.herokuapp.com 접속 후 request
       // CORS 문제로 다른 사람이 만든 프록시 서버 이용, 추후 헤로쿠 사용하여 해결
       await axios.get(
@@ -235,12 +235,13 @@ export default {
           headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
           },
           params: {
-            origin: address[0][0] + ',' + address[0][1], // 출발지 x(경도), y(위도) 좌표
-            destination: address[1][0] + ',' + address[1][1], // 도착지 x, y 좌표
+            origin: address[0][1] + ',' + address[0][0], // 출발지 x(경도), y(위도) 좌표
+            destination: address[1][1] + ',' + address[1][0], // 도착지 x, y 좌표
             priority: 'RECOMMEND' // 거리, 시간
           }
         }).then((res) => {
         console.log('kakaonavi: ' + res)
+        console.log(res)
         const resultCode = res.data.routes[0].result_code
         if (resultCode === 105) { // 교통 장애가 있다면 출발지와 도착지간의 선 하나만 출력
           alert(res.data.routes[0].result_msg)
@@ -248,6 +249,7 @@ export default {
           // return address
         } else if (resultCode === 0) { // 길찾기 성공이면 이동경로 선으로 출력
           this.guides = res.data.routes[0].sections[0].guides
+          console.log(this.guides) // ok
           this.markerPositions2 = this.getAddressList(this.guides)
           console.log(this.markerPositions2) // 카카오네비 결과값 x,y
           this.duration = res.data.routes[0].sections[0].duration
@@ -276,7 +278,7 @@ export default {
         if (res.data.rows[0].elements[0].status === 'ZERO_RESULTS') this.transit = '정보없음'
         else this.transit = res.data.rows[0].elements[0].duration.text
       })
-      console.log('이동시간 ' + this.transit)
+      console.log('이동시간 ' + this.transit) // 나옴
       return this.transit
     }
   },
