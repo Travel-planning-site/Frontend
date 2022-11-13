@@ -22,32 +22,20 @@
 </template>
 
 <script>
-import { LOCAL_URL } from '../url/BackendUrl'
-import axios from 'axios'
+// import { LOCAL_URL } from '../url/BackendUrl'
+// import axios from 'axios'
 
 export default {
   name: 'LoginBoard',
   data () {
     return {
-      userEmail: null
+      userEmail: null,
+      isLogin: false
     }
   },
   methods: {
     LoginonClicked () {
-      this.requestServercode()
-    },
-    requestServercode () {
       window.location.assign('http://localhost:9090/user/login')
-    },
-    requestAccessToken (refreshtoken) {
-      const requestURL = LOCAL_URL + '/refresh?index=' + refreshtoken
-      axios.post(requestURL)
-        .then(res => {
-          console.log(res)
-        })
-    },
-    findUserInfo () {
-      axios.get(LOCAL_URL + '/info')
     }
   }
 }

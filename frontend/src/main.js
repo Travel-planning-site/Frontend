@@ -12,6 +12,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 import MainPage from './pages/MainPage'
 import LoginBoard from './pages/LoginBoard'
+import Login from './pages/Login'
 import BasicInfo from './pages/BasicInfo'
 import ResearchPlace from './pages/ResearchPlace'
 import DaumSearch from './pages/DaumSearch'
@@ -32,6 +33,7 @@ Vue.config.productionTip = false
 
 Vue.component('main-page', MainPage)
 Vue.component('login-board', LoginBoard)
+Vue.component('login', Login)
 Vue.component('basic-info', BasicInfo)
 Vue.component('research-page', ResearchPlace)
 Vue.component('daum-search', DaumSearch)
@@ -50,8 +52,6 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(VueCookies)
 // Vue.use(AxiosPlugin)
-
-Vue.$cookies.config('7d')
 
 /* eslint-disable no-new */
 new Vue({
