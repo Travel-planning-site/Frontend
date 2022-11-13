@@ -3,9 +3,13 @@
         <b-container fluid="fluid">
             <b-row id="header-page" cols="6">
                 <b-col cols="6" md="md" style="text-align: right">
-                    <b-button id="login"
+                    <b-button id="login" v-if="!isLogin"
                         @click="$router.push('LoginBoard')">
                         Login
+                    </b-button>
+                    <b-button id="logout" v-if="isLogin"
+                        @click="Logout()">
+                        Logout
                     </b-button>
                 </b-col>
             </b-row>
@@ -24,12 +28,12 @@
                         id="makeButton"
                         style="font-size: 2.6rem"
                         variant="light"
-                        @click="$router.push('BasicInfo')">
+                        @click="IsAbletoMake()">
                         Make a Travel Plan
                     </b-button>
                     <b-button style="font-size: 2.6rem"
                         variant="light"
-                        @click="$router.push('MyPlan')">
+                        @click="IsAbletoMyplan()">
                         My Plans
                     </b-button>
                 </b-col>
@@ -56,6 +60,27 @@ export default {
     if (info) {
       this.isLogin = true
       this.userInfo = info
+    }
+  },
+  methods: {
+    Logout () {
+      this.isLogin = false
+      this.$cookies.remove('info')
+      this.userInfo = null
+    },
+    IsAbletoMake () {
+      if (!this.isLogin) {
+        alert('로그인 이후 계획을 만들 수 있습니다!')
+      } else {
+        this.$router.push('BasicInfo')
+      }
+    },
+    IsAbletoMyplan () {
+      if (!this.isLogin) {
+        alert('로그인 이후 사용 가능합니다!')
+      } else {
+        this.$router.push('MyPlan')
+      }
     }
   }
 }
@@ -88,7 +113,7 @@ export default {
     #makeButton {
         margin-right: 10px;
     }
-    #login {
+    #login, #logout {
         font-size: 20px;
         font-family: yg-jalnan;
     }
