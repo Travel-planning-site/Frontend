@@ -57,11 +57,11 @@ export default {
     }
   },
   watch: {
-    token: function (notExpired) {
-      if (!notExpired) {
-        console.log('만료')
-        this.isLogin = false
+    token: function (val) {
+      if (val === false) {
+        console.log(val)
         this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
+        this.isLogin = false
       }
     }
   },
