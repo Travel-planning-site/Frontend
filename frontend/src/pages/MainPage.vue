@@ -68,7 +68,7 @@ export default {
   mounted () {
     const token = this.$cookies.get('token') || false
     const info = this.$cookies.get('info') || false
-    if ((token) || (info)) {
+    if ((token) && (info)) {
       this.token = token
       this.isLogin = true
       this.userInfo = info
