@@ -4,6 +4,7 @@
 </template>
 
 <script>
+import { LOCAL_URL } from '../url/BackendUrl'
 import InputDataForm from './InputDataForm.vue'
 import axios from 'axios'
 import {EventBus} from '../main'
@@ -36,6 +37,7 @@ export default {
   },
   created () { // template 만들어지기 전
     EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
+      console.log('도착지 눌렀습니다.')
       // console.log('position: ' + positions) 나옴
       this.map.setCenter(new kakao.maps.LatLng(positions[0][0], positions[0][1]))
       this.displayMarker(positions) // 마커 생성
@@ -183,10 +185,15 @@ export default {
       distanceOverlay.setMap(this.map)
     },
     displayMarker (markerPositions) { // 마커 생성
+      // this.marker.setMap(null)
+
+      console.log('몇개: ' + this.map.Marker.length)
+
       console.log(markerPositions)
       if (this.markers.length > 0) {
+        console.log('0이상!!!')
         this.markers.forEach((marker) => {
-          marker.setMap(null)
+          marker.setMap(null) // 지도에서 제거
         })
       }
 
@@ -223,36 +230,28 @@ export default {
         this.map.setBounds(bounds) // 지도의 중심 좌표와 확대 수준을 설정
       }
     },
-    async getKakaoNavi (address) { // 잘못됨
-      // console.log('address:' + address) 나옴
-      // console.log(routes)
-      // console.log('출발지:' + address[0][1] + ',' + address[0][0]) 129, 35
-      // console.log('도착지:' + address[1][1] + ',' + address[1][0])
-      // https://cors-anywhere.herokuapp.com 접속 후 request
-      // CORS 문제로 다른 사람이 만든 프록시 서버 이용, 추후 헤로쿠 사용하여 해결
-      await axios.get(
-        'https://cors-anywhere.herokuapp.com/https://apis-navi.kakaomobility.com/v1/directions', {
-          headers: { 'Authorization': 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
-          },
-          params: {
-            origin: address[0][1] + ',' + address[0][0], // 출발지 x(경도), y(위도) 좌표
-            destination: address[1][1] + ',' + address[1][0], // 도착지 x, y 좌표
-            priority: 'RECOMMEND' // 거리, 시간
-          }
+    async getKakaoNavi (address) {
+      await axios.post(
+        LOCAL_URL + '/api/KakaoNavi',
+        {
+          originX: address[0][1],
+          originY: address[0][0],
+          destinationX: address[1][1],
+          destinationY: address[1][0]
         }).then((res) => {
         console.log('kakaonavi: ' + res)
         console.log(res)
-        const resultCode = res.data.routes[0].result_code
+        const resultCode = res.result_code
         if (resultCode === 105) { // 교통 장애가 있다면 출발지와 도착지간의 선 하나만 출력
-          alert(res.data.routes[0].result_msg)
+          alert(res.result_msg)
           this.setLine(address)
           // return address
         } else if (resultCode === 0) { // 길찾기 성공이면 이동경로 선으로 출력
-          this.guides = res.data.routes[0].sections[0].guides
+          this.guides = res.guides
           console.log(this.guides) // ok
           this.markerPositions2 = this.getAddressList(this.guides)
           console.log(this.markerPositions2) // 카카오네비 결과값 x,y
-          this.duration = res.data.routes[0].sections[0].duration
+          this.duration = res.duration
           this.setLineAndOverLay(this.getLinePath(this.markerPositions2), this.duration)
         // return this.markerPositions2
         }
