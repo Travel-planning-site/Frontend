@@ -47,8 +47,6 @@ export default {
     ResultList_result () {
       this.place_name = this.ResultList_result.placeName
       this.place_addr = this.ResultList_result.Addr
-    },
-    Image () {
       this.place_img = this.ResultList_result.placeImage
     }
   },

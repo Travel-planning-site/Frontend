@@ -45,13 +45,15 @@ export default {
 </script>
 <style scoped>
 #savedBox_Header {
-  white-space: nowrap;
+  white-space: pre-line;
+  text-align: center;
 }
 .savedBox_Body {
-  white-space: nowrap;
+  white-space: pre-line;
   text-align: center;
 }
 .savedBox {
+  filter: invert(10%);
   padding: 10px;
 }
 </style>

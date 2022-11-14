@@ -52,12 +52,24 @@ export default {
   data () {
     return {
       userInfo: null,
-      isLogin: false
+      isLogin: false,
+      token: null
+    }
+  },
+  watch: {
+    token: function (notExpired) {
+      if (!notExpired) {
+        console.log('만료')
+        this.isLogin = false
+        this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
+      }
     }
   },
   mounted () {
+    const token = this.$cookies.get('token') || false
     const info = this.$cookies.get('info') || false
-    if (info) {
+    if ((token) || (info)) {
+      this.token = token
       this.isLogin = true
       this.userInfo = info
     }
@@ -67,6 +79,7 @@ export default {
       this.isLogin = false
       this.$cookies.remove('info')
       this.userInfo = null
+      alert('로그아웃되었습니다!')
     },
     IsAbletoMake () {
       if (!this.isLogin) {
