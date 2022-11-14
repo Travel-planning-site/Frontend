@@ -32,18 +32,20 @@ export default {
       linePath: '',
       time: '',
       duration: 0,
-      positionArray: []
+      positionArray: [],
+      transit: ''
     }
   },
   created () { // template 만들어지기 전
     EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
+      // debugger
       console.log('도착지 눌렀습니다.')
       // console.log('position: ' + positions) 나옴
+      this.getKakaoNavi(positions)
       this.map.setCenter(new kakao.maps.LatLng(positions[0][0], positions[0][1]))
       this.displayMarker(positions) // 마커 생성
       this.markerPositions1 = positions
       this.getMidPoint(this.markerPositions1)
-      this.getKakaoNavi(this.markerPositions1)
       this.transit = this.getDuration(this.markerPositions1)
       // this.initMap()
 
@@ -79,6 +81,7 @@ export default {
       return this.midPoint
     },
     getLinePath (address) {
+      console.log('mmmmm' + address.length)
       if (address.length === 2) { // 출발지, 도착지만 있을 경우
         const latlngArray = new Array(2)
         console.log(latlngArray)
@@ -87,6 +90,7 @@ export default {
         }
         return latlngArray
       } else {
+        console.log('????????????????????')
         const latlngArray = new Array(address.length)
         for (let j = 0; j < address.length; j++) {
           latlngArray[j] = new kakao.maps.LatLng(address[j][1], address[j][0])
@@ -127,7 +131,7 @@ export default {
       let distance = polyline.getLength().toFixed(0)
       this.setOverLay(distance, duration)
     },
-    async setOverLay (distance, duration) { // 커스텀오버레이
+    setOverLay (distance, duration) { // 커스텀오버레이
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
       let walkkTime = distance / 67 | 0
       let walkHour = ''
@@ -187,8 +191,6 @@ export default {
     displayMarker (markerPositions) { // 마커 생성
       // this.marker.setMap(null)
 
-      console.log('몇개: ' + this.map.Marker.length)
-
       console.log(markerPositions)
       if (this.markers.length > 0) {
         console.log('0이상!!!')
@@ -204,11 +206,16 @@ export default {
       if (positions.length > 0) {
         for (let i = 0; i < positions.length; i++) {
           const content = this.savedListProps[i].placeName
+          // const content = "TEST CON"
+          console.log('ccc: ' , this.savedListProps[i])
           let iwContent = '<div style="padding:5px; font-size:18px;">' + content + '</div>'
           const marker = new kakao.maps.Marker({
             map: this.map,
             position: positions[i]
           })
+          console.log('marker: ' + marker)
+
+          // 마커 장소명
           const infowindow = new kakao.maps.InfoWindow({
             content: iwContent
           })
@@ -230,28 +237,30 @@ export default {
         this.map.setBounds(bounds) // 지도의 중심 좌표와 확대 수준을 설정
       }
     },
-    async getKakaoNavi (address) {
-      await axios.post(
+    getKakaoNavi (address) {
+      console.log('kakaonavi 실행')
+      console.log(address[0][1] + ' ' + address[0][0])
+      axios.post(
         LOCAL_URL + '/api/KakaoNavi',
         {
-          originX: address[0][1],
-          originY: address[0][0],
-          destinationX: address[1][1],
-          destinationY: address[1][0]
+          originX: address[0][0],
+          originY: address[0][1],
+          destinationX: address[1][0],
+          destinationY: address[1][1]
         }).then((res) => {
         console.log('kakaonavi: ' + res)
-        console.log(res)
-        const resultCode = res.result_code
+        console.log(res) // OK
+        const resultCode = res.data.resultCode
         if (resultCode === 105) { // 교통 장애가 있다면 출발지와 도착지간의 선 하나만 출력
           alert(res.result_msg)
           this.setLine(address)
           // return address
         } else if (resultCode === 0) { // 길찾기 성공이면 이동경로 선으로 출력
-          this.guides = res.guides
+          this.guides = res.data.guides
           console.log(this.guides) // ok
           this.markerPositions2 = this.getAddressList(this.guides)
           console.log(this.markerPositions2) // 카카오네비 결과값 x,y
-          this.duration = res.duration
+          this.duration = res.data.duration
           this.setLineAndOverLay(this.getLinePath(this.markerPositions2), this.duration)
         // return this.markerPositions2
         }
@@ -265,16 +274,21 @@ export default {
       }
       return arr
     },
-    async getDuration (address) {
+    getDuration (address) {
       console.log('출발지:' + address[0][1] + ',' + address[0][0])
       console.log('도착지:' + address[1][1] + ',' + address[1][0])
-      await axios.get(
-        'https://cors-anywhere.herokuapp.com/https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&mode=transit&' +
-        'origins=' + address[0][0] + ',' + address[0][1] +
-        '&destinations=' + address[1][0] + ',' + address[1][1] +
-        '&region=KR&key=AIzaSyDq6BYogP8DXJXho6EXr4A87IeyEqc5lo0'
+      axios.post(
+        LOCAL_URL + '/api/GoogleMap',
+        {
+          originX: address[0][0],
+          originY: address[0][1],
+          destinationX: address[1][0],
+          destinationY: address[1][1]
+        }
       ).then((res) => {
-        if (res.data.rows[0].elements[0].status === 'ZERO_RESULTS') this.transit = '정보없음'
+        console.log('googlemapapi호출')
+        console.log(res)
+        if (res.data.status === 'ZERO_RESULTS') this.transit = '정보없음'
         else this.transit = res.data.rows[0].elements[0].duration.text
       })
       console.log('이동시간 ' + this.transit) // 나옴
