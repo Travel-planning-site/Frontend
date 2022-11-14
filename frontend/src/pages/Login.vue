@@ -9,7 +9,7 @@ import axios from 'axios'
 
 export default {
   name: 'Login',
-  created () {
+  mounted () {
     console.log('생성')
     this.getToken()
     this.getUserInfo()
