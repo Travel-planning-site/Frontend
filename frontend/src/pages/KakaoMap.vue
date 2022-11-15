@@ -224,15 +224,8 @@ export default {
       if (positions.length > 0) {
         for (let i = 0; i < positions.length; i++) {
           const content = this.savedListProps[i].placeName
-<<<<<<< HEAD:frontend/src/components/KakaoMap.vue
-          // const content = "TEST CON"
-          console.log('ccc: ' , this.savedListProps[i])
           let iwContent = '<div style="padding:5px; font-size:18px;">' + content + '</div>'
-=======
-          let iwContent = '<div style="padding:5px; font-size:18px;">' +
-                            content +
-                          '</div>'
->>>>>>> master:frontend/src/pages/KakaoMap.vue
+
           const marker = new kakao.maps.Marker({
             map: this.map,
             position: positions[i]
