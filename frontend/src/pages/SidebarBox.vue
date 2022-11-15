@@ -3,7 +3,7 @@
     <b-container flex>
       <b-row>
         <b-col id="image_col" cols="12" md="auto">
-          <b-img-lazy id="image" center thumbnail src="https://picsum.photos/125/125/?image=58"></b-img-lazy>
+          <b-img-lazy id="image" center thumbnail :src="savedProps.placeImage" blank-src="https://picsum.photos/125/125/?image=58"></b-img-lazy>
         </b-col>
         <b-col class="info_container">
           <b-row class="info_items">

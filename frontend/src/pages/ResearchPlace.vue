@@ -55,23 +55,13 @@
                     ></result-list>
                   </b-row>
                   <b-row>
-                    <pagination @PageChanged="PageChanged"></pagination>
+                    <pagination @PageChanged="PageChanged" v-if="search_results.length > 9"></pagination>
                   </b-row>
                 </b-col>
               </b-row>
             </div>
           </b-container>
         </b-col>
-        <!-- <b-col cols="3" class="container_savedplace">
-                    <div class="savedplace_area">
-                      <div id="savedplace_area_Header">저장된 장소</div>
-                      <savedplace-list :selectedList="resultList" @DeleteFromSavedBox="DeleteFromSavedBox" id="savedplace_area_Body"></savedplace-list>
-                      <b-row cols="2" id="savedplace_area_Footer">
-                        <b-col><b-button block @click="$router.go(-1)">Back</b-button></b-col>
-                        <b-col><b-button block @click="nextOnClicked">Next</b-button></b-col>
-                      </b-row>
-                    </div>
-                </b-col> -->
       </b-row>
     </b-container>
   </div>
@@ -91,10 +81,6 @@ export default {
       search_results: [],
       listData: [],
       total: 0,
-      center_postion: {
-        x: 33.450701,
-        y: 126.570667
-      },
       limit: 9,
       block: 4,
       currentPage: '',
@@ -128,25 +114,6 @@ export default {
         this.PlaceSearch(this.search_term)
       }
     },
-    // kakaosearch (keyword, i) {
-    //   axios
-    //     .get(
-    //       'https://dapi.kakao.com/v2/local/search/keyword.json?page=' +
-    //         i +
-    //         '&query=' +
-    //         keyword,
-    //       {
-    //         headers: {
-    //           Authorization: 'KakaoAK c01ebcf3f04756103db0826a158a5c21'
-    //         }
-    //       }
-    //     )
-    //     .then(res => {
-    //       this.search_results.push(...res.data.documents)
-    //       this.total += res.data.documents.length
-    //       this.PageChanged(1)
-    //     })
-    // },
     async PlaceSearch (keyword) {
       // axios.get(LOCAL_URL + '/ResearchPlace/searchplace' + '?input=' + keyword)
       //   .then(axios.get(LOCAL_URL + '/ResearchPlace/getsearch')
@@ -224,15 +191,6 @@ export default {
 }
 .area_searching {
   margin-bottom: 10%;
-  background-color: gray;
-}
-.result_searched {
-  background-color: gray;
-}
-.container_savedplace {
-  background-color: gray;
-  height: 100%;
-  text-align: center;
 }
 #result_box {
   background-color: white;

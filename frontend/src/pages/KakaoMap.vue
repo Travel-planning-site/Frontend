@@ -150,31 +150,49 @@ export default {
 
       // 계산한 도보 시간이 60분 보다 크면 시간으로 표시
       if (walkkTime > 60) {
-        walkHour = '<span class="number">' + Math.floor(walkkTime / 60) + '</span>시간 '
+        walkHour = '<span class="number">' +
+                    Math.floor(walkkTime / 60) +
+                   '</span>시간 '
       }
-      walkMin = '<span class="number">' + walkkTime % 60 + '</span>분'
+      walkMin = '<span class="number">' +
+                  walkkTime % 60 +
+                '</span>분'
 
       let content = '<ul class="dotOverlay">'
       content += '    <li>'
-      if (distanceCheck) content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>Km'
-      else content += '        <span class="label">총거리 </span><span class="number">' + distance + '</span>m'
+      if (distanceCheck) {
+        content += '<span class="label">총거리 </span>' +
+                   '<span class="number">' + distance + '</span>Km'
+      } else {
+        content += '<span class="label">총거리 </span>' + '<span class="number">' +
+                      distance +
+                   '</span>m'
+      }
       content += '    </li>'
+
       if (Math.floor(walkkTime / 60) < 1) {
         content += '    <li>'
         content += '        <span class="label">도보 </span>' + walkHour + walkMin
         content += '    </li>'
       } else {
         content += '    <li>'
-        content += '        <span class="label">도보</span>' + '<span class="number"> 1</span>' + '시간이상'
+        content += '        <span class="label">도보</span>' +
+                           '<span class="number"> 1</span>' + '시간이상'
         content += '    </li>'
       }
       content += '    <li>'
-      content += '        <span class="label">자동차 </span>' + '<span style="color: blue; font-weight:bold;">'
+      content += '        <span class="label">자동차 </span>' +
+                         '<span style="color: blue; font-weight:bold;">'
+
       if (hour > 0) { content += hour + '시간' }
+
       content += min + '분' + '</span>'
       content += '    </li>'
       content += '    <li>'
-      content += '        <span class="label">대중교통 </span>' + '<span style="color: blue; font-weight:bold;">' + this.transit + '</span>'
+      content += '        <span class="label">대중교통 </span>' +
+                         '<span style="color: blue; font-weight:bold;">' +
+                            this.transit +
+                          '</span>'
       content += '    </li>'
       content += '</ul>'
 
@@ -206,9 +224,15 @@ export default {
       if (positions.length > 0) {
         for (let i = 0; i < positions.length; i++) {
           const content = this.savedListProps[i].placeName
+<<<<<<< HEAD:frontend/src/components/KakaoMap.vue
           // const content = "TEST CON"
           console.log('ccc: ' , this.savedListProps[i])
           let iwContent = '<div style="padding:5px; font-size:18px;">' + content + '</div>'
+=======
+          let iwContent = '<div style="padding:5px; font-size:18px;">' +
+                            content +
+                          '</div>'
+>>>>>>> master:frontend/src/pages/KakaoMap.vue
           const marker = new kakao.maps.Marker({
             map: this.map,
             position: positions[i]

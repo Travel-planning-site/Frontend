@@ -7,8 +7,9 @@
             <b-card-text>
               구글 계정과 연동되어 로그인/회원가입이 진행됩니다.
             </b-card-text>
-            <b-button variant="outline-warning" @click="LoginonClicked()">
-            로그인/회원가입
+            <b-button variant="outline-warning"
+              @click="LoginonClicked()">
+              로그인/회원가입
             </b-button>
             <b-button variant="outline-warning" class="btn1">
               <router-link to="/">뒤로가기</router-link>
@@ -21,13 +22,21 @@
 </template>
 
 <script>
-// import axios from 'axios'
 // import { LOCAL_URL } from '../url/BackendUrl'
+// import axios from 'axios'
 
 export default {
   name: 'LoginBoard',
+  data () {
+    return {
+      userEmail: null,
+      isLogin: false
+    }
+  },
   methods: {
-
+    LoginonClicked () {
+      window.location.assign('http://localhost:9090/user/login')
+    }
   }
 }
 </script>
