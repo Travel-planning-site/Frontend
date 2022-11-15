@@ -90,7 +90,8 @@
 </template>
 
 <script>
-
+import { LOCAL_URL } from '../url/BackendUrl'
+import axios from 'axios'
 export default {
   name: 'BasicInfo',
   data () {
@@ -98,11 +99,18 @@ export default {
   },
   methods: {
     onClickInfo: function () {
-      console.log(this.title)
-      console.log(this.place)
-      console.log(this.people)
-      console.log(this.period)
-      console.log(this.memo)
+      axios.post(
+        LOCAL_URL + '/save/basic',
+        {
+          title: this.title,
+          place: this.place,
+          people: this.people,
+          period: this.period,
+          memo: this.memo,
+          userId: 1
+        }
+      ).then((res) => console.log(res))
+        .catch((caches) => console.log(caches))
     }
   }
 }
