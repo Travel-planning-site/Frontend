@@ -7,7 +7,8 @@
                         <b-col cols="12" md="auto"><b-button v-b-toggle.sidebar-1 id="sideOpenBtn"><b-icon font-scale="2" icon="arrow-right-square"></b-icon></b-button>
                             <b-sidebar :visible="true" id="sidebar-1" width="25%" title="저장된 장소들" title-color="primary" shadow>
                                 <div class="sidebarbox">
-                                    <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" :index="index" style="text-align: center;" @startingonClicked="startingonClicked" @destinationClicked="destinationClicked"></sidebar-box>
+                                    <sidebar-box class="sidebarbox" v-for="(saved, index) in savedListProps" :key="index" :savedProps="saved" :index="index" style="text-align: center;" @startingonClicked="startingonClicked"
+                                    @destinationClicked="destinationClicked"></sidebar-box>
                                 </div>
                             </b-sidebar>
                         </b-col>
@@ -50,6 +51,7 @@
                             </b-row>
                             <b-row class="margin">
                                 <b-col><b-form-input id="startTime" :type="'time'"></b-form-input></b-col>
+                                <!-- bootstrap vue -->
                                 <b-col><b-form-input id="arriveTime" :type="'time'"></b-form-input></b-col>
                             </b-row>
                             <b-row class="title">
