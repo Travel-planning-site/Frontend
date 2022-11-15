@@ -12,7 +12,7 @@
                                 </div>
                             </b-sidebar>
                         </b-col>
-                        <b-col>Where - date</b-col>
+                        <b-col></b-col>
                     </b-row>
                     <b-row>
                         <b-col>
@@ -63,7 +63,7 @@
                                     <datalist id="my-list-id">
                                     <option v-for= "size in sizes" :key="size.id">{{ size }}</option>
                                     </datalist></b-col>
-                                <b-col><b-form-input :id="content"  placeholder="가격" v-model="cost"></b-form-input></b-col>
+                                <b-col><b-form-input style = "width: 355px;" :id="content"  placeholder="가격" v-model="cost"></b-form-input></b-col>
                                 <b-col><b-button @click="addBtnOnClick()">+</b-button></b-col>
                             </b-row>
                             <b-row class="margin" v-for= "costObject in costArray" :key="costObject.id">
@@ -155,12 +155,14 @@ export default{
     sidebar: function () {
       alert('sidebar')
     },
-    getImage: function (placeName, placeImg) {
+    getImage: function (placeName, placeImg, i) {
       axios.get(
         LOCAL_URL + '/api/searchImg?query=' + placeName, {
         }).then((res) => {
         console.log(res)
         placeImg.setAttribute('src', res.data)
+        if (i === 1) this.startPlaceImg = res.data
+        else this.arrivalPlaceImg = res.data
       }).catch(() => {
         console.log('이미지 가져오기 실패')
       })
@@ -188,7 +190,7 @@ export default{
       this.destinationObject = ''
       this.resetDestnation()
       this.startingObject = this.savedListProps[index]
-      this.getImage(this.startingObject.placeName, document.querySelector('#startImg'))
+      this.getImage(this.startingObject.placeName, document.querySelector('#startImg'), 1)
       this.startPlace = this.startingObject.placeName
     },
     destinationClicked (index) {
@@ -198,9 +200,8 @@ export default{
         if (this.startingObject !== this.savedListProps[index]) {
           document.getElementsByClassName('close text-dark')[0].click()
           this.destinationObject = this.savedListProps[index]
-          this.getImage(this.destinationObject.placeName, 2)
           this.arrivalPlace = this.destinationObject.placeName
-          this.getImage(this.destinationObject.placeName, document.querySelector('#arriveImg'))
+          this.getImage(this.destinationObject.placeName, document.querySelector('#arriveImg'), 2)
           this.arrivalPlace = this.destinationObject.placeName
           this.$emit('coordinate', this.startingObject, this.destinationObject)
         } else if (this.startingObject === this.savedListProps[index]) {
@@ -333,11 +334,15 @@ export default{
 }
 #sidebar {
     margin-bottom: 40px;
-    background-color: rgba(226, 213, 247, 0.943);
+    background-color: rgba(255, 255, 255, 0.943);
 }
 #startImg, #arriveImg {
     width: 400px;
     height: 300px;
+    border-radius: 10px;
+}
+#costTitle {
+  width: 420px;
 }
 
 </style>

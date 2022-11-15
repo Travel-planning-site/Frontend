@@ -34,17 +34,20 @@ export default {
       duration: 0,
       positionArray: [],
       transit: '',
-      distance: ''
+      distance: '',
+      distanceOverlay: [],
+      lineArray: []
     }
   },
   created () { // template 만들어지기 전
     EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
       console.log('positions ', positions)
-      this.markerPositions1 = positions
       // debugger
       console.log('도착지 눌렀습니다.')
+      this.markerPositions1 = positions
       this.map.setCenter(new kakao.maps.LatLng(positions[0][0], positions[0][1]))
       this.displayMarker(positions) // 마커 생성
+      this.getTransInfo(positions)
     })
   },
   mounted () { // template 만들어진 후
@@ -104,6 +107,11 @@ export default {
       this.setLineAndOverLay(linePath)
     },
     setLineAndOverLay (linePath, duration) {
+      if (this.lineArray.length > 0) {
+        this.lineArray.forEach((line) => {
+          line.setMap(null) // 지도에서 제거
+        })
+      }
       let polyline = new kakao.maps.Polyline({
         path: linePath, // 선을 구성하는 좌표배열
         strokeWeight: 10, // 선의 두께
@@ -113,13 +121,21 @@ export default {
       })
 
       polyline.setPath(linePath)
-      polyline.setMap(null)
       polyline.setMap(this.map)
-      let distance = polyline.getLength().toFixed(0) // ----
+
+      this.lineArray.push(polyline)
+
+      let distance = polyline.getLength().toFixed(0)
       this.setOverLay(distance, duration) // overlay
     },
     setOverLay (distance, duration) { // 커스텀오버레이
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
+      if (this.distanceOverlay.length > 0) {
+        console.log(this.distanceOverlay)
+        this.distanceOverlay.forEach((overlay) => {
+          overlay.setMap(null) // 지도에서 제거
+        })
+      }
       let walkkTime = distance / 67 | 0
       let walkHour = ''
       let walkMin = ''
@@ -189,33 +205,32 @@ export default {
         yAnchor: 0.5,
         zIndex: 0
       })
-      // this.distanceOverlay.setMap(null)
+      this.distanceOverlay.push(distanceOverlay)
       distanceOverlay.setMap(this.map)
     },
     displayMarker (markerPositions) { // 마커 생성
-      // this.marker.setMap(null)
-      console.log('마커')
-      console.log(this.markers)
-      if (this.markerPositions > 0) {
-        console.log('마커지우니??')
+      if (this.markers.length > 0) {
         this.markers.forEach((marker) => {
           marker.setMap(null) // 지도에서 제거
         })
       }
 
-      const positions = markerPositions.map(
-        (position) => new kakao.maps.LatLng(...position)
-      )
+      var positions = []
+      for (var k = 0; k < 2; k++) {
+        positions.push(new kakao.maps.LatLng(markerPositions[k][0], markerPositions[k][1]))
+      }
 
       if (positions.length > 0) {
         for (let i = 0; i < positions.length; i++) {
           const content = this.savedListProps[i].placeName
           let iwContent = '<div style="padding:5px; font-size:18px;">' + content + '</div>'
 
-          const marker = new kakao.maps.Marker({
+          const marker = new kakao.maps.Marker({ // 마커 생성
             map: this.map,
             position: positions[i]
           })
+
+          this.markers.push(marker)
 
           // 마커 장소명
           const infowindow = new kakao.maps.InfoWindow({
@@ -252,13 +267,11 @@ export default {
         if (resultCode === 105) { // 교통 장애가 있다면 출발지와 도착지간의 선 하나만 출력
           alert(res.result_msg)
           this.setLine(address)
-          // return address
         } else if (resultCode === 0) { // 길찾기 성공이면 이동경로 선으로 출력
           this.guides = res.data.guides
           this.markerPositions2 = this.getAddressList(this.guides)
           this.duration = res.data.duration
           this.setLineAndOverLay(this.getLinePath(this.markerPositions2), this.duration)
-        // return this.markerPositions2
         }
       })
     },
@@ -280,7 +293,13 @@ export default {
           destinationY: address[1][0]
         }
       ).then((res) => {
-        this.transit = (res.data.status === 'ZERO_RESULTS') ? '정보없음' : res.data.rows[0].elements[0].duration.text
+        if (res.data.status === 'ZERO_RESULTS') {
+          this.transit = '정보없음'
+        } else {
+          // this.transit = res.data.rows[0].elements[0].duration.text.split(' mins', 1) + '분'
+          var transitTex = res.data.rows[0].elements[0].duration.text.replace(' mins', '분').replace(' hours', '시간').replace(' hour', '시간')
+          this.transit = transitTex
+        }
       })
     },
     async getTransInfo (positions) {
@@ -300,9 +319,19 @@ export default {
       }
     },
     markerPositions1 (val) {
+      console.log('변경감지')
+      console.log('val: ', val)
       this.getTransInfo(val)
     }
   }
+  // markerPositions1: {
+  // handler (val) {
+  // console.log('변경감지')
+  // console.log('val: ', val)
+  // this.getTransInfo(val)
+  // },
+  // deep: true
+  // }
 }
 </script>
 
