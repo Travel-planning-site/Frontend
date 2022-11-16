@@ -33,6 +33,9 @@
 </template>
 
 <script>
+import { LOCAL_URL } from '../url/BackendUrl'
+import axios from 'axios'
+
 export default {
   name: 'MyPlanBox',
   props: {
@@ -58,6 +61,14 @@ export default {
     },
     onClickDelete () {
       console.log(this.plan.idx)
+      axios.delete(LOCAL_URL + '/myPage/plan/' + this.plan.idx)
+        .then(res => {
+          console.log(res)
+          window.location.reload(true)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }

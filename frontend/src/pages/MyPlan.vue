@@ -35,7 +35,7 @@ export default {
     }
   },
   created () {
-    axios.get(LOCAL_URL + '/myPlan/plan')
+    axios.get(LOCAL_URL + '/myPage/plan')
       .then(res => {
         console.log(res)
         this.boxlist = res.data
