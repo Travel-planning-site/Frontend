@@ -20,7 +20,7 @@
                           출발지: {{plan.startPlace}} <br/>
                           도착지: {{plan.arrivalPlace}} <br/>
                           이동수단: {{plan.transportation}} <br/>
-                          총 비용: {{plan.totalCost}} <br/>
+                          총 비용: {{plan.commaCost}} <br/>
                           총 소요시간: {{plan.totalTime}}
                       </b-card-text>
                     </b-card>
@@ -43,23 +43,30 @@ export default{
         startPlace: '',
         arrivalPlace: '',
         costArray: '',
-        totalCost: Number,
+        cost: Number,
         startTime: '',
         arriveTime: '',
         transportation: '',
         totalTime: '',
-        memo: ''
+        memo: '',
+        commaCost: String
       }
     }
   },
   created () {
     this.plans = this.$route.params.travels
+    this.getCommaCost(this.plans)
     console.log(this.plans)
   },
   mounted () {
   },
   methods: {
     getTransport (msg) {
+    },
+    getCommaCost (plans) {
+      for (var i = 0; i < plans.length; i++) {
+        this.plans[i].commaCost = this.plans[i].cost.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+      }
     }
   },
   watch: {
