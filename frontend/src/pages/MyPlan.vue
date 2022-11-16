@@ -30,10 +30,17 @@ export default {
   name: 'MyPlan',
   data () {
     return {
+      userInfo: null,
       userName: '사용자',
       boxlist: []
     }
   },
+  mounted () {
+    const userInfo = this.$cookies.get('info') || false
+    if (userInfo) {
+      this.userInfo = userInfo
+      this.userName = userInfo.name
+    }
   created () {
     axios.get(LOCAL_URL + '/myPage/plan')
       .then(res => {
