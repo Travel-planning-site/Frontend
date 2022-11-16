@@ -27,8 +27,16 @@ export default {
   name: 'MyPlan',
   data () {
     return {
+      userInfo: null,
       userName: '사용자',
       boxlist: 5
+    }
+  },
+  mounted () {
+    const userInfo = this.$cookies.get('info') || false
+    if (userInfo) {
+      this.userInfo = userInfo
+      this.userName = userInfo.name
     }
   }
 }
