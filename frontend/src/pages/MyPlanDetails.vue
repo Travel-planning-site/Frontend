@@ -1,8 +1,18 @@
 <template>
     <div>
-        <b-container >
+      <b-button style="margin-right:30px; margin-top:30px; float:right;" @click="$router.push('/MyPlan')">
+        <b-icon font-scale="2" icon="arrow-left-square">
+        </b-icon>
+      </b-button>
+      <b-container>
             <b-row>
-              <h4>1일차</h4>
+              <b-col cols="11" style="margin-bottom: 30px;">
+                <div class="dayBox">
+                  <span id="day">
+                    1일차
+                  </span>
+                </div>
+              </b-col>
             </b-row>
             <b-row style="padding-top: 50px;">
                 <b-col cols="4" v-for="(plan, index) in plans" :key="index">
@@ -75,5 +85,21 @@ export default{
 </script>
 
 <style scoped>
+
+@font-face {
+    font-family: 'twayfly';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayfly.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+#day {
+    color: #45e0e6;
+}
+.dayBox {
+  font-size: 300%;
+  margin-top: 10px;
+  margin-left: 10px;
+  font-family: twayfly;
+}
 
 </style>

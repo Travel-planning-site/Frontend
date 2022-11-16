@@ -1,6 +1,14 @@
 <template>
   <div class="MyPlan">
     <b-container fluid>
+      <b-row>
+        <b-col cols="6" md="md" style="text-align: right">
+          <b-button @click="$router.push('/')">
+            <b-icon font-scale="2" icon="house-door-fill">
+            </b-icon>
+          </b-button>
+        </b-col>
+      </b-row>
       <b-row align-v="start">
         <b-col cols="12" md="auto" style="margin-bottom: 30px;">
           <div class="nameBox">
