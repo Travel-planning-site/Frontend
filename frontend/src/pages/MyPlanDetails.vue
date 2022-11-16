@@ -53,7 +53,7 @@ export default{
     }
   },
   created () {
-    this.plans = this.$route.params.travles
+    this.plans = this.$route.params.travels
     console.log(this.plans)
   },
   mounted () {

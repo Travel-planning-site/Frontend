@@ -46,18 +46,18 @@ export default {
   data () {
     return {
       plan: {},
-      travles: [],
+      travels: [],
       imgUrl: 'https://picsum.photos/125/125/?image=58'
     }
   },
   created () {
     this.plan = this.planData.info
-    this.travles = this.planData.travles
-    this.imgUrl = this.planData.travles[0].startPlaceImg
+    this.travels = this.planData.travels
+    this.imgUrl = this.planData.travels[0].startPlaceImg
   },
   methods: {
     onClickDetail () {
-      this.$router.push({name: 'MyPlanDetails', params: { travles: this.travles }})
+      this.$router.push({name: 'MyPlanDetails', params: { travels: this.travels }})
     },
     onClickDelete () {
       console.log(this.plan.idx)

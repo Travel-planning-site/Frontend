@@ -229,7 +229,7 @@ export default{
       }
       console.log('idx: ', this.idxProp)
       axios.post(
-        LOCAL_URL + '/save/travle',
+        LOCAL_URL + '/save/travel',
         {
           infoIdx: this.idxProp,
           startPlaceImg: this.startPlaceImg,
