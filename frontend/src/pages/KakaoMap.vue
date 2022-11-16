@@ -41,7 +41,7 @@ export default {
   },
   created () { // template 만들어지기 전
     EventBus.$on('push-positions', (positions) => { // InputData에서 출발지, 도착지 좌표 전달받았을 경우
-      console.log('positions ', positions)
+      // console.log('positions ', positions)
       // debugger
       console.log('도착지 눌렀습니다.')
       this.markerPositions1 = positions
@@ -131,7 +131,6 @@ export default {
     setOverLay (distance, duration) { // 커스텀오버레이
       // 도보의 시속은 평균 4km/h 이고 도보의 분속은 67m/min
       if (this.distanceOverlay.length > 0) {
-        console.log(this.distanceOverlay)
         this.distanceOverlay.forEach((overlay) => {
           overlay.setMap(null) // 지도에서 제거
         })

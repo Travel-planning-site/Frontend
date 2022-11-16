@@ -107,6 +107,7 @@ export default{
   name: 'InputData',
   props: {
     savedListProps: Array,
+    idxProp: Number,
     durationProps: String
   },
   data () {
@@ -159,7 +160,6 @@ export default{
       axios.get(
         LOCAL_URL + '/api/searchImg?query=' + placeName, {
         }).then((res) => {
-        console.log(res)
         placeImg.setAttribute('src', res.data)
         if (i === 1) this.startPlaceImg = res.data
         else this.arrivalPlaceImg = res.data
@@ -219,7 +219,7 @@ export default{
         arrivalPlaceImg: this.arrivalPlaceImg,
         startPlace: this.startPlace,
         arrivalPlace: this.arrivalPlace,
-        costArray: this.costArray,
+        // costArray: this.costArray,
         totalCost: this.totalCost,
         startTime: document.getElementById('startTime').value,
         arriveTime: document.getElementById('arriveTime').value,
@@ -227,18 +227,38 @@ export default{
         totalTime: this.totalTime,
         memo: this.memo
       }
+      console.log('idx: ', this.idxProp)
+      axios.post(
+        LOCAL_URL + '/save/travle',
+        {
+          infoIdx: this.idxProp,
+          startPlaceImg: this.startPlaceImg,
+          arrivalPlaceImg: this.arrivalPlaceImg,
+          startPlace: this.startPlace,
+          arrivalPlace: this.arrivalPlace,
+          cost: this.totalCost,
+          startTime: document.getElementById('startTime').value,
+          arriveTime: document.getElementById('arriveTime').value,
+          transportation: this.transportation,
+          totalTime: this.totalTime,
+          memo: this.memo,
+          userId: 1
+        }
+      ).then((res) => console.log(res))
+        .catch((caches) => console.log(caches))
+
       this.plans.push(this.plan)
       console.log(this.plan)
       console.log(this.plans)
-      this.inputDataReset()
+      this.inputDataReset() // 입력 값 초기화
       const position = Array.from(Array(2), () => new Array(2))
-      console.log(this.startingObject.placeY)
       position[0][0] = this.startingObject.placeY
       position[0][1] = this.startingObject.placeX
       position[1][0] = this.destinationObject.placeY
       position[1][1] = this.destinationObject.placeX
+
       console.log(position)
-      this.positions.push(position)
+      this.positions.push(position) // 좌표값들
       this.startingObject = this.destinationObject
       this.destinationObject = ''
       document.getElementById('sideOpenBtn').click()

@@ -149,9 +149,10 @@ export default {
       this.$emit('listData', this.list)
     },
     nextOnClicked () {
+      console.log('research: ', this.$route.params.idx)
       if (this.resultList.length > 1) {
         this.$router.push({
-          name: 'InputData', params: { savedList: this.resultList }
+          name: 'InputData', params: { savedList: this.resultList, idx: this.$route.params.idx }
         })
       } else {
         alert('장소를 2개이상 선택해주세요.')

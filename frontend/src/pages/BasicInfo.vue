@@ -76,7 +76,7 @@
                             Cancle
                         </b-button>
                         <b-button id="next"
-                            @click="[onClickInfo(),$router.push('ResearchPlace')]">
+                            @click="onClickInfo()">
                             Next
                         </b-button>
                     </b-col>
@@ -95,7 +95,7 @@ import axios from 'axios'
 export default {
   name: 'BasicInfo',
   data () {
-    return {title: '', place: '', people: '', period: '', memo: ''}
+    return {title: '', place: '', people: '', period: '', memo: '', idx: 0}
   },
   methods: {
     onClickInfo: function () {
@@ -109,7 +109,11 @@ export default {
           memo: this.memo,
           userId: 1
         }
-      ).then((res) => console.log(res))
+      ).then((res) => {
+        this.idx = res.data
+        console.log(this.idx)
+        this.$router.push({name: 'ResearchPlace', params: { idx: this.idx }})
+      })
         .catch((caches) => console.log(caches))
     }
   }
