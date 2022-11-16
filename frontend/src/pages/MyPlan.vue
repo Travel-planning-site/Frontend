@@ -13,7 +13,7 @@
       </b-row>
       <b-row cols="4">
         <b-col v-for="(box, index) in boxlist" :key="index">
-          <my-plan-box style="margin-bottom: 20px;"></my-plan-box>
+          <my-plan-box v-bind:planData="box" style="margin-bottom: 20px;"></my-plan-box>
         </b-col>
       </b-row>
     </b-container>
@@ -22,6 +22,9 @@
 
 <script>
 import MyPlanBox from './MyPlanBox.vue'
+import { LOCAL_URL } from '../url/BackendUrl'
+import axios from 'axios'
+
 export default {
   components: { MyPlanBox },
   name: 'MyPlan',
@@ -29,7 +32,7 @@ export default {
     return {
       userInfo: null,
       userName: '사용자',
-      boxlist: 5
+      boxlist: []
     }
   },
   mounted () {
@@ -38,6 +41,15 @@ export default {
       this.userInfo = userInfo
       this.userName = userInfo.name
     }
+  created () {
+    axios.get(LOCAL_URL + '/myPage/plan')
+      .then(res => {
+        console.log(res)
+        this.boxlist = res.data
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 </script>

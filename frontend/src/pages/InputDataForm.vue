@@ -12,7 +12,7 @@
                                 </div>
                             </b-sidebar>
                         </b-col>
-                        <b-col>Where - date</b-col>
+                        <b-col></b-col>
                     </b-row>
                     <b-row>
                         <b-col>
@@ -63,7 +63,7 @@
                                     <datalist id="my-list-id">
                                     <option v-for= "size in sizes" :key="size.id">{{ size }}</option>
                                     </datalist></b-col>
-                                <b-col><b-form-input :id="content"  placeholder="가격" v-model="cost"></b-form-input></b-col>
+                                <b-col><b-form-input style = "width: 355px;" :id="content"  placeholder="가격" v-model="cost"></b-form-input></b-col>
                                 <b-col><b-button @click="addBtnOnClick()">+</b-button></b-col>
                             </b-row>
                             <b-row class="margin" v-for= "costObject in costArray" :key="costObject.id">
@@ -107,6 +107,7 @@ export default{
   name: 'InputData',
   props: {
     savedListProps: Array,
+    idxProp: Number,
     durationProps: String
   },
   data () {
@@ -155,12 +156,13 @@ export default{
     sidebar: function () {
       alert('sidebar')
     },
-    getImage: function (placeName, placeImg) {
+    getImage: function (placeName, placeImg, i) {
       axios.get(
         LOCAL_URL + '/api/searchImg?query=' + placeName, {
         }).then((res) => {
-        console.log(res)
         placeImg.setAttribute('src', res.data)
+        if (i === 1) this.startPlaceImg = res.data
+        else this.arrivalPlaceImg = res.data
       }).catch(() => {
         console.log('이미지 가져오기 실패')
       })
@@ -188,7 +190,7 @@ export default{
       this.destinationObject = ''
       this.resetDestnation()
       this.startingObject = this.savedListProps[index]
-      this.getImage(this.startingObject.placeName, document.querySelector('#startImg'))
+      this.getImage(this.startingObject.placeName, document.querySelector('#startImg'), 1)
       this.startPlace = this.startingObject.placeName
     },
     destinationClicked (index) {
@@ -198,9 +200,8 @@ export default{
         if (this.startingObject !== this.savedListProps[index]) {
           document.getElementsByClassName('close text-dark')[0].click()
           this.destinationObject = this.savedListProps[index]
-          this.getImage(this.destinationObject.placeName, 2)
           this.arrivalPlace = this.destinationObject.placeName
-          this.getImage(this.destinationObject.placeName, document.querySelector('#arriveImg'))
+          this.getImage(this.destinationObject.placeName, document.querySelector('#arriveImg'), 2)
           this.arrivalPlace = this.destinationObject.placeName
           this.$emit('coordinate', this.startingObject, this.destinationObject)
         } else if (this.startingObject === this.savedListProps[index]) {
@@ -218,7 +219,7 @@ export default{
         arrivalPlaceImg: this.arrivalPlaceImg,
         startPlace: this.startPlace,
         arrivalPlace: this.arrivalPlace,
-        costArray: this.costArray,
+        // costArray: this.costArray,
         totalCost: this.totalCost,
         startTime: document.getElementById('startTime').value,
         arriveTime: document.getElementById('arriveTime').value,
@@ -226,18 +227,38 @@ export default{
         totalTime: this.totalTime,
         memo: this.memo
       }
+      console.log('idx: ', this.idxProp)
+      axios.post(
+        LOCAL_URL + '/save/travle',
+        {
+          infoIdx: this.idxProp,
+          startPlaceImg: this.startPlaceImg,
+          arrivalPlaceImg: this.arrivalPlaceImg,
+          startPlace: this.startPlace,
+          arrivalPlace: this.arrivalPlace,
+          cost: this.totalCost,
+          startTime: document.getElementById('startTime').value,
+          arriveTime: document.getElementById('arriveTime').value,
+          transportation: this.transportation,
+          totalTime: this.totalTime,
+          memo: this.memo,
+          userId: 1
+        }
+      ).then((res) => console.log(res))
+        .catch((caches) => console.log(caches))
+
       this.plans.push(this.plan)
       console.log(this.plan)
       console.log(this.plans)
-      this.inputDataReset()
+      this.inputDataReset() // 입력 값 초기화
       const position = Array.from(Array(2), () => new Array(2))
-      console.log(this.startingObject.placeY)
       position[0][0] = this.startingObject.placeY
       position[0][1] = this.startingObject.placeX
       position[1][0] = this.destinationObject.placeY
       position[1][1] = this.destinationObject.placeX
+
       console.log(position)
-      this.positions.push(position)
+      this.positions.push(position) // 좌표값들
       this.startingObject = this.destinationObject
       this.destinationObject = ''
       document.getElementById('sideOpenBtn').click()
@@ -333,11 +354,15 @@ export default{
 }
 #sidebar {
     margin-bottom: 40px;
-    background-color: rgba(226, 213, 247, 0.943);
+    background-color: rgba(255, 255, 255, 0.943);
 }
 #startImg, #arriveImg {
     width: 400px;
     height: 300px;
+    border-radius: 10px;
+}
+#costTitle {
+  width: 420px;
 }
 
 </style>

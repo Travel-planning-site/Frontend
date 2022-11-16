@@ -3,9 +3,6 @@
         <b-container >
             <b-row>
               <h4>1일차</h4>
-              <b-col>
-                <b-button @click="$router.push('/')">Main으로</b-button>
-              </b-col>
             </b-row>
             <b-row style="padding-top: 50px;">
                 <b-col cols="4" v-for="(plan, index) in plans" :key="index">
@@ -36,7 +33,7 @@
 
 <script>
 export default{
-  name: 'PlanData',
+  name: 'MyPlanDetails',
   data () {
     return {
       plans: [],
@@ -56,7 +53,7 @@ export default{
     }
   },
   created () {
-    this.plans = this.$route.params.plans
+    this.plans = this.$route.params.travles
     console.log(this.plans)
   },
   mounted () {
