@@ -41,6 +41,7 @@ export default {
       this.userInfo = userInfo
       this.userName = userInfo.name
     }
+  },
   created () {
     axios.get(LOCAL_URL + '/myPage/plan')
       .then(res => {
