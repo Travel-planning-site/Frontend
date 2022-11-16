@@ -37,9 +37,9 @@ export default {
     },
     saveUserToCookie (res) {
       const info = {
-        id: res.id,
-        name: res.name,
-        email: res.email
+        id: res.userId,
+        name: res.userName,
+        email: res.userEmail
       }
       this.$cookies.set('info', info, 1800000)
     }
