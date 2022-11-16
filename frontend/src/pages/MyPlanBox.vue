@@ -46,7 +46,7 @@ export default {
   data () {
     return {
       plan: {},
-      travles: [],
+      travels: [],
       imgUrl: 'https://picsum.photos/125/125/?image=58'
     }
   },
