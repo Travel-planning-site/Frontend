@@ -77,7 +77,7 @@ export default {
   methods: {
     Logout () {
       this.isLogin = false
-      this.RemoveCookie()
+      this.$cookies.remove('token')
       this.userInfo = null
       alert('로그아웃되었습니다!')
     },
@@ -94,10 +94,6 @@ export default {
       } else {
         this.$router.push('MyPlan')
       }
-    },
-    RemoveCookie () {
-      this.$cookie.remove('info')
-      this.$cookies.remove('token')
     }
   }
 }
