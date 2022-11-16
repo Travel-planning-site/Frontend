@@ -78,6 +78,7 @@ export default {
     Logout () {
       this.isLogin = false
       this.$cookies.remove('info')
+      this.$cookies.remove('token')
       this.userInfo = null
       alert('로그아웃되었습니다!')
     },
