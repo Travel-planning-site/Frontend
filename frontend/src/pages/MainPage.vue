@@ -61,7 +61,7 @@ export default {
       if (!notExpired) {
         console.log('만료')
         this.isLogin = false
-        this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
+        this.RemoveCookie()
       }
     }
   },
@@ -77,7 +77,7 @@ export default {
   methods: {
     Logout () {
       this.isLogin = false
-      this.$cookies.remove('info')
+      this.RemoveCookie()
       this.userInfo = null
       alert('로그아웃되었습니다!')
     },
@@ -94,6 +94,10 @@ export default {
       } else {
         this.$router.push('MyPlan')
       }
+    },
+    RemoveCookie () {
+      this.$cookie.remove('info')
+      this.$cookies.remove('token')
     }
   }
 }
