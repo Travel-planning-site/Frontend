@@ -28,9 +28,11 @@ export default {
       axios.get(LOCAL_URL + '/user/userInfo', {
         headers: {
           'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + this.$cookies.get('token')
+          'Authorization': 'Bearer ' + this.$cookies.get('token')
         }
-      }).then(res => this.saveUserToCookie(res.data))
+      }).then(res => {
+        this.saveUserToCookie(res.data)
+      })
     },
     goMain () {
       this.$router.push('/')
