@@ -33,7 +33,6 @@ export default {
       }).then(res => {
         this.saveUserToCookie(res.data)
         console.log(res.data)
-        console.log('getUserInfo 동작')
       })
     },
     goMain () {
