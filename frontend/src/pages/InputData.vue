@@ -6,6 +6,7 @@
                 @msg="getTransport"
                 @coordinate="getPlace"
                 v-bind:savedListProps="savedList"
+                v-bind:idxProp="idx"
                 v-bind:durationProps="duration">
               </input-data-form>
             </b-col>
@@ -41,7 +42,8 @@ export default{
   created () {
     if (this.$route.params.savedList != null) {
       this.savedList = this.$route.params.savedList
-      console.log(this.savedList)
+      this.idx = this.$route.params.idx
+      // console.log(this.savedList)
     }
   },
   mounted () {
@@ -58,7 +60,6 @@ export default{
       this.positions[0][0] = startObj.placeY
       this.positions[1][1] = arriveObj.placeX
       this.positions[1][0] = arriveObj.placeY
-      console.log('posi: ' + this.positions)
       EventBus.$emit('push-positions', this.positions)
     }
   },

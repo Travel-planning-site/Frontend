@@ -11,6 +11,7 @@ import KakaoMap from '@/pages/KakaoMap'
 import MyPlan from '@/pages/MyPlan'
 import PlanData from '@/pages/PlanData'
 import ResultOfPlan from '@/pages/ResultOfPlan'
+import MyPlanDetails from '@/pages/MyPlanDetails'
 
 Vue.use(Router)
 
@@ -71,6 +72,12 @@ export default new Router({
       path: '/ResultOfPlan',
       name: 'ResultOfPlan',
       component: ResultOfPlan,
+      props: true
+    },
+    {
+      path: '/MyPlanDetails',
+      name: 'MyPlanDetails',
+      component: MyPlanDetails,
       props: true
     }
   ]

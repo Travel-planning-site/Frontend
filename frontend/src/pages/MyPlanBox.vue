@@ -5,29 +5,27 @@
       height: 100%"
       align="center"
       border-variant="dark">
-      <b-card-img src="https://picsum.photos/125/125/?image=58"
-        style="width: 300px; height: 200px">
-      </b-card-img>
+      <img :src = "imgUrl" style="width: 300px; height: 200px" />
       <b-list-group class="listgroup" flush>
         <b-list-group-item>
           <h4>Title</h4>
-          <div id="title">여행 제목</div>
+          <div id="title">{{plan.title}}</div>
         </b-list-group-item>
         <b-list-group-item>
           <h4>Date</h4>
-          <div id="date">여행 날짜</div>
+          <div id="date">{{plan.period}}</div>
         </b-list-group-item>
         <b-list-group-item>
           <h4>Who</h4>
-          <div id="who">여행 동반자</div>
+          <div id="who">{{plan.people}}</div>
         </b-list-group-item>
       </b-list-group>
       <b-row cols="2">
           <b-col>
-            <b-button block>편집</b-button>
+            <b-button @click="onClickDetail()" block>상세보기</b-button>
           </b-col>
           <b-col>
-            <b-button block>삭제</b-button>
+            <b-button @click="onClickDelete($event)" block>삭제</b-button>
           </b-col>
         </b-row>
     </b-card>
@@ -35,10 +33,42 @@
 </template>
 
 <script>
+import { LOCAL_URL } from '../url/BackendUrl'
+import axios from 'axios'
+
 export default {
   name: 'MyPlanBox',
+  props: {
+    planData: {
+      type: Object
+    }
+  },
   data () {
     return {
+      plan: {},
+      travels: [],
+      imgUrl: 'https://picsum.photos/125/125/?image=58'
+    }
+  },
+  created () {
+    this.plan = this.planData.info
+    this.travels = this.planData.travels
+    this.imgUrl = this.planData.travels[0].startPlaceImg
+  },
+  methods: {
+    onClickDetail () {
+      this.$router.push({name: 'MyPlanDetails', params: { travels: this.travels }})
+    },
+    onClickDelete () {
+      console.log(this.plan.idx)
+      axios.delete(LOCAL_URL + '/myPage/plan/' + this.plan.idx)
+        .then(res => {
+          console.log(res)
+          window.location.reload(true)
+        })
+        .catch(error => {
+          console.log(error)
+        })
     }
   }
 }
