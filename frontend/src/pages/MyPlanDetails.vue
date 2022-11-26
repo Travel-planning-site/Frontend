@@ -1,10 +1,17 @@
 <template>
     <div>
-        <b-container >
+      <b-button style="margin-right:30px; margin-top:30px; float:right;" @click="$router.push('/MyPlan')">
+        <b-icon font-scale="2" icon="arrow-left-square">
+        </b-icon>
+      </b-button>
+      <b-container>
             <b-row>
-              <h4>1일차</h4>
-              <b-col>
-                <b-button @click="$router.push('/')">Main으로</b-button>
+              <b-col cols="11" style="margin-bottom: 30px;">
+                <div class="dayBox">
+                  <span id="day">
+                    1일차
+                  </span>
+                </div>
               </b-col>
             </b-row>
             <b-row style="padding-top: 50px;">
@@ -23,7 +30,7 @@
                           출발지: {{plan.startPlace}} <br/>
                           도착지: {{plan.arrivalPlace}} <br/>
                           이동수단: {{plan.transportation}} <br/>
-                          총 비용: {{plan.totalCost}} <br/>
+                          총 비용: {{plan.commaCost}} <br/>
                           총 소요시간: {{plan.totalTime}}
                       </b-card-text>
                     </b-card>
@@ -36,7 +43,7 @@
 
 <script>
 export default{
-  name: 'PlanData',
+  name: 'MyPlanDetails',
   data () {
     return {
       plans: [],
@@ -46,23 +53,30 @@ export default{
         startPlace: '',
         arrivalPlace: '',
         costArray: '',
-        totalCost: Number,
+        cost: Number,
         startTime: '',
         arriveTime: '',
         transportation: '',
         totalTime: '',
-        memo: ''
+        memo: '',
+        commaCost: String
       }
     }
   },
   created () {
-    this.plans = this.$route.params.plans
+    this.plans = this.$route.params.travels
+    this.getCommaCost(this.plans)
     console.log(this.plans)
   },
   mounted () {
   },
   methods: {
     getTransport (msg) {
+    },
+    getCommaCost (plans) {
+      for (var i = 0; i < plans.length; i++) {
+        this.plans[i].commaCost = this.plans[i].cost.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
+      }
     }
   },
   watch: {
@@ -71,5 +85,21 @@ export default{
 </script>
 
 <style scoped>
+
+@font-face {
+    font-family: 'twayfly';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_tway@1.0/twayfly.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+#day {
+    color: #45e0e6;
+}
+.dayBox {
+  font-size: 300%;
+  margin-top: 10px;
+  margin-left: 10px;
+  font-family: twayfly;
+}
 
 </style>

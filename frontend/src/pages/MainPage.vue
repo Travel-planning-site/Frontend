@@ -57,18 +57,18 @@ export default {
     }
   },
   watch: {
-    token: function (notExpired) {
-      if (!notExpired) {
-        console.log('만료')
-        this.isLogin = false
+    token: function (val) {
+      if (val === false) {
+        console.log(val)
         this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
+        this.isLogin = false
       }
     }
   },
   mounted () {
     const token = this.$cookies.get('token') || false
     const info = this.$cookies.get('info') || false
-    if ((token) || (info)) {
+    if ((token) && (info)) {
       this.token = token
       this.isLogin = true
       this.userInfo = info
@@ -77,7 +77,7 @@ export default {
   methods: {
     Logout () {
       this.isLogin = false
-      this.$cookies.remove('info')
+      this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
       this.userInfo = null
       alert('로그아웃되었습니다!')
     },

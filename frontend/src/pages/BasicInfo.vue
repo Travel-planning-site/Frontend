@@ -76,7 +76,7 @@
                             Cancle
                         </b-button>
                         <b-button id="next"
-                            @click="[onClickInfo(),$router.push('ResearchPlace')]">
+                            @click="onClickInfo()">
                             Next
                         </b-button>
                     </b-col>
@@ -90,19 +90,31 @@
 </template>
 
 <script>
-
+import { LOCAL_URL } from '../url/BackendUrl'
+import axios from 'axios'
 export default {
   name: 'BasicInfo',
   data () {
-    return {title: '', place: '', people: '', period: '', memo: ''}
+    return {title: '', place: '', people: '', period: '', memo: '', idx: 0}
   },
   methods: {
     onClickInfo: function () {
-      console.log(this.title)
-      console.log(this.place)
-      console.log(this.people)
-      console.log(this.period)
-      console.log(this.memo)
+      axios.post(
+        LOCAL_URL + '/save/basic',
+        {
+          title: this.title,
+          place: this.place,
+          people: this.people,
+          period: this.period,
+          memo: this.memo,
+          userId: 1
+        }
+      ).then((res) => {
+        this.idx = res.data
+        console.log(this.idx)
+        this.$router.push({name: 'ResearchPlace', params: { idx: this.idx }})
+      })
+        .catch((caches) => console.log(caches))
     }
   }
 }

@@ -20,7 +20,7 @@ export default {
       axios.get(LOCAL_URL + '/user/token')
         .then(res => {
           this.token = res
-          this.$cookies.set('token', res.data.accessToken, 1800000)
+          this.$cookies.set('token', res.data.accessToken, 3600)
           // 30분만료
         })
     },
@@ -30,18 +30,21 @@ export default {
           'Content-Type': 'application/json',
           Authorization: 'Bearer ' + this.$cookies.get('token')
         }
-      }).then(res => this.saveUserToCookie(res.data))
+      }).then(res => {
+        this.saveUserToCookie(res.data)
+        console.log(res.data)
+      })
     },
     goMain () {
       this.$router.push('/')
     },
     saveUserToCookie (res) {
       const info = {
-        id: res.id,
-        name: res.name,
-        email: res.email
+        id: res.userId,
+        name: res.userName,
+        email: res.userEmail
       }
-      this.$cookies.set('info', info, 1800000)
+      this.$cookies.set('info', JSON.stringify(info), 3600)
     }
   }
 }
