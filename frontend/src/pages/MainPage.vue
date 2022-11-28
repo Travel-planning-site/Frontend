@@ -85,7 +85,7 @@ export default {
       if (!this.isLogin) {
         alert('로그인 이후 계획을 만들 수 있습니다!')
       } else {
-        this.$router.push('BasicInfo')
+        this.$router.push({ name: 'BasicInfo', params: { userInfo: this.userInfo } })
       }
     },
     IsAbletoMyplan () {
