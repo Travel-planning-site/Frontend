@@ -95,7 +95,10 @@ import axios from 'axios'
 export default {
   name: 'BasicInfo',
   data () {
-    return {title: '', place: '', people: '', period: '', memo: '', idx: 0}
+    return {title: '', place: '', people: '', period: '', memo: '', idx: 0, userId: ''}
+  },
+  created () {
+    this.userId = this.$route.params.userInfo.id
   },
   methods: {
     onClickInfo: function () {
@@ -107,12 +110,12 @@ export default {
           people: this.people,
           period: this.period,
           memo: this.memo,
-          userId: 1
+          userId: this.userId
         }
       ).then((res) => {
         this.idx = res.data
         console.log(this.idx)
-        this.$router.push({name: 'ResearchPlace', params: { idx: this.idx }})
+        this.$router.push({name: 'ResearchPlace', params: { idx: this.idx, userId: this.userId }})
       })
         .catch((caches) => console.log(caches))
     }
