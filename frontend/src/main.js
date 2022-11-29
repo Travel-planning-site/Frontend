@@ -30,6 +30,9 @@ import SidebarBox from './pages/SidebarBox'
 export const EventBus = new Vue()
 
 Vue.config.productionTip = false
+Vue.prototype.$globalData = Vue.observable({
+  day: 1
+})
 
 Vue.component('main-page', MainPage)
 Vue.component('login-board', LoginBoard)

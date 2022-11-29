@@ -56,6 +56,10 @@ export default {
       token: null
     }
   },
+  created () {
+    this.$globalData.day = 1
+    // 날짜 전역 변수 0으로 설정
+  },
   watch: {
     token: function (val) {
       if (val === false) {
@@ -68,6 +72,7 @@ export default {
   mounted () {
     const token = this.$cookies.get('token') || false
     const info = this.$cookies.get('info') || false
+
     if ((token) && (info)) {
       this.token = token
       this.isLogin = true
