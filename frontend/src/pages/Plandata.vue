@@ -1,10 +1,11 @@
 <template>
     <div>
-        <b-container >
-            <b-row>
-              <h4>1일차</h4>
-              <b-col>
-                <b-button @click="$router.push('/')">Main으로</b-button>
+        <b-container>
+            <b-row style="margin-top: 10px">
+              <h4>{{date}}일차</h4>
+              <b-col cols="6" md="md" style="text-align: right">
+                <b-button variant="outline-primary" @click="nextPlan()">다음 계획</b-button>
+                <b-button variant="outline-danger" @click="finishPlan()">계획 종료</b-button>
               </b-col>
             </b-row>
             <b-row style="padding-top: 50px;">
@@ -52,7 +53,8 @@ export default{
         transportation: '',
         totalTime: '',
         memo: ''
-      }
+      },
+      date: this.$globalData.day
     }
   },
   created () {
@@ -63,6 +65,14 @@ export default{
   },
   methods: {
     getTransport (msg) {
+    },
+    nextPlan () {
+      this.$globalData.day += 1
+      console.log(this.$globalData.day)
+      this.$router.push('/ResearchPlace')
+    },
+    finishPlan () {
+      this.$router.push('/')
     }
   },
   watch: {

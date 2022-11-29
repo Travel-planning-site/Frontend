@@ -85,8 +85,12 @@ export default {
       block: 4,
       currentPage: '',
       ImageList: [],
-      list: []
+      list: [],
+      userId: this.$cookies.get('info').id
     }
+  },
+  created () {
+    console.log(this.$globalData.day)
   },
   methods: {
     SelectFromResult_List: function (selected) {
@@ -152,28 +156,12 @@ export default {
       console.log('research: ', this.$route.params.idx)
       if (this.resultList.length > 1) {
         this.$router.push({
-          name: 'InputData', params: { savedList: this.resultList, idx: this.$route.params.idx, userId: this.$route.params.userId }
+          name: 'InputData', params: { savedList: this.resultList, idx: this.$route.params.idx, userId: this.userId }
         })
       } else {
         alert('장소를 2개이상 선택해주세요.')
       }
     }
-    // unitList (selected, index) {
-    //   console.log(index + 1)
-    //   var obj = {
-    //     place_name: '',
-    //     address_name: '',
-    //     x: 0,
-    //     y: 0,
-    //     placeImage: ''
-    //   }
-    //   obj.place_name = selected.place_name
-    //   obj.address_name = selected.address_name
-    //   obj.x = selected.x
-    //   obj.y = selected.y
-    //   obj.placeImage = this.ImageList[index]
-    //   this.list.push(obj)
-    // }
   }
 }
 </script>

@@ -145,6 +145,7 @@ export default{
         arriveTime: '',
         transportation: '',
         totalTime: '',
+        date: 0,
         memo: ''
       },
       positions: [],
@@ -226,6 +227,7 @@ export default{
         arriveTime: document.getElementById('arriveTime').value,
         transportation: this.transportation,
         totalTime: this.totalTime,
+        date: this.$globalData.day,
         memo: this.memo
       }
       console.log('idx: ', this.idxProp)
@@ -243,6 +245,7 @@ export default{
           transportation: this.transportation,
           totalTime: this.totalTime,
           memo: this.memo,
+          date: this.$globalData.day,
           userId: this.userId
         }
       ).then((res) => console.log(res))
