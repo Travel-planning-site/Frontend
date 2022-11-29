@@ -65,11 +65,15 @@ export default{
         memo: '',
         commaCost: String
       },
-      day: 1
+      travels: [],
+      day: 1,
+      lastDay: 0
     }
   },
   created () {
-    this.plans = this.$route.params.travels
+    this.travels = this.$route.params.travels
+    this.lastDay = this.travels[this.travels.length - 1].date
+    this.retrieveDay(1)
     this.getCommaCost(this.plans)
     console.log(this.plans)
   },
@@ -86,15 +90,30 @@ export default{
     previousDay () {
       if (this.day > 1) {
         this.day -= 1
+        this.retrieveDay(this.day)
       }
     },
     nextDay () {
-      if (this.checkValidateDay) {
+      if (this.checkValidateDay(this.day)) {
         this.day += 1
+        this.retrieveDay(this.day)
       }
     },
-    checkValidateDay () {
-
+    checkValidateDay (day) {
+      if (day < this.lastDay) {
+        return true
+      } else { return false }
+    },
+    retrieveDay (day) {
+      this.clearPlanList()
+      for (var i = 0; i < this.travels.length; i++) {
+        if (this.travels[i].date === day) {
+          this.plans.push(this.travels[i])
+        }
+      }
+    },
+    clearPlanList () {
+      this.plans.splice(0)
     }
   },
   watch: {
