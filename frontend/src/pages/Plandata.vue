@@ -69,7 +69,7 @@ export default{
     nextPlan () {
       this.$globalData.day += 1
       console.log(this.$globalData.day)
-      this.$router.push('/ResearchPlace')
+      this.$router.push({name: 'ResearchPlace', params: { infoIdx: this.$route.params.infoIdx }})
     },
     finishPlan () {
       this.$router.push('/')

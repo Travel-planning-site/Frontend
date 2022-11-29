@@ -5,13 +5,17 @@
         </b-icon>
       </b-button>
       <b-container>
-            <b-row>
+            <b-row cols="2">
               <b-col cols="11" style="margin-bottom: 30px;">
                 <div class="dayBox">
                   <span id="day">
-                    1일차
+                    {{day}}일차
                   </span>
                 </div>
+              </b-col>
+              <b-col>
+                <b-button @click="previousDay()"><b-icon icon="chevron-left"></b-icon></b-button>
+                <b-button @click="nextDay()"><b-icon icon="chevron-right"></b-icon></b-button>
               </b-col>
             </b-row>
             <b-row style="padding-top: 50px;">
@@ -60,7 +64,8 @@ export default{
         totalTime: '',
         memo: '',
         commaCost: String
-      }
+      },
+      day: 1
     }
   },
   created () {
@@ -77,6 +82,19 @@ export default{
       for (var i = 0; i < plans.length; i++) {
         this.plans[i].commaCost = this.plans[i].cost.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
       }
+    },
+    previousDay () {
+      if (this.day > 1) {
+        this.day -= 1
+      }
+    },
+    nextDay () {
+      if (this.checkValidateDay) {
+        this.day += 1
+      }
+    },
+    checkValidateDay () {
+
     }
   },
   watch: {

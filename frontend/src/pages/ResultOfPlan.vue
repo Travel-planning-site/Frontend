@@ -81,7 +81,7 @@ export default {
       alert(this.distance)
     },
     resultBtnOnClick () {
-      this.$router.push({name: 'PlanData', params: { plans: this.$route.params.plans }})
+      this.$router.push({name: 'PlanData', params: { plans: this.$route.params.plans, infoIdx: this.$route.params.infoIdx }})
     }
   }
 }

@@ -284,7 +284,7 @@ export default{
     },
     savePlans () { // 저장
       console.log(this.positions)
-      this.$router.push({name: 'ResultOfPlan', params: { positions: this.positions, plans: this.plans }})
+      this.$router.push({name: 'ResultOfPlan', params: { positions: this.positions, plans: this.plans, infoIdx: this.idxProp }})
       // this.$router.push({name: 'PlanData', query: { data: this.plans }})
     }
   },
