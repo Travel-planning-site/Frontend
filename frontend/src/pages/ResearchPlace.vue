@@ -86,11 +86,17 @@ export default {
       currentPage: '',
       ImageList: [],
       list: [],
-      userId: this.$cookies.get('info').id
+      userId: this.$cookies.get('info').id,
+      infoIdx: null
     }
   },
   created () {
     console.log(this.$globalData.day)
+    if (this.$route.params.infoIdx !== undefined) {
+      this.infoIdx = this.$route.params.infoIdx
+    } else {
+      this.infoIdx = this.$route.params.idx
+    }
   },
   methods: {
     SelectFromResult_List: function (selected) {
@@ -156,7 +162,7 @@ export default {
       console.log('research: ', this.$route.params.idx)
       if (this.resultList.length > 1) {
         this.$router.push({
-          name: 'InputData', params: { savedList: this.resultList, idx: this.$route.params.idx, userId: this.userId }
+          name: 'InputData', params: { savedList: this.resultList, idx: this.infoIdx, userId: this.userId }
         })
       } else {
         alert('장소를 2개이상 선택해주세요.')
