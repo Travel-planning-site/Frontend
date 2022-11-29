@@ -108,7 +108,8 @@ export default{
   props: {
     savedListProps: Array,
     idxProp: Number,
-    durationProps: String
+    durationProps: String,
+    userId: Number
   },
   data () {
     return {
@@ -242,7 +243,7 @@ export default{
           transportation: this.transportation,
           totalTime: this.totalTime,
           memo: this.memo,
-          userId: 1
+          userId: this.userId
         }
       ).then((res) => console.log(res))
         .catch((caches) => console.log(caches))

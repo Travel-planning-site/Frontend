@@ -152,7 +152,7 @@ export default {
       console.log('research: ', this.$route.params.idx)
       if (this.resultList.length > 1) {
         this.$router.push({
-          name: 'InputData', params: { savedList: this.resultList, idx: this.$route.params.idx }
+          name: 'InputData', params: { savedList: this.resultList, idx: this.$route.params.idx, userId: this.$route.params.userId }
         })
       } else {
         alert('장소를 2개이상 선택해주세요.')

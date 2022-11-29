@@ -77,8 +77,7 @@ export default {
   methods: {
     Logout () {
       this.isLogin = false
-      this.$cookies.remove('info')
-      this.$cookies.remove('token')
+      this.$cookies.keys().forEach(cookie => this.$cookies.remove(cookie))
       this.userInfo = null
       alert('로그아웃되었습니다!')
     },
@@ -86,7 +85,7 @@ export default {
       if (!this.isLogin) {
         alert('로그인 이후 계획을 만들 수 있습니다!')
       } else {
-        this.$router.push('BasicInfo')
+        this.$router.push({ name: 'BasicInfo', params: { userInfo: this.userInfo } })
       }
     },
     IsAbletoMyplan () {

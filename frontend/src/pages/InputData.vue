@@ -7,7 +7,9 @@
                 @coordinate="getPlace"
                 v-bind:savedListProps="savedList"
                 v-bind:idxProp="idx"
-                v-bind:durationProps="duration">
+                v-bind:durationProps="duration"
+                :userId="userId"
+                >
               </input-data-form>
             </b-col>
             <b-col>
@@ -36,13 +38,15 @@ export default{
       positions: [
         [0, 0],
         [0, 0]
-      ]
+      ],
+      userId: ''
     }
   },
   created () {
     if (this.$route.params.savedList != null) {
       this.savedList = this.$route.params.savedList
       this.idx = this.$route.params.idx
+      this.userId = this.$route.params.userId
       // console.log(this.savedList)
     }
   },
