@@ -10,31 +10,38 @@ import axios from 'axios'
 export default {
   name: 'Login',
   mounted () {
-    console.log('생성')
-    this.getToken()
-    this.getUserInfo()
-    setTimeout(this.goMain, 1000)
+    this.start()
   },
   methods: {
+    async start () {
+      console.log('생성')
+      var token = await this.getToken()
+      this.$cookies.set('token', token, 3600)
+      this.getUserInfo()
+      setTimeout(this.goMain, 1000)
+    },
     getToken () {
-      axios.get(LOCAL_URL + '/user/token')
-        .then(res => {
-          this.token = res
-          this.$cookies.set('token', res.data.accessToken, 3600)
-          // 30분만료
-        })
+      return new Promise(function (resolve) {
+        axios.get(LOCAL_URL + '/user/token')
+          .then(res => {
+            console.log(res)
+            resolve(res.data.accessToken)
+          })
+      })
     },
     getUserInfo () {
-      axios.get(LOCAL_URL + '/user/userInfo', {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + this.$cookies.get('token')
-        }
-      }).then(res => {
-        this.saveUserToCookie(res.data)
-        console.log(res.data)
-        console.log('getUserInfo 동작')
-      })
+      var token = this.$cookies.get('token') || false
+      if (token) {
+        axios.get(LOCAL_URL + '/user/userInfo', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + token
+          }
+        }).then(res => {
+          this.saveUserToCookie(res.data)
+          console.log(res.data)
+        })
+      }
     },
     goMain () {
       this.$router.push('/')
